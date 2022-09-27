@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <h1>Welcome <small>{{session.email}}</small></h1>
+  <a href="/post_question" class="post-qtn-btn">Ask Question</a>
+  <hr>
+{% endblock %}

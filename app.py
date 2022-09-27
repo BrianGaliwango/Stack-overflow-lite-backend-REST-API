@@ -50,5 +50,50 @@ def register():
     return redirect(url_for("index"))
   return render_template("register.html")
 
+# User login
+@app.route("/login", methods=["GET", "POST"])
+def login():
+  if request.method == "POST":
+    # Get Form fields data
+    email = request.form["email"]
+    password_candidate = request.form["password"]
+    
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Get user by email
+    result = cur.execute("SELECT * FROM users WHERE email = %s", [email])
+
+    # Verify result
+    if result > 0:
+      # Get stored hash
+      data = cur.fetchone()
+      password = data["password"]
+      
+      # Compare passwords
+      if sha256_crypt.verify(password_candidate, password):
+        # When passed login
+        session["logged_in"] = True
+        session["email"] = email
+
+        return redirect(url_for("dashboard"))
+      else:
+        return render_template("login.html")
+      # Close connection
+    cur.close()
+  else:
+      return render_template("login.html")    
+  return render_template("login.html")
+
+# Logout
+@app.route("/logout")
+def logout():
+  session.clear()
+  return redirect(url_for("login"))
+
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+  return render_template("dashboard.html")
+
 if __name__ == "__main__":
   app.run(debug=True)
