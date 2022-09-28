@@ -170,6 +170,11 @@ def post_question():
   
   return render_template("post_question.html")
 
+# Answer question
+@app.route("/answer_question/<string:id>", methods=["GET", "POST"])
+def post_answer(id):  
+  return render_template("answer_question.html")
+
 # Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])
 @is_logged_in

@@ -23,7 +23,7 @@
               {{question.body}} 
               
               <div class="qtn-btns">
-                <a href="/answer_question" class="answer-btn">answer</a>
+                <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
 
                <form action="{{url_for('delete_question', id=question.id)}}" method="POST">
                 <input type="hidden" name="method" value="DELETE">
