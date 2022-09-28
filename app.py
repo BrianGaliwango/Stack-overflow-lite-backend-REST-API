@@ -172,8 +172,17 @@ def post_question():
 
 # Answer question
 @app.route("/answer_question/<string:id>", methods=["GET", "POST"])
-def post_answer(id):  
-  return render_template("answer_question.html")
+# @is_logged_in()
+def post_answer(id): 
+  # create cursor 
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  result = cur.execute("SELECT * FROM questions WHERE id = %s", [id])
+  
+  question = cur.fetchone()
+     
+  return render_template("answer_question.html", question=question)
 
 # Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])

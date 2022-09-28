@@ -4,4 +4,23 @@
 
   <h1>Post answer to question</h1>
 
+  <div class="asked-qtns">
+        
+      <small>{{question.asked_by}}</small>
+      <br>
+      <small>{{question.title}}</small>
+      <br>
+      <div class="qtn-body">
+          {{question.body}} 
+      </div>
+      
+    <form action="" method="POST" class="post-answer-form">
+      <textarea name="answer" id="" cols="65" rows="10" class="answer-qtn" placeholder="Answer question"></textarea>
+    <input type="submit" value="submit" class="submit-answer-btn">
+  </form>
+
+  </div>
+
 {% endblock %}
+
+<!-- <input type="text" name="answer" class="answer-qtn" placeholder="answer question"> -->
