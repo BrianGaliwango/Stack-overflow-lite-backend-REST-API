@@ -11,10 +11,13 @@
     <div class="navbar-items">
 
       <ul class="nav-list">
+        {% if session.logged_in %}
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/logout">Logout</a></li>
+        {% else %}
         <li><a href="/login">Login</a></li>
         <li><a href="/register">Register</a></li>
+        {% endif %}
       </ul>
     </div>
   </div>

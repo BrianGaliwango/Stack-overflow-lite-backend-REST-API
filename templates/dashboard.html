@@ -1,7 +1,28 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <h1>Welcome <small>{{session.email}}</small></h1>
-  <a href="/post_question" class="post-qtn-btn">Ask Question</a>
-  <hr>
+    
+      <h1 class="dashboard-header">
+          Welcome!
+        <br>
+        Don't get stuck
+      </h1>
+      <hr>
+      <a href="/post_question" class="post-qtn">Post Question</a>
+      <hr>
+
+      <div class="asked-qths">
+        <ul class="qtns-list">
+          {% for question in questions %}         
+          <li class="qtn-content">
+          <small>{{question.asked_by}}</small>
+          <br>
+          <small>{{question.title}}</small>
+          <br>
+            {{question.body}} 
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+
 {% endblock %}

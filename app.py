@@ -1,7 +1,9 @@
+from email.quoprimime import body_check
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_mysqldb import MySQL
 from wtforms import Form, StringField, TextAreaField, validators, PasswordField
 from passlib.hash import sha256_crypt
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -19,14 +21,6 @@ app.secret_key = "secret123456"
 @app.route("/")
 def index():
   return render_template("index.html")
-
-# # Register form
-# class RegisterForm(Form):
-#   first_name = StringField("Name", [validators.Length(min=1, max=50)])
-#   last_name = StringField("LastName", [validators.Length(min=1, max=50)])
-#   email = StringField("Email", [validators.Length(min=6, max=50)])
-#   password = PasswordField("Password", [validators.DataRequired(), validators.EqualTo("Confirm", message="Password do not match")])
-#   confirm = PasswordField("Confirm Password")
   
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -85,15 +79,64 @@ def login():
       return render_template("login.html")    
   return render_template("login.html")
 
+# Check if the user is logged in decorator
+def is_logged_in(f):
+  @wraps(f)
+  def wrap(*args, **kwargs):
+   if "logged_in" in session:
+     return f(*args, **kwargs)
+   else:
+     return redirect(url_for("login")) 
+  return wrap 
+
 # Logout
 @app.route("/logout")
+@is_logged_in
 def logout():
   session.clear()
   return redirect(url_for("login"))
 
 @app.route("/dashboard", methods=["GET", "POST"])
+@is_logged_in
 def dashboard():
-  return render_template("dashboard.html")
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute get questions query
+  result = cur.execute("SELECT * FROM questions")
+  
+  # Init questions from db
+  questions = cur.fetchall()
+  
+  if result > 0:
+    return render_template("dashboard.html", questions=questions) 
+  else:
+    return render_template("dashboard.html")
+  cur.close()
+  
+# Post question 
+@app.route("/post_question", methods=["GET", "POST"])
+@is_logged_in
+def post_question():
+  if request.method == "POST":
+    title = request.form.get("title")
+    body = request.form.get("body")
+    
+    # Create cursor connection
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("INSERT INTO questions(title, body, asked_by) VALUES (%s, %s, %s)", (title, body, session["email"]))
+    
+    # Commit to db
+    mysql.connection.commit()
+    
+    # Close connection
+    cur.close()
+    
+    return redirect(url_for("dashboard"))
+  
+  return render_template("post_question.html")
 
 if __name__ == "__main__":
   app.run(debug=True)
