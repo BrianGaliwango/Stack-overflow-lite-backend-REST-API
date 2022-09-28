@@ -132,6 +132,16 @@ a{
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0;
+}
+
+.qtn-btns {
+  display: inline-flex;
+  /* align-items: center; */
+}
+
+.qtn-btns form {
+  margin: 0;
 }
 
 .answer-btn ,
@@ -150,6 +160,7 @@ a{
 
 .delete-btn {
   color: red;
+  font-size: 13px;
 }
 
 .qtn-link {

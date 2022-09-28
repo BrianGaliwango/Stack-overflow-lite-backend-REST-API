@@ -170,5 +170,23 @@ def post_question():
   
   return render_template("post_question.html")
 
+# Delete question
+@app.route("/delete_question/<string:id>", methods=["POST"])
+@is_logged_in
+def delete_question(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  cur.execute("DELETE FROM questions WHERE id = %s", [id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  # Close cursor
+  cur.close()
+  
+  return redirect(url_for("dashboard"))
+
 if __name__ == "__main__":
   app.run(debug=True)
