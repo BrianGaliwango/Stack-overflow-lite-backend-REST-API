@@ -21,7 +21,39 @@ app.secret_key = "secret123456"
 @app.route("/")
 def index():
   return render_template("index.html")
+
+@app.route("/questions")
+def questions():
+  # Create cursor
+  cur = mysql.connection.cursor()
   
+  # Execute get questions query
+  result = cur.execute("SELECT * FROM questions")
+  
+  # Init questions from db
+  questions = cur.fetchall()
+  
+  if result > 0:
+    return render_template("questions.html", questions=questions) 
+  else:
+    return render_template("questions.html")
+  cur.close()
+  
+# Get single question
+@app.route("/question/<string:id>/")
+def get_question(id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+
+    question = cur.fetchone()
+    
+    return render_template("question.html", question=question)
+  
+    cur.close()
+    
 @app.route("/register", methods=["GET", "POST"])
 def register():
   if request.method == "POST":

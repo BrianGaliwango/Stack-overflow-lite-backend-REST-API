@@ -127,3 +127,31 @@ a{
   margin: 5px 0;
   padding: 5px;
 }
+
+.qtn-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.answer-btn ,
+.delete-btn{
+  background-color: whitesmoke;
+  border: none;
+  border-radius: 35px;
+  font-size: 14px;
+  margin: 0 5px;
+  padding: 0 5px;
+}
+
+.answer-btn {
+  color: green;
+}
+
+.delete-btn {
+  color: red;
+}
+
+.qtn-link {
+  color: black;
+}

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>{{question.title}}</h1>
+    <ul class="qtns-list">            
+      <li class="qtn-content">
+      <small>Posted by {{question.asked_by}}</small>
+      <br>
+      <small>{{question.date_asked}}</small>
+      <br>     
+          {{question.body | safe}}          
+      </li>
+    </ul>
+
+{% endblock %}

@@ -11,7 +11,7 @@
       <a href="/post_question" class="post-qtn">Post Question</a>
       <hr>
 
-      <div class="asked-qths">
+      <div class="asked-qtns">
         <ul class="qtns-list">
           {% for question in questions %}         
           <li class="qtn-content">
@@ -19,10 +19,20 @@
           <br>
           <small>{{question.title}}</small>
           <br>
-            {{question.body}} 
+          <div class="qtn-body">
+              {{question.body}} 
+              
+              <div class="qtn-btns">
+                <a href="/answer_question" class="answer-btn">answer</a>
+               <a href="/delete_question" class="delete-btn">delete</a>
+              </div>
+          </div>
           </li>
           {% endfor %}
         </ul>
       </div>
 
 {% endblock %}
+
+ <!-- <input type="submit" value="answer" class="answer-btn">
+                <input type="submit" value="delete" class="delete-btn"> -->
