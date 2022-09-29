@@ -150,6 +150,7 @@ a{
   border: none;
   border-radius: 35px;
   font-size: 14px;
+  font-family: inherit;
   margin: 0 5px;
   padding: 0 5px;
 }
@@ -167,10 +168,7 @@ a{
   color: black;
 }
 
-
-
 .post-answer-form {
-  /* width: 100%; */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -187,12 +185,19 @@ a{
 .submit-answer-btn {
   background-color: green;
   border: none;
-  border-radius: 15px;
-  padding: 8px;
+  border-radius: 5px;
+  padding: 5px;
   margin: 5px 0;
   color: #fff;
+  font-family: inherit;
 }
 
 .submit-answer-btn:active {
   transform: scale(0.98);
+}
+
+.answer-form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }

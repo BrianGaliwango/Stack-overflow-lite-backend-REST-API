@@ -171,7 +171,7 @@ def post_question():
   return render_template("post_question.html")
 
 # Answer question
-@app.route("/answer_question/<string:id>", methods=["GET", "POST"])
+@app.route("/answer_question/<string:id>/", methods=["GET", "POST"])
 # @is_logged_in()
 def post_answer(id): 
   # create cursor 
@@ -181,7 +181,24 @@ def post_answer(id):
   result = cur.execute("SELECT * FROM questions WHERE id = %s", [id])
   
   question = cur.fetchone()
-     
+  
+  # Send request
+  if request.method == "POST":
+    question_answer = request.form.get("answer")
+    print(question_answer)
+    #  create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("INSERT INTO answers (answer_body) VALUES (%s)", [question_answer])
+    # cur.execute("INSERT INTO questions SET answer_id WHERE id = %s", (id))
+    
+    # Commit to db   
+    mysql.connection.commit()
+    
+    # Close cursor
+    cur.close()
+    return redirect(url_for("dashboard"))
   return render_template("answer_question.html", question=question)
 
 # Delete question
