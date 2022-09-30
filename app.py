@@ -45,8 +45,9 @@ def get_question(id):
     cur = mysql.connection.cursor()
     
     # Execute query
-    result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
-
+    # result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    result = cur.execute("SELECT questions.username, questions.title, questions.body, questions.date_asked, answers.answer_username, answers.answer_body, answers.answered_date FROM questions INNER JOIN answers ON question_id = answers.question_id WHERE questions.id = %s", [id])
+    
     question = cur.fetchone()
     
     return render_template("question.html", question=question)
@@ -190,7 +191,7 @@ def post_answer(id):
     cur = mysql.connection.cursor()
     
     # Execute query
-    cur.execute("INSERT INTO answers (question_id, username, answer_body) VALUES (%s, %s, %s)", [id, session["username"], question_answer])
+    cur.execute("INSERT INTO answers (question_id, answer_username, answer_body) VALUES (%s, %s, %s)", [id, session["username"], question_answer])
     
     # Commit to db   
     mysql.connection.commit()
