@@ -19,7 +19,7 @@
       <h1 class="answers-title">Answers</h1>
       <ul class="answers-list"> 
         {% for answer in answers %}     
-        <li class="answer-content">
+        <li class="answer-content picked-answer">
           {{answer.answer_body | safe}}  
           <br>
           <small>Answered by {{answer.answer_username}}</small>

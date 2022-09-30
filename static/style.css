@@ -119,11 +119,11 @@ a{
 }
 
 .answers-title {
-  color: green;
+  color: orange;
 }
 
 .qtns-list ,
-.answers-list{
+.answers-list {
   list-style-type: none;
   margin: 0;
 }
@@ -210,4 +210,8 @@ a{
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+.picked-answer {
+  border-top: 5px solid green;
 }
