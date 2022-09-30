@@ -12,16 +12,19 @@
       </li>
     </ul>
 
+    <div class="answers">
     <h1>Answers</h1>
-    <ul class="qtns-list">            
+    <ul class="qtns-list"> 
+      {% for answer in answers %}     
       <li class="qtn-content">
-        {{question.answer_body | safe}}  
+        {{answer.answer_body | safe}}  
         <br>
-        <small>Answered by {{question.answer_username}}</small>
+        <small>Answered by {{answer.answer_username}}</small>
         <br>
-        <small>{{question.answered_date}}</small>          
-      </li>
+        <small>{{answer.answered_date}}</small>          
+      </li>  
+      {% endfor %}  
     </ul>
-
+  </div>
 
 {% endblock %}

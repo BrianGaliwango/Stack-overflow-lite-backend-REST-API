@@ -45,12 +45,18 @@ def get_question(id):
     cur = mysql.connection.cursor()
     
     # Execute query
-    # result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
-    result = cur.execute("SELECT questions.username, questions.title, questions.body, questions.date_asked, answers.answer_username, answers.answer_body, answers.answered_date FROM questions INNER JOIN answers ON question_id = answers.question_id WHERE questions.id = %s", [id])
+    result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    # cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    # result = cur.execute("SELECT questions.username, questions.title, questions.body, questions.date_asked, answers.answer_username, answers.answer_body, answers.answered_date FROM questions INNER JOIN answers ON question_id = answers.question_id WHERE questions.id = %s", [id])
     
     question = cur.fetchone()
+       
+    result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
     
-    return render_template("question.html", question=question)
+    answers = cur.fetchall()
+    
+    # answers = cur.fetchall()
+    return render_template("question.html", question=question, answers=answers)
   
     cur.close()
     
