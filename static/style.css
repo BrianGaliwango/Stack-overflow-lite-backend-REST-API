@@ -110,16 +110,26 @@ a{
   border: none;
 }
 
-.dashboard-header {
+.dashboard-header , 
+.selected-qtn-title ,
+.answers-title {
   text-align: center;
+  text-decoration: underline 2px solid gray;
+  text-underline-offset: 2px;
 }
 
-.qtns-list {
+.answers-title {
+  color: green;
+}
+
+.qtns-list ,
+.answers-list{
   list-style-type: none;
   margin: 0;
 }
 
-.qtn-content {
+.qtn-content ,
+.answer-content{
   width: 600px;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
