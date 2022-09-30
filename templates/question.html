@@ -6,10 +6,12 @@
       <li class="qtn-content">
         {{question.body | safe}}  
         <br>
-        <small>Posted by {{question.asked_by}}</small>
+        <small>Posted by {{question.username}}</small>
         <br>
         <small>{{question.date_asked}}</small>          
       </li>
     </ul>
+
+    
 
 {% endblock %}

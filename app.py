@@ -1,7 +1,6 @@
-from email.quoprimime import body_check
+
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_mysqldb import MySQL
-from wtforms import Form, StringField, TextAreaField, validators, PasswordField
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -59,6 +58,7 @@ def register():
   if request.method == "POST":
     first_name = request.form.get("first_name")
     last_name = request.form.get("last_name")
+    username = request.form.get("username")
     email = request.form.get("email")
     password = sha256_crypt.encrypt(str(request.form.get("password")))
     
@@ -66,7 +66,7 @@ def register():
     cur = mysql.connection.cursor()
       
     # Execute query
-    cur.execute("INSERT INTO users(first_name, last_name, email, password) VALUES (%s, %s, %s, %s)", (first_name, last_name, email, password))
+    cur.execute("INSERT INTO users(first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s)", (first_name, last_name, username, email, password))
     
     # commit to db
     mysql.connection.commit()
@@ -81,14 +81,14 @@ def register():
 def login():
   if request.method == "POST":
     # Get Form fields data
-    email = request.form["email"]
+    username = request.form["username"]
     password_candidate = request.form["password"]
     
     # Create cursor
     cur = mysql.connection.cursor()
     
     # Get user by email
-    result = cur.execute("SELECT * FROM users WHERE email = %s", [email])
+    result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
 
     # Verify result
     if result > 0:
@@ -100,7 +100,7 @@ def login():
       if sha256_crypt.verify(password_candidate, password):
         # When passed login
         session["logged_in"] = True
-        session["email"] = email
+        session["username"] = username
 
         return redirect(url_for("dashboard"))
       else:
@@ -158,7 +158,7 @@ def post_question():
     cur = mysql.connection.cursor()
     
     # Execute query
-    cur.execute("INSERT INTO questions(title, body, asked_by) VALUES (%s, %s, %s)", (title, body, session["email"]))
+    cur.execute("INSERT INTO questions(username, title, body) VALUES (%s, %s, %s)", (session["username"], title, body))
     
     # Commit to db
     mysql.connection.commit()
@@ -185,13 +185,12 @@ def post_answer(id):
   # Send request
   if request.method == "POST":
     question_answer = request.form.get("answer")
-    print(question_answer)
+
     #  create cursor
     cur = mysql.connection.cursor()
     
     # Execute query
-    cur.execute("INSERT INTO answers (answer_body) VALUES (%s)", [question_answer])
-    # cur.execute("INSERT INTO questions SET answer_id WHERE id = %s", (id))
+    cur.execute("INSERT INTO answers (question_id, username, answer_body) VALUES (%s, %s, %s)", [id, session["username"], question_answer])
     
     # Commit to db   
     mysql.connection.commit()
