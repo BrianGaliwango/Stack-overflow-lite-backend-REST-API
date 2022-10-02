@@ -9,6 +9,8 @@
     <ul class="qtns-list">
       {% for question in questions %}
       <li class="qtn-content">
+        {{question.title}}
+        <br>
         <a href="question/{{question.id}}" class="qtn-link">{{question.body}}</a>
       </li>
       {% endfor %}

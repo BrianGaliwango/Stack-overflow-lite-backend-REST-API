@@ -1,4 +1,5 @@
 
+from crypt import methods
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
@@ -55,11 +56,13 @@ def get_question(id):
     
     answers = cur.fetchall()
     
+    cur.close()
+    
     # answers = cur.fetchall()
     return render_template("question.html", question=question, answers=answers)
 
-    cur.close()
     
+#Register route 
 @app.route("/register", methods=["GET", "POST"])
 def register():
   if request.method == "POST":
@@ -153,6 +156,26 @@ def dashboard():
     return render_template("dashboard.html")
   cur.close()
   
+# Get single question
+@app.route("/user_question/<string:id>/")
+@is_logged_in
+def user_get_question(id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    
+    question = cur.fetchone()
+       
+    result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    
+    answers = cur.fetchall()
+    # Close cursor
+    cur.close()
+    
+    return render_template("user_question.html", question=question, answers=answers)
+  
 # Post question 
 @app.route("/post_question", methods=["GET", "POST"])
 @is_logged_in
@@ -207,6 +230,31 @@ def post_answer(id):
     return redirect(url_for("dashboard"))
   return render_template("answer_question.html", question=question)
 
+@app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
+@is_logged_in
+def mark_answer(answer_id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
+  
+  marked_answer = cur.fetchone()
+  
+  cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  # Close cursor
+  cur.close()
+  
+  return redirect(url_for("dashboard"))
+  
+  # return redirect(url_for("question/answer/%s" % answer_id))
+
+  # return redirect(url_for("question/answer/answer_id"))
+
 # Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])
 @is_logged_in
@@ -224,28 +272,6 @@ def delete_question(id):
   cur.close()
   
   return redirect(url_for("dashboard"))
-
-@app.route("/mark_answer/<string:answer_id>")
-# @is_logged_in
-def mark_answer(answer_id):
-  # Create cursor
-  cur = mysql.connection.cursor()
-  
-  # Execute query
-  result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
-  
-  marked_answer = cur.fetchone()
-  print(marked_answer)
-  
-  cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
-  
-  # Commit to db
-  cur.connection.commit()
-  
-  # Close cursor
-  cur.close()
-  print(marked_answer)
-  return redirect(url_for("mark_answer"))
 
 if __name__ == "__main__":
   app.run(debug=True)

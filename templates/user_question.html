@@ -25,14 +25,13 @@
           <small>Answered by {{answer.answer_username}}</small>
           <br>
           <small>{{answer.answered_date}}</small> 
-          
-          <!-- <a href="{{url_for('mark_answer', answer_id=answer.id)}}" class="pick-answer-btn">Mark Answer</a>   -->
 
-          <!-- <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="POST">
+           <!-- <a href="{{url_for('mark_answer', answer_id=answer.id)}}" class="pick-answer-btn">Mark Answer</a>   -->
+
+          <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
             <input type="hidden" name="method" value="MARK ANSWER">
             <input type="submit" value="mark answer" class="pick-answer-btn">
-          </form> -->
-   
+          </form> 
         </li>  
         {% endfor %}  
       </ul>
