@@ -19,12 +19,13 @@
       <h1 class="answers-title">Answers</h1>
       <ul class="answers-list"> 
         {% for answer in answers %}     
-        <li class="answer-content picked-answer">
+        <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
           {{answer.answer_body | safe}}  
           <br>
           <small>Answered by {{answer.answer_username}}</small>
           <br>
-          <small>{{answer.answered_date}}</small>          
+          <small>{{answer.answered_date}}</small> 
+          <a href="{{url_for('mark_answer', answer_id=answer.id)}}" class="pick-answer-btn">Mark Answer</a>         
         </li>  
         {% endfor %}  
       </ul>

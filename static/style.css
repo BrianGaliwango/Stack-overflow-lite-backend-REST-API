@@ -155,7 +155,8 @@ a{
 }
 
 .answer-btn ,
-.delete-btn{
+.delete-btn ,
+.pick-answer-btn{
   background-color: whitesmoke;
   border: none;
   border-radius: 35px;
@@ -165,7 +166,8 @@ a{
   padding: 0 5px;
 }
 
-.answer-btn {
+.answer-btn ,
+.pick-answer-btn {
   color: green;
 }
 

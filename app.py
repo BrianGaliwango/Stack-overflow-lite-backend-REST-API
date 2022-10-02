@@ -57,7 +57,7 @@ def get_question(id):
     
     # answers = cur.fetchall()
     return render_template("question.html", question=question, answers=answers)
-  
+
     cur.close()
     
 @app.route("/register", methods=["GET", "POST"])
@@ -224,6 +224,28 @@ def delete_question(id):
   cur.close()
   
   return redirect(url_for("dashboard"))
+
+@app.route("/mark_answer/<string:answer_id>")
+# @is_logged_in
+def mark_answer(answer_id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
+  
+  marked_answer = cur.fetchone()
+  print(marked_answer)
+  
+  cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  # Close cursor
+  cur.close()
+  print(marked_answer)
+  return redirect(url_for("mark_answer"))
 
 if __name__ == "__main__":
   app.run(debug=True)
