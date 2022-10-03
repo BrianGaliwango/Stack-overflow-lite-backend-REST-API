@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block body %} 
+
+  <h1>My profile</h1>
+    
+    <hr>
+    <a href="/post_question" class="post-qtn">Ask Question</a>
+    <hr>
+
+  <div class="main-pro-container">
+    <div class="asked-qtns">
+      <ul class="qtns-list">
+        {% for question in questions %}         
+        <li class="qtn-content">
+        <small>Asked by : {{question.username}}</small>
+        <br>
+        <small>{{question.title}}</small>
+        <br>
+        <div class="qtn-body">
+          <a href="profile_question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+            
+          <div class="qtn-btns">
+            <a href="/edit_question/{{question.id}}" class="answer-btn">edit question</a>
+          
+              <form action="{{url_for('delete_question', id=question.id)}}" method="POST">
+              <input type="hidden" name="method" value="DELETE">
+              <input type="submit" value="delete" class="delete-btn">
+              </form>
+          </div>
+        </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div class="answers-">
+      <h1 class="answers-title">Answers</h1>
+        
+      <div class="my-answers">  
+        <ul class="answers-list"> 
+          {% for answer in answers %}     
+          <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+            {{answer.answer_body | safe}}  
+            <br>
+            <small>Answered by {{answer.answer_username}}</small>
+            <br>
+
+            <div class="qtn-body">
+              <small>{{answer.answered_date}}</small> 
+
+              <div class="qtn-btns">
+                <a href="/edit_answer/{{answer.id}}" class="answer-btn">edit answer</a>
+
+                <form action="{{url_for('delete_answer', id=answer.id)}}" method="POST">
+                  <input type="hidden" name="method" value="DELETE">
+                  <input type="submit" value="delete" class="delete-btn">
+                </form>
+              </div> 
+          </div>              
+          </li>  
+          {% endfor %}  
+        </ul>
+      </div>
+    </div>  
+  </div>
+
+{% endblock %}

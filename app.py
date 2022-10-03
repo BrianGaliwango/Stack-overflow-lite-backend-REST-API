@@ -1,7 +1,8 @@
-
 from crypt import methods
+from unittest import result
 from flask import Flask, render_template, request, redirect, session, url_for
 from flask_mysqldb import MySQL
+# from flask_login import current_user
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -138,6 +139,25 @@ def logout():
   session.clear()
   return redirect(url_for("login"))
 
+# Profile route
+@app.route("/profile", methods=["GET", "POST"])
+@is_logged_in
+def profile():
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  result = cur.execute("SELECT * FROM questions WHERE username = %s", [session["username"]])
+  
+  questions = cur.fetchall()
+  
+  result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
+  
+  answers = cur.fetchall()
+  print(answers)
+  return render_template("profile.html", questions=questions, answers=answers)
+
+# Dashboard
 @app.route("/dashboard", methods=["GET", "POST"])
 @is_logged_in
 def dashboard():
@@ -157,9 +177,30 @@ def dashboard():
   cur.close()
   
 # Get single question
-@app.route("/user_question/<string:id>/")
+@app.route("/user_question/<string:id>/", methods=["GET", "POST"])
 @is_logged_in
 def user_get_question(id):
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    
+    question = cur.fetchone()
+       
+    result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    
+    answers = cur.fetchall()
+    
+    # Close cursor
+    cur.close()
+    
+    return render_template("user_question.html", question=question, answers=answers)
+
+#Get profile question 
+@app.route("/profile_question/<string:id>/")
+@is_logged_in
+def profile_get_question(id):
     # Create cursor
     cur = mysql.connection.cursor()
     
@@ -174,8 +215,8 @@ def user_get_question(id):
     # Close cursor
     cur.close()
     
-    return render_template("user_question.html", question=question, answers=answers)
-  
+    return render_template("profile_question.html", question=question, answers=answers)    
+    
 # Post question 
 @app.route("/post_question", methods=["GET", "POST"])
 @is_logged_in
@@ -230,6 +271,7 @@ def post_answer(id):
     return redirect(url_for("dashboard"))
   return render_template("answer_question.html", question=question)
 
+# Mark answer
 @app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
 @is_logged_in
 def mark_answer(answer_id):
@@ -254,6 +296,18 @@ def mark_answer(answer_id):
   # return redirect(url_for("question/answer/%s" % answer_id))
 
   # return redirect(url_for("question/answer/answer_id"))
+  
+#Edit my question
+@app.route("/edit_question/<string:id>", methods=["GET", "POST"])
+@is_logged_in
+def edit_question(id):
+  
+  return render_template("edit_question.html")
+
+#Edit my answer
+@app.route("/edit_answer/<string:id>", methods=["GET", "POST"])
+def edit_answer(id):
+  return render_template("edit_answer.html")
 
 # Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])
@@ -271,7 +325,24 @@ def delete_question(id):
   # Close cursor
   cur.close()
   
-  return redirect(url_for("dashboard"))
+  return redirect(url_for("profile"))
+
+@app.route("/delete_answer/<string:id>", methods=["POST"])
+@is_logged_in
+def delete_answer(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  cur.execute("DELETE FROM answers WHERE id = %s", [id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  # Close cursor
+  cur.close()
+  
+  return redirect(url_for("profile"))
 
 if __name__ == "__main__":
   app.run(debug=True)

@@ -103,12 +103,14 @@ a{
   padding: 10px;
 }
 
-.dashboard-container {
+.dashboard-container ,
+.answers-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   border: none;
 }
+
 
 .dashboard-header , 
 .selected-qtn-title ,
@@ -129,7 +131,7 @@ a{
 }
 
 .qtn-content ,
-.answer-content{
+.answer-content {
   width: 600px;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
@@ -138,7 +140,15 @@ a{
   padding: 5px;
 }
 
-.qtn-body {
+.comment-section {
+   width: 100%;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: flex-end; */ 
+}
+
+.qtn-body ,
+.date-answer-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -156,7 +166,7 @@ a{
 
 .answer-btn ,
 .delete-btn ,
-.pick-answer-btn{
+.pick-answer-btn {
   background-color: whitesmoke;
   border: none;
   border-radius: 35px;
@@ -180,14 +190,20 @@ a{
   color: blue;
 }
 
-.post-answer-form {
+.post-answer-form ,
+.post-comment-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
 
-.post-answer-form textarea {
-  font-size: 18px;
+.post-answer-form textarea ,
+.post-comment-form textarea {
+  font-size: 18.5px;
+}
+
+.post-comment-form textarea {
+  /* width: 100%; */
 }
 
 .answer-qtn:focus {

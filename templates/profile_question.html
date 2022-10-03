@@ -27,28 +27,14 @@
         <div class="date-answer-container">
           <small>{{answer.answered_date}}</small> 
 
+          <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
+            <input type="hidden" name="method" value="MARK ANSWER">
+            <input type="submit" value="mark answer" class="pick-answer-btn">
+          </form> 
       </div>
       </li>  
       {% endfor %}  
       </ul>
-  </div>
-
-  <div class="comments-container">
-    <ul>
-      <li>Comments</li>
-    </ul>
-  </div>
-
-  <br>
-
-  <div class="comment-section">
-    <form action="" method="POST" class="post-comment-form">
-      <div class="answer-form-group">
-        <label>Comment</label>
-        <textarea name="comment" cols="52" rows="6" class="comment-answer" placeholder="Comment answer"></textarea>
-    </div>
-    <input type="submit" value="submit" class="submit-answer-btn">
-  </form>
   </div>
 </div>
 {% endblock %}
