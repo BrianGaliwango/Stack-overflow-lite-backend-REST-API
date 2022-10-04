@@ -180,6 +180,22 @@ def dashboard():
 @app.route("/user_question/<string:id>/", methods=["GET", "POST"])
 @is_logged_in
 def user_get_question(id):
+  
+  # send comment request
+    if request.method == "POST":
+      answer_comment = request.form.get("comment")
+      
+      # Create cursor
+      cur = mysql.connection.cursor()
+      
+      cur.execute("INSERT INTO comments (comment_qtn_id, comment_username, comment_body) VALUES (%s, %s, %s)",[id, session["username"], answer_comment])
+      
+      # Commit cursor to database
+      mysql.connection.commit()
+      
+       # Close cursor
+      # cur.close()
+      
     # Create cursor
     cur = mysql.connection.cursor()
     
@@ -192,10 +208,22 @@ def user_get_question(id):
     
     answers = cur.fetchall()
     
+     # Get comments
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM comments WHERE comment_qtn_id = %s",[id])
+  
+    comments = cur.fetchall()
+    print(comments)
+        
     # Close cursor
     cur.close()
     
-    return render_template("user_question.html", question=question, answers=answers)
+    context = {"comments": comments, "question": question,"answers":answers}
+    
+    # return render_template("user_question.html", question=question, comments=comments, answers=answers)
+    return render_template("user_question.html", **context)
 
 #Get profile question 
 @app.route("/profile_question/<string:id>/")
@@ -297,17 +325,73 @@ def mark_answer(answer_id):
 
   # return redirect(url_for("question/answer/answer_id"))
   
+#Add comment to answer 
+@app.route("/add_comment/<string:id>", methods=["GET", "POST"])
+def add_comment(id):
+    
+  return redirect(url_for("user_question/question_id>"))
+  
 #Edit my question
 @app.route("/edit_question/<string:id>", methods=["GET", "POST"])
 @is_logged_in
 def edit_question(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
   
-  return render_template("edit_question.html")
+  # Get query
+  result = cur.execute("SELECT * FROM questions WHERE id = %s", [id])
+  
+  question = cur.fetchone()
+  
+  # Get request form
+  if request.method == "POST":
+    question = request.form["question"]
+    
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, id])
+  
+    # Commit to db
+    mysql.connection.commit()
+    
+    # Close cursor
+    cur.close()
+    return redirect(url_for("profile"))
+  
+  return render_template("edit_question.html", question=question)
 
 #Edit my answer
 @app.route("/edit_answer/<string:id>", methods=["GET", "POST"])
 def edit_answer(id):
-  return render_template("edit_answer.html")
+  #Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Get query
+  result = cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+  
+  # Get result
+  answer = cur.fetchone()
+  
+  # Get request
+  if request.method == "POST":
+    answer = request.form["answer"]
+  
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, id])
+    
+    # Commit to db
+    mysql.connection.commit()
+    
+    # Close cursor
+    cur.close()
+    return redirect(url_for("dashboard"))
+    
+  return render_template("edit_answer.html", answer=answer)
 
 # Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])

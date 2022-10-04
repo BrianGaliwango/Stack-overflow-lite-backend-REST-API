@@ -50,7 +50,7 @@ a{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .home-container {
@@ -114,7 +114,8 @@ a{
 
 .dashboard-header , 
 .selected-qtn-title ,
-.answers-title {
+.answers-title ,
+.comments-title{
   text-align: center;
   text-decoration: underline 2px solid gray;
   text-underline-offset: 2px;
