@@ -220,7 +220,7 @@ def user_get_question(id):
     # Close cursor
     cur.close()
     
-    context = {"comments": comments, "question": question,"answers":answers}
+    context = {"comments":comments, "question":question,"answers":answers}
     
     # return render_template("user_question.html", question=question, comments=comments, answers=answers)
     return render_template("user_question.html", **context)
@@ -319,7 +319,7 @@ def mark_answer(answer_id):
   # Close cursor
   cur.close()
   
-  return redirect(url_for("dashboard"))
+  return redirect(url_for("profile"))
   
   # return redirect(url_for("question/answer/%s" % answer_id))
 
