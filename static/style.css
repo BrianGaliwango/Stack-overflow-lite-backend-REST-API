@@ -96,11 +96,31 @@ a{
   background-color: blueviolet;
 }
 
-.post-qtn {
+.post-qtn , 
+.myPro-answers-btn {
   background-color: green;
   border: none;
   border-radius: 5px;
   padding: 10px;
+}
+
+.myPro-answers-btn {
+  background-color: orange;
+}
+
+.post-qtn:hover , 
+.myPro-answers-btn:hover {
+  background-color: rgba(136, 136, 136, 0.5);
+}
+
+.myPro-asked-qtns-container {
+  margin-bottom: 20px;
+}
+
+.ask-qtn-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .dashboard-container ,
@@ -111,11 +131,10 @@ a{
   border: none;
 }
 
-
 .dashboard-header , 
 .selected-qtn-title ,
-.answers-title ,
-.comments-title{
+.my-questions-title ,
+.answers-title {
   text-align: center;
   text-decoration: underline 2px solid gray;
   text-underline-offset: 2px;
@@ -149,7 +168,8 @@ a{
 }
 
 .qtn-body ,
-.date-answer-container {
+.date-answer-container ,
+.question-date {
   display: flex;
   align-items: center;
   justify-content: space-between;

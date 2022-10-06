@@ -26,11 +26,17 @@
         <br>
         <div class="date-answer-container">
           <small>{{answer.answered_date}}</small> 
-
+          {% if answer.marked_answer != True %}
           <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
             <input type="hidden" name="method" value="MARK ANSWER">
             <input type="submit" value="mark answer" class="pick-answer-btn">
           </form> 
+          {% else %}
+          <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
+            <input type="hidden" name="method" value="MARK ANSWER">
+            <input type="submit" value="unmark answer" class="pick-answer-btn">
+          </form> 
+          {% endif %}
       </div>
       </li>  
       {% endfor %}  

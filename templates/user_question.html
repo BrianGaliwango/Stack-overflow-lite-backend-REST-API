@@ -10,7 +10,14 @@
           <br>
           <small>Posted by {{question.username}}</small>
           <br>
-          <small>{{question.date_asked}}</small>          
+          <div class="question-date">
+          <small>{{question.date_asked}}</small>   
+          {% if question.username != session["username"] %}
+          <div class="qtn-btns">
+            <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
+          </div> 
+          {% endif %}
+        </div>        
         </li>
       </ul>
   </div>
@@ -26,7 +33,12 @@
         <br>
         <div class="date-answer-container">
           <small>{{answer.answered_date}}</small> 
-          <a href="/edit_answer/{{answer.id}}" class="answer-btn">edit answer</a>
+          {% if answer.answer_username == session["username"] %}
+          <form action="{{url_for('dashboard_delete_answer', id=answer.id)}}" method="POST">
+            <input type="hidden" name="method" value="DELETE">
+            <input type="submit" value="delete" class="delete-btn">
+          </form>
+          {% endif %}
         </div>     
       </li>  
       {% endfor %}  

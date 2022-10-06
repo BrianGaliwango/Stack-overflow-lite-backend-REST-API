@@ -159,13 +159,28 @@ def profile():
   
   questions = cur.fetchall()
   
+  return render_template("profile.html", questions=questions)
+
+#Get myPro profile answers
+@app.route("/myPro_answers", methods=["GET", "POST"])
+@is_logged_in
+def get_myPro_answers():
+  # Create cursor
+  cur = mysql.connection.cursor()
   # Execute  answers query
   result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
   
   # Get answers
   answers = cur.fetchall()
   
-  return render_template("profile.html", questions=questions, answers=answers)
+  # Get answered questions
+  # create cursor
+  cur = mysql.connection.cursor()
+  
+  # close cursor
+  cur.close()
+  
+  return render_template("myPro_answers.html", answers=answers, questions=questions)
 
 # Dashboard
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -198,7 +213,8 @@ def user_get_question(id):
     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
     
     question = cur.fetchone()
-       
+      
+    #Execute answers query  
     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
     
     answers = cur.fetchall()
@@ -231,7 +247,7 @@ def profile_get_question(id):
     # Close cursor
     cur.close()
     
-    return render_template("profile_question.html", question=question, answers=answers)    
+    return render_template("profile_question.html", question=question, answers=answers)   
     
 # Post question 
 @app.route("/post_question", methods=["GET", "POST"])
@@ -291,9 +307,19 @@ def post_answer(id):
     # Commit to db   
     mysql.connection.commit()
     
+    # Get answers
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    
+    answers = cur.fetchall()
+    
     # Close cursor
     cur.close()
-    return redirect(url_for("dashboard"))
+    # return redirect(url_for("dashboard"))
+    return render_template("user_question.html", question=question, answers=answers)
   return render_template("answer_question.html", question=question)
 
 # Mark answer
@@ -307,12 +333,41 @@ def mark_answer(answer_id):
   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
   
   # Get marked_answer
-  marked_answer = cur.fetchone()
+  # marked_answer = cur.fetchone()
   
   cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
   
   # Commit to db
   cur.connection.commit()
+  
+  question = cur.fetchone()
+  print (question)
+  
+  # Close cursor
+  cur.close()
+  
+  return redirect(url_for("profile"))
+
+# UnMark answer
+@app.route("/unmark_answer/<string:answer_id>", methods=["GET", "PUT"])
+@is_logged_in
+def unmark_answer(answer_id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
+  
+  # Get marked_answer
+  # marked_answer = cur.fetchone()
+  
+  cur.execute("UPDATE answers SET marked_answer = '0' WHERE id = %s", [answer_id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  question = cur.fetchone()
+  print (question)
   
   # Close cursor
   cur.close()
@@ -384,13 +439,23 @@ def edit_answer(id):
     # Commit to db
     mysql.connection.commit()
     
+    # Get answers 
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
+    
+    answers = cur.fetchall()
+    
     # Close cursor
     cur.close()
-    return redirect(url_for("dashboard"))
+    # return redirect(url_for("profile"))
+    return render_template("myPro_answers.html", answers=answers)
     
   return render_template("edit_answer.html", answer=answer)
 
-# Delete question
+# Profile Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])
 @is_logged_in
 def delete_question(id):
@@ -408,7 +473,7 @@ def delete_question(id):
   
   return redirect(url_for("profile"))
 
-# Delete answer 
+# Profile Delete answer 
 @app.route("/delete_answer/<string:id>", methods=["POST"])
 @is_logged_in
 def delete_answer(id):
@@ -421,10 +486,37 @@ def delete_answer(id):
   # Commit to db
   cur.connection.commit()
   
+  # Create get answers cursor 
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
+  
+  answers = cur.fetchall()
+  
   # Close cursor
   cur.close()
   
-  return redirect(url_for("profile"))
+  # return redirect(url_for("myPro_answers"))
+  return render_template("myPro_answers.html", answers=answers)
 
+# Dashboard Delete answer 
+@app.route("/dashboard_delete_answer/<string:id>", methods=["POST"])
+@is_logged_in
+def dashboard_delete_answer(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  cur.execute("DELETE FROM answers WHERE id = %s", [id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  # Close cursor
+  cur.close()
+  
+  return redirect(url_for("dashboard"))
+  
 if __name__ == "__main__":
   app.run(debug=True)
