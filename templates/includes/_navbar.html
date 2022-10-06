@@ -7,9 +7,13 @@
         <li><a href="/questions">Questions</a></li>
       </ul>
     </div>
+    <div class="search-container">
+      <form action="/search_questions" method="POST">
+        <input type="search" name="q" class="search-form" autocomplete="off" placeholder="search question">
+      </form>
+    </div>
 
-    <div class="navbar-items">
-
+    <div class="navbar-items">  
       <ul class="nav-list">
         {% if session.logged_in %}
         <li><a href="/profile">@{{session["username"]}}</a></li>

@@ -59,6 +59,36 @@ def get_question(id):
     
     # answers = cur.fetchall()
     return render_template("question.html", question=question, answers=answers)
+  
+#Search Route
+@app.route("/search_questions", methods=["GET", "POST"])
+def search_questions():
+  # Send request
+  if request.method == "POST":
+    search_questions = request.form.get("q")
+    
+    if not search_questions:
+      return redirect(url_for("questions"))
+    print(search_questions)
+    
+    # Create cursor 
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    result = cur.execute("SELECT * FROM questions WHERE title LIKE %s", [search_questions])
+
+    if result > 0:
+      questions = cur.fetchall()
+    else:
+      return redirect(url_for("questions"))  
+       
+    # Commit to db
+    mysql.connection.commit()
+    
+    # Close cursor
+    cur.close()
+    
+  return render_template("search_questions.html", questions=questions) 
 
     
 #Register route 
@@ -128,7 +158,9 @@ def login():
       # Close connection
     cur.close()
   else:
-    return render_template("login.html")    
+    return render_template("login.html") 
+  return render_template("login.html") 
+      
 
 # Check if the user is logged in decorator
 def is_logged_in(f):

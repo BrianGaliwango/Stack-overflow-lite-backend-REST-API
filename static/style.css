@@ -24,6 +24,25 @@
   align-items: center;
 }
 
+.search-container {
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.search-form {
+  width: 300px;
+  /* padding: 5px; */
+  border: none;
+  border-radius: 35px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.search-form:focus {
+  outline: 0;
+}
+
 .navbar-items {
    display: flex;
    align-items: center; 
