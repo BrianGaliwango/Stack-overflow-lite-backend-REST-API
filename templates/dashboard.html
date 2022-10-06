@@ -2,40 +2,36 @@
 
 {% block body %}
     
-      <h1 class="dashboard-header">
-          Welcome!
-        <br>
-        Don't get stuck
-      </h1>
-      <hr>
-      <a href="/post_question" class="post-qtn">Post Question</a>
-      <hr>
+    <h1 class="dashboard-header">
+        Welcome!
+      <br>
+      Don't get stuck
+    </h1>
+    <hr>
 
-      <div class="asked-qtns">
-        <ul class="qtns-list">
-          {% for question in questions %}         
-          <li class="qtn-content">
+    <a href="/post_question" class="post-qtn">Ask Question</a>
+    <hr>
+
+    <div class="asked-qtns">
+      <ul class="qtns-list">
+        {% for question in questions %}         
+        <li class="qtn-content">
           <small>Asked by : {{question.username}}</small>
-          <br>
+        <br>
           <small>{{question.title}}</small>
-          <br>
+        <br>
           <div class="qtn-body">
-              {{question.body}} 
-              
-              <div class="qtn-btns">
-                <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
-
-               <form action="{{url_for('delete_question', id=question.id)}}" method="POST">
-                <input type="hidden" name="method" value="DELETE">
-                <input type="submit" value="delete" class="delete-btn">
-               </form>
-
-              </div>
+            <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
+            {% if question.username != session["username"]%}                    
+             <div class="qtn-btns">
+              <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
+            </div>  
+            {% endif %}   
           </div>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
 
 {% endblock %}
 

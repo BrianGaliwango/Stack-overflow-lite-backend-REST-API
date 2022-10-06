@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="answers-container">
+    <div class="selected-qtn">
+      <h1 class="selected-qtn-title">{{question.title}}</h1>
+      <ul class="qtns-list">            
+        <li class="qtn-content">
+          {{question.body | safe}}  
+          <br>
+          <small>Posted by {{question.username}}</small>
+          <br>
+          <div class="question-date">
+          <small>{{question.date_asked}}</small>   
+          {% if question.username != session["username"] %}
+          <div class="qtn-btns">
+            <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
+          </div> 
+          {% endif %}
+        </div>        
+        </li>
+      </ul>
+  </div>
+
+  <div class="answers-">
+    <h1 class="answers-title">Answers</h1>
+    <ul class="answers-list"> 
+      {% for answer in answers %}     
+      <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+        {{answer.answer_body | safe}}  
+        <br>
+        <small>Answered by {{answer.answer_username}}</small>
+        <br>
+        <div class="date-answer-container">
+          <small>{{answer.answered_date}}</small> 
+          {% if answer.answer_username == session["username"] %}
+          <form action="{{url_for('dashboard_delete_answer', id=answer.id)}}" method="POST">
+            <input type="hidden" name="method" value="DELETE">
+            <input type="submit" value="delete" class="delete-btn">
+          </form>
+          {% endif %}
+        </div>     
+      </li>  
+      {% endfor %}  
+      </ul>
+  </div>
+</div>
+{% endblock %}

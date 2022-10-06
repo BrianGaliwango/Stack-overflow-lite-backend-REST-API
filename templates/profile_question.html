@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <div class="answers-container">
+    <div class="selected-qtn">
+      <h1 class="selected-qtn-title">{{question.title}}</h1>
+      <ul class="qtns-list">            
+        <li class="qtn-content">
+          {{question.body | safe}}  
+          <br>
+          <small>Posted by {{question.username}}</small>
+          <br>
+          <small>{{question.date_asked}}</small>          
+        </li>
+      </ul>
+  </div>
+
+  <div class="answers-">
+    <h1 class="answers-title">Answers</h1>
+    <ul class="answers-list"> 
+      {% for answer in answers %}     
+      <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+        {{answer.answer_body | safe}}  
+        <br>
+        <small>Answered by {{answer.answer_username}}</small>
+        <br>
+        <div class="date-answer-container">
+          <small>{{answer.answered_date}}</small> 
+          {% if answer.marked_answer != True %}
+          <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
+            <input type="hidden" name="method" value="MARK ANSWER">
+            <input type="submit" value="mark answer" class="pick-answer-btn">
+          </form> 
+          {% else %}
+          <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
+            <input type="hidden" name="method" value="MARK ANSWER">
+            <input type="submit" value="unmark answer" class="pick-answer-btn">
+          </form> 
+          {% endif %}
+      </div>
+      </li>  
+      {% endfor %}  
+      </ul>
+  </div>
+
+  
+</div>
+{% endblock %}

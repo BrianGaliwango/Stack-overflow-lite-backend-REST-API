@@ -12,6 +12,7 @@
 
       <ul class="nav-list">
         {% if session.logged_in %}
+        <li><a href="/profile">@{{session["username"]}}</a></li>
         <li><a href="/dashboard">Dashboard</a></li>
         <li><a href="/logout">Logout</a></li>
         {% else %}

@@ -50,7 +50,7 @@ a{
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 100px;
+  margin-top: 50px;
 }
 
 .home-container {
@@ -96,30 +96,62 @@ a{
   background-color: blueviolet;
 }
 
-.post-qtn {
+.post-qtn , 
+.myPro-answers-btn {
   background-color: green;
   border: none;
   border-radius: 5px;
   padding: 10px;
 }
 
-.dashboard-container {
+.myPro-answers-btn {
+  background-color: orange;
+}
+
+.post-qtn:hover , 
+.myPro-answers-btn:hover {
+  background-color: rgba(136, 136, 136, 0.5);
+}
+
+.myPro-asked-qtns-container {
+  margin-bottom: 20px;
+}
+
+.ask-qtn-btn-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.dashboard-container ,
+.answers-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   border: none;
 }
 
-.dashboard-header {
+.dashboard-header , 
+.selected-qtn-title ,
+.my-questions-title ,
+.answers-title {
   text-align: center;
+  text-decoration: underline 2px solid gray;
+  text-underline-offset: 2px;
 }
 
-.qtns-list {
+.answers-title {
+  color: orange;
+}
+
+.qtns-list ,
+.answers-list {
   list-style-type: none;
   margin: 0;
 }
 
-.qtn-content {
+.qtn-content ,
+.answer-content {
   width: 600px;
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
@@ -128,7 +160,16 @@ a{
   padding: 5px;
 }
 
-.qtn-body {
+.comment-section {
+   width: 100%;
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: flex-end; */ 
+}
+
+.qtn-body ,
+.date-answer-container ,
+.question-date {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -145,7 +186,8 @@ a{
 }
 
 .answer-btn ,
-.delete-btn{
+.delete-btn ,
+.pick-answer-btn {
   background-color: whitesmoke;
   border: none;
   border-radius: 35px;
@@ -155,7 +197,8 @@ a{
   padding: 0 5px;
 }
 
-.answer-btn {
+.answer-btn ,
+.pick-answer-btn {
   color: green;
 }
 
@@ -165,17 +208,23 @@ a{
 }
 
 .qtn-link {
-  color: black;
+  color: blue;
 }
 
-.post-answer-form {
+.post-answer-form ,
+.post-comment-form {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 }
 
-.post-answer-form textarea {
-  font-size: 18px;
+.post-answer-form textarea ,
+.post-comment-form textarea {
+  font-size: 18.5px;
+}
+
+.post-comment-form textarea {
+  /* width: 100%; */
 }
 
 .answer-qtn:focus {
@@ -200,4 +249,8 @@ a{
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+
+.picked-answer {
+  border-top: 5px solid green;
 }
