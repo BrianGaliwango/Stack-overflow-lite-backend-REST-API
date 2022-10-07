@@ -3,15 +3,13 @@
 {% block body %} 
 
   <h1>@{{session["username"]}}</h1>
-    
+  
   <div class="main-pro-container">
-    <div class="myPro-asked-qtns-container">
-
-      <div class="ask-qtn-btn-container">
-        <a href="/post_question" class="post-qtn">Ask Question</a>
-        <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
-       </div>
-
+    <div class="profile-askQtnBtn-container">
+      <a href="/post_question" class="post-qtn">Ask Question</a>
+      <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
+     </div>
+    <div class="myPro-asked-qtns-container">      
       <h1 class="my-questions-title">My Questions</h1>
 
       <ul class="qtns-list">

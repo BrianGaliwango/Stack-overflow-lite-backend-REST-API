@@ -404,7 +404,6 @@ def downvote_answer(answer_id):
     
     # Execute query
     cur.execute("UPDATE answers SET votes = votes - 1 WHERE id = %s", [answer_id])
-    # cur.execute("INSERT INTO answers(votes) VALUES (%s)", [downvote])
     
     # Commit to db
     mysql.connection.commit()

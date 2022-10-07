@@ -53,8 +53,9 @@
         <br>
         <small>Answered by {{answer.answer_username}}</small>
         <br>
+        <small>{{answer.answered_date}}</small> 
         <div class="date-answer-container">
-          <small>{{answer.answered_date}}</small> 
+          
           {% if answer.answer_username == session["username"] %}
           <form action="{{url_for('dashboard_delete_answer', id=answer.id)}}" method="POST">
             <input type="hidden" name="method" value="DELETE">
