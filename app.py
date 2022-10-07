@@ -367,6 +367,53 @@ def post_answer(id):
     return render_template("user_question.html", question=question, answers=answers)
   return render_template("answer_question.html", question=question)
 
+# Upvote answer
+@app.route("/upvote_answer/<answer_id>", methods=["POST"])
+@is_logged_in
+def upvote_answer(answer_id):
+  # Send request
+  if request.method == "POST":
+    votes = request.form.get("upvote")
+    
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE answers SET votes = votes + 1 WHERE id = %s", [answer_id])
+    
+    # Commit to db
+    mysql.connection.commit()
+              
+    # Close cursor
+    cur.close()
+  
+    return redirect(url_for("dashboard"))
+
+# DownVote answer
+@app.route("/downvote_answer/<answer_id>", methods=["POST"])
+@is_logged_in
+def downvote_answer(answer_id):
+  # Send request
+  if request.method == "POST":
+    votes = request.form.get("downvote")
+    
+    # downvote = votes - 1
+    
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE answers SET votes = votes - 1 WHERE id = %s", [answer_id])
+    # cur.execute("INSERT INTO answers(votes) VALUES (%s)", [downvote])
+    
+    # Commit to db
+    mysql.connection.commit()
+              
+    # Close cursor
+    cur.close()
+  
+    return redirect(url_for("dashboard"))
+
 # Mark answer
 @app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
 @is_logged_in
@@ -386,7 +433,6 @@ def mark_answer(answer_id):
   cur.connection.commit()
   
   question = cur.fetchone()
-  print (question)
   
   # Close cursor
   cur.close()
@@ -412,7 +458,6 @@ def unmark_answer(answer_id):
   cur.connection.commit()
   
   question = cur.fetchone()
-  print (question)
   
   # Close cursor
   cur.close()
@@ -562,122 +607,6 @@ def dashboard_delete_answer(id):
   cur.close()
   
   return redirect(url_for("dashboard"))
-
-# Upvote answer
-@app.route("/upvote_answer/<answer_id>", methods=["POST"])
-@is_logged_in
-def upvote_answer(answer_id):
-  # Send request
-  if request.method == "POST":
-    upvote = request.form.get("upvote")
-    
-    # upvote = upvote + 1
-    
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute query
-    cur.execute("UPDATE answers SET votes = votes + 1 WHERE id = %s", [answer_id])
-    
-    # Commit to db
-    mysql.connection.commit()
-    
-    # # Get votes
-    # # Create cursor
-    # cur = mysql.connection.cursor()
-    
-    # # Execute get votes query
-    # result = cur.execute("SELECT votes FROM answers WHERE id = %s", [answer_id])
-    
-    # votes = cur.fetchone()
-    
-    # # Commit to db
-    # mysql.connection.commit()
-    
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute get questions query
-    result = cur.execute("SELECT * FROM questions INNER JOIN answers ON question_id WHERE answers.id = %s", [answer_id])
-    
-    question = cur.fetchone()
-    
-    # Commit to db
-    mysql.connection.commit()
-    
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute get answers query
-    result = cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
-    
-    answers = cur.fetchall()
-    print(answers)
-    # Commit to db
-    mysql.connection.commit()
-              
-    # Close cursor
-    cur.close()
-  
-  return render_template("profile_question.html", answers=answers, question=question)
-
-# DownVote answer
-@app.route("/downvote_answer/<answer_id>", methods=["POST"])
-@is_logged_in
-def downvote_answer(answer_id):
-  # Send request
-  if request.method == "POST":
-    upvote = request.form.get("upvote")
-    
-    # upvote = upvote + 1
-    
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute query
-    cur.execute("UPDATE answers SET votes = votes - 1 WHERE id = %s", [answer_id])
-    
-    # Commit to db
-    mysql.connection.commit()
-    
-    # # Get votes
-    # # Create cursor
-    # cur = mysql.connection.cursor()
-    
-    # # Execute get votes query
-    # result = cur.execute("SELECT votes FROM answers WHERE id = %s", [answer_id])
-    
-    # votes = cur.fetchone()
-    
-    # # Commit to db
-    # mysql.connection.commit()
-    
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute get questions query
-    result = cur.execute("SELECT * FROM questions INNER JOIN answers ON question_id WHERE answers.id = %s", [answer_id])
-    
-    question = cur.fetchone()
-    
-    # Commit to db
-    mysql.connection.commit()
-    
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute get answers query
-    result = cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
-    
-    answers = cur.fetchall()
-    print(answers)
-    # Commit to db
-    mysql.connection.commit()
-              
-    # Close cursor
-    cur.close()
-  
-  return render_template("profile_question.html", question= question, answers=answers)
   
 if __name__ == "__main__":
   app.run(debug=True)

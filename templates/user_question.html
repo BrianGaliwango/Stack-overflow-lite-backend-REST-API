@@ -22,11 +22,33 @@
       </ul>
   </div>
 
-  <div class="answers-">
+  <div class="answers-container">
     <h1 class="answers-title">Answers</h1>
     <ul class="answers-list"> 
       {% for answer in answers %}     
-      <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+      <li class="user-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+        <div class="votes-container">
+
+          <div class="votes">
+            <small>Votes</small>            
+           :&nbsp{{answer.votes}}
+          </div>
+
+          {% if answer.answer_username != session["username"] %}
+          <div class="vote-btns">           
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+              <input type="hidden" name="method" value="<">       
+              <input type="submit" value="<" class="downvote-btn">
+            </form>
+
+            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+              <input type="hidden" name="method" value=">">
+              <input type="submit" value=">" class="upvote-btn">
+            </form>
+          </div>
+          {% endif %}
+          
+        </div>
         {{answer.answer_body | safe}}  
         <br>
         <small>Answered by {{answer.answer_username}}</small>

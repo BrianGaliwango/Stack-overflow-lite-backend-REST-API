@@ -2,8 +2,8 @@
 
 {% block body %}
   <div class="answers-container">
-    <div class="selected-qtn">
-      <h1 class="selected-qtn-title">{{question.title}}</h1>
+    <h1 class="selected-qtn-title">Question</h1>
+    <div class="profile-selected-qtn">
       <ul class="qtns-list">            
         <li class="qtn-content">
           {{question.body | safe}}  
@@ -14,33 +14,35 @@
         </li>
       </ul>
   </div>
-
-  <div class="answers-">
-    <h1 class="answers-title">Answers</h1>
-    <ul class="answers-list"> 
+  <h1 class="answers-title">Answers</h1>
+  <div class="profile-question-answers">
+    <ul class="profile-answers-list"> 
       {% for answer in answers %}     
-      <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
-        <div class="answer-body-container">
-          {{answer.answer_body | safe}} 
-          <div class="vote-container">
-            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST">        
-            <input type="submit" value="<" class="vote-btns">
-          </form>
-            {% for votes in votes %}  
-            <div class="votes">
-              <!-- <small>Votes</small> -->
-              {{answer.votes}}
-            </div>
-            {% endfor %}
-            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
-            <input type="submit" value=">" class="vote-btns">
-          </form>
-          </div>
-      </div>
-        <br>
-        <small>Answered by {{answer.answer_username}}</small>
-        <br>
+      <li class="profile-answer-content {% if answer.marked_answer %}picked-answer {% endif %}">
+        <div class="votes-container">
 
+          <div class="votes">
+            <small>Votes</small>
+            :&nbsp{{answer.votes}}
+          </div>
+          <div class="vote-btns">
+            
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+              <input type="hidden" name="method" value="<">       
+              <input type="submit" value="<" class="downvote-btn">
+            </form>
+
+            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+              <input type="hidden" name="method" value=">">
+              <input type="submit" value=">" class="upvote-btn">
+            </form>
+          </div>
+          
+        </div>
+        <div class="answer-body-container">
+          {{answer.answer_body | safe}}         
+      </div>
+        <small>Answered by {{answer.answer_username}}</small>
         <div class="date-answer-container">
           <small>{{answer.answered_date}}</small> 
 
@@ -61,7 +63,7 @@
       </div>
       </li>  
       {% endfor %}  
-      </ul>
+    </ul>
   </div>
 
   
