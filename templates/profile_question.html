@@ -20,10 +20,27 @@
     <ul class="answers-list"> 
       {% for answer in answers %}     
       <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
-        {{answer.answer_body | safe}}  
+        <div class="answer-body-container">
+          {{answer.answer_body | safe}} 
+          <div class="vote-container">
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST">        
+            <input type="submit" value="<" class="vote-btns">
+          </form>
+            {% for votes in votes %}  
+            <div class="votes">
+              <!-- <small>Votes</small> -->
+              {{answer.votes}}
+            </div>
+            {% endfor %}
+            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+            <input type="submit" value=">" class="vote-btns">
+          </form>
+          </div>
+      </div>
         <br>
         <small>Answered by {{answer.answer_username}}</small>
         <br>
+
         <div class="date-answer-container">
           <small>{{answer.answered_date}}</small> 
 
