@@ -399,8 +399,7 @@ def unmark_answer(answer_id):
   cur.connection.commit()
   
   question = cur.fetchone()
-  print (question)
-  
+    
   # Close cursor
   cur.close()
   
