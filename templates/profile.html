@@ -3,26 +3,22 @@
 {% block body %} 
 
   <h1>@{{session["username"]}}</h1>
-    
+  
   <div class="main-pro-container">
-    <div class="myPro-asked-qtns-container">
 
-      <div class="ask-qtn-btn-container">
-        <a href="/post_question" class="post-qtn">Ask Question</a>
-        <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
-       </div>
+    <div class="profile-askQtnBtn-container">
+      <a href="/post_question" class="myPro-ask-questionBtn">Ask Question</a>
+      <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
+    </div>
 
-      <h1 class="my-questions-title">My Questions</h1>
-
+    <div class="myPro-asked-qtns-container">  
+      <h3 class="myPro-questions-title">My Questions</h3>    
       <ul class="qtns-list">
         {% for question in questions %}         
         <li class="qtn-content">
-        <small>Asked by : {{question.username}}</small>
-        <br>
-        <small>{{question.title}}</small>
-        <br>
-        <div class="qtn-body">
-          <a href="profile_question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+
+        <div class="myPro-qtns-title-container">
+          <small>{{question.title}}</small>
             
           <div class="qtn-btns">
             <a href="/edit_question/{{question.id}}" class="answer-btn">edit question</a>
@@ -33,6 +29,11 @@
             </form>
           </div>
         </div>
+        
+          <small>Asked by : {{question.username}}</small>
+        <br>
+          <a href="profile_question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+
         </li>
         {% endfor %}
       </ul>

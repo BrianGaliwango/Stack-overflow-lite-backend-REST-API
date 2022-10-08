@@ -272,10 +272,23 @@ def profile_get_question(id):
     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
     
     question = cur.fetchone()
+    
+    # # Get votes
+    # # Create cursor
+    # cur = mysql.connection.cursor()
+    
+    # # Execute get votes query
+    # result = cur.execute("SELECT votes FROM answers WHERE question_id = %s", [id])
+    
+    # votes = cur.fetchone()
+    
+    # # Commit to db
+    # mysql.connection.commit()
        
     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
     
     answers = cur.fetchall()
+    
     # Close cursor
     cur.close()
     
@@ -354,6 +367,52 @@ def post_answer(id):
     return render_template("user_question.html", question=question, answers=answers)
   return render_template("answer_question.html", question=question)
 
+# Upvote answer
+@app.route("/upvote_answer/<answer_id>", methods=["POST"])
+@is_logged_in
+def upvote_answer(answer_id):
+  # Send request
+  if request.method == "POST":
+    votes = request.form.get("upvote")
+    
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE answers SET votes = votes + 1 WHERE id = %s", [answer_id])
+    
+    # Commit to db
+    mysql.connection.commit()
+              
+    # Close cursor
+    cur.close()
+  
+    return redirect(url_for("dashboard"))
+
+# DownVote answer
+@app.route("/downvote_answer/<answer_id>", methods=["POST"])
+@is_logged_in
+def downvote_answer(answer_id):
+  # Send request
+  if request.method == "POST":
+    votes = request.form.get("downvote")
+    
+    # downvote = votes - 1
+    
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE answers SET votes = votes - 1 WHERE id = %s", [answer_id])
+    
+    # Commit to db
+    mysql.connection.commit()
+              
+    # Close cursor
+    cur.close()
+  
+    return redirect(url_for("dashboard"))
+
 # Mark answer
 @app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
 @is_logged_in
@@ -373,7 +432,6 @@ def mark_answer(answer_id):
   cur.connection.commit()
   
   question = cur.fetchone()
-  print (question)
   
   # Close cursor
   cur.close()
@@ -399,7 +457,11 @@ def unmark_answer(answer_id):
   cur.connection.commit()
   
   question = cur.fetchone()
+<<<<<<< HEAD
     
+=======
+  
+>>>>>>> search_questions
   # Close cursor
   cur.close()
   

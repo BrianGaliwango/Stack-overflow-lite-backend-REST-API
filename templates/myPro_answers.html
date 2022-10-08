@@ -11,11 +11,7 @@
         <ul class="answers-list"> 
           {% for answer in answers %}     
           <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
-            {{answer.answer_body | safe}}  
-            <br>
-            <small>Answered by {{answer.answer_username}}</small>
-            <br>
-
+            
             <div class="qtn-body">
               <small>{{answer.answered_date}}</small> 
 
@@ -27,7 +23,12 @@
                   <input type="submit" value="delete" class="delete-btn">
                 </form>
               </div> 
-          </div>              
+            </div>               
+
+            <small>Answered by {{answer.answer_username}}</small>
+            <br>
+            {{answer.answer_body | safe}} 
+                    
           </li>  
           {% endfor %}  
         </ul>

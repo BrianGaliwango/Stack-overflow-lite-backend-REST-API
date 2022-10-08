@@ -2,8 +2,8 @@
 
 {% block body %}
   <div class="answers-container">
-    <div class="selected-qtn">
-      <h1 class="selected-qtn-title">{{question.title}}</h1>
+    <h1 class="selected-qtn-title">Question</h1>
+    <div class="profile-selected-qtn">
       <ul class="qtns-list">            
         <li class="qtn-content">
           {{question.body | safe}}  
@@ -14,37 +14,56 @@
         </li>
       </ul>
   </div>
-
-  <div class="answers-">
-    <h1 class="answers-title">Answers</h1>
-    <ul class="answers-list"> 
+  <h1 class="answers-title">Answers</h1>
+  <div class="profile-question-answers">
+    <ul class="profile-answers-list"> 
       {% for answer in answers %}     
-      <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
-        {{answer.answer_body | safe}}  
+      <li class="profile-answer-content {% if answer.marked_answer %}picked-answer {% endif %}">
+
+        <div class="votes-container">     
+            <small class="votes-title">Votes</small>
+
+            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+              <input type="hidden" name="method" value="<">
+              <input type="submit" value=">" class="upvote-btn">
+            </form>
+            
+            <div class="votes">
+              {{answer.votes}}
+            </div>
+           
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+              <input type="hidden" name="method" value=">">       
+              <input type="submit" value="<" class="downvote-btn">
+            </form>          
+        </div>
+         
+        <small>{{answer.answered_date}}</small>
         <br>
         <small>Answered by {{answer.answer_username}}</small>
-        <br>
-        <div class="date-answer-container">
-          <small>{{answer.answered_date}}</small> 
-
+        <div class="answer-body-container">
+          {{answer.answer_body | safe}}         
+        </div>
+        
+        <div class="allMark-btns-container"> 
           {% if answer.marked_answer != True %}
-          <div class="mark btns">
+          <div class="allMark btns">
             <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
               <input type="hidden" name="method" value="MARK ANSWER">
               <input type="submit" value="mark answer" class="pick-answer-btn">
             </form> 
             {% else %}
-            <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
-              <input type="hidden" name="method" value="MARK ANSWER">
-              <input type="submit" value="unmark answer" class="pick-answer-btn">
-            </form> 
+              <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
+                <input type="hidden" name="method" value="MARK ANSWER">
+                <input type="submit" value="unmark answer" class="pick-answer-btn">
+              </form> 
+          </div>
           {% endif %}
           
-         </div>
       </div>
       </li>  
       {% endfor %}  
-      </ul>
+    </ul>
   </div>
 
   
