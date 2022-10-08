@@ -3,18 +3,21 @@
 {% block body %}
   <h1>Ask Question</h1>
 
-  <form action="" method="POST">
-    <div class="form-group">
-      <label>Title</label>
-      <input type="text" name="title" class="form-control">
-    </div>
-    <div class="form-group">
-      <label>Body</label>
-      <input type="text" name="body" id="" class="form-control">
-    </div>
-    <div class="form-group">
-      <input type="submit" value="Submit">
-    </div>
-  </form>
+  <div class="post_question-container">
+    <form action="" method="POST" class="post-answer-form">
+        
+        <div class="ask-question-titleInput">
+          <label>Title</label>
+          <input type="text" name="title" class="ask-title-form">  
+        </div> 
+        
+        <div class="ask-question-body">
+          <label>Body</label>
+          <textarea name="body" cols="70" rows="6" placeholder="Ask question" class></textarea>
+        </div>
+        <input type="submit" value="submit" class="submit-answer-btn">
+      </form>     
+    
+  </div>
 
 {% endblock %}

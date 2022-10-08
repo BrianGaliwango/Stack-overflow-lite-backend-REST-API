@@ -6,7 +6,6 @@
   position: fixed;
   top: 0;
   left: 0;
-  /* right: 0; */
 }
 .nav-container {
   width: 100vw;
@@ -32,7 +31,6 @@
 
 .search-form {
   width: 300px;
-  /* padding: 5px; */
   border: none;
   border-radius: 35px;
   text-align: center;
@@ -59,7 +57,7 @@
   margin: 0 10px;
 } 
 
-a{
+a {
   color: #fff;
   text-decoration: none;
   font-size: 20px;
@@ -121,6 +119,21 @@ a{
   align-items: center;
 }
 
+.ask-question-titleInput {
+  width: 800px;
+  margin-bottom: 10px;
+}
+
+.ask-title-form {
+  width: 100%;
+  padding: 10px;
+}
+
+.ask-question-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .profile-askQtnBtn-container {
   width: 800px;
   display: flex;
@@ -164,7 +177,6 @@ a{
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* justify-content: center; */
 }
 
 .dashboard-container ,
@@ -173,15 +185,6 @@ a{
   flex-direction: column;
   align-items: center;
   border: none;
-}
-
-
-.profile-question-answers ,
-.profile-selected-qtn {
-  /* width: 600px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end; */
 }
 
 .dashboard-header , 
@@ -199,7 +202,6 @@ a{
 
 .answers-title {
   color: orange;
-  /* margin-left: 60px; */
 }
 
 .qtns-list ,
@@ -209,7 +211,6 @@ a{
 }
 
 .profile-answers-list {
-  /* width: 600px; */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -234,13 +235,6 @@ a{
   position: relative;
   padding-left: 45px;
 } 
-
-.comment-section {
-   width: 100%;
-  /* display: flex; */
-  /* align-items: center; */
-  /* justify-content: flex-end; */ 
-}
 
 .qtn-body ,
 .date-answer-container ,
@@ -305,10 +299,6 @@ a{
   font-size: 18.5px;
 }
 
-.post-comment-form textarea {
-  /* width: 100%; */
-}
-
 .answer-qtn:focus {
   outline: none;
 }
@@ -347,7 +337,6 @@ a{
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
   width: 40px;
-  /* border-radius: 5px; */
   position: absolute;
   top: 0;
   left: 0;
@@ -356,8 +345,6 @@ a{
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  /* padding: 5px; */
-  /* z-index: -1; */
 }
 
 .votes {
@@ -368,7 +355,6 @@ a{
 
 .votes-title {
   color: green;
-  /* font-size: 12px; */
   text-align: center;
 }
 

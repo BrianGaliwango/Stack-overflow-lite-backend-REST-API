@@ -273,18 +273,7 @@ def profile_get_question(id):
     
     question = cur.fetchone()
     
-    # # Get votes
-    # # Create cursor
-    # cur = mysql.connection.cursor()
-    
-    # # Execute get votes query
-    # result = cur.execute("SELECT votes FROM answers WHERE question_id = %s", [id])
-    
-    # votes = cur.fetchone()
-    
-    # # Commit to db
-    # mysql.connection.commit()
-       
+    #Get answers query 
     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
     
     answers = cur.fetchall()
@@ -462,6 +451,45 @@ def unmark_answer(answer_id):
   cur.close()
   
   return redirect(url_for("profile"))
+ 
+# Add comment
+@app.route("/post_comment/<string:id>", methods=["GET", "POST"]) 
+@is_logged_in
+def post_comment(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute question query
+  result = cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+  
+  # Fetch question
+  answer = cur.fetchone()
+  
+  # Commit to db
+  mysql.connection.commit()
+  print(answer)
+  
+  # send request
+  if request.method == "POST":
+    comment = request.form.get("comment")
+    
+    if not comment:
+      print("Please fill in the comment field")
+      return render_template("post_comment.html")
+      
+      # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("INSERT INTO comments (comment_answer_id, comment_author, comment_body) VALUES (%s, %s, %s)", [id, session["username"], comment])
+    
+    #Commit to db
+    mysql.connection.commit()
+    
+    # Close cursor
+    cur.close()
+      
+  return render_template("post_comment.html", answer=answer)
   
 #Edit my question
 @app.route("/edit_question/<string:id>", methods=["GET", "POST"])

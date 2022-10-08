@@ -63,7 +63,12 @@
             <input type="submit" value="delete" class="delete-btn">
           </form>
           {% endif %}
-        </div>     
+        </div>  
+        
+        <div class="comments-btn">
+          <a href="/post_comment/{{answer.id}}" class="answer-btn">Add comment</a>
+        </div> 
+        
       </li>  
       {% endfor %}  
       </ul>
