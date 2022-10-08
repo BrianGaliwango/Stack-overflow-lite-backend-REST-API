@@ -6,6 +6,7 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 6;
 }
 .nav-container {
   width: 100vw;
@@ -228,6 +229,9 @@ a {
   border-radius: 5px;
   margin: 5px 0;
   padding: 16px;
+  letter-spacing: 1px;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .profile-answer-content ,
@@ -263,7 +267,9 @@ a {
 
 .answer-btn ,
 .delete-btn ,
-.pick-answer-btn {
+.pick-answer-btn ,
+.view-comments-btn,
+.add-comments-btn {
   background-color: whitesmoke;
   border: none;
   border-radius: 35px;
@@ -276,6 +282,11 @@ a {
 .answer-btn ,
 .pick-answer-btn {
   color: green;
+}
+
+.view-comments-btn ,
+.add-comments-btn {
+  color: blue;
 }
 
 .delete-btn {
@@ -354,7 +365,7 @@ a {
 }
 
 .votes-title {
-  color: green;
+  color: whitesmoke;
   text-align: center;
 }
 
@@ -375,8 +386,11 @@ a {
 }
 
 .answer-author ,
-.answered-date {
+.answered-date ,
+.comment-author ,
+.comment-date {
   text-decoration: underline 1px solid gray;
+  line-height: 20px;
 }
 .answer-author {
   margin-bottom: 10px;

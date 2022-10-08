@@ -248,8 +248,14 @@ def user_get_question(id):
       
     #Execute answers query  
     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    # result = cur.execute("SELECT * FROM answers INNER JOIN comments ON comment_answer_id WHERE question_id = %s", [id])
     
     answers = cur.fetchall()
+    print(answers)
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
     
      # Get comments
     cur = mysql.connection.cursor()
@@ -361,8 +367,8 @@ def post_answer(id):
 @is_logged_in
 def upvote_answer(answer_id):
   # Send request
-  if request.method == "POST":
-    votes = request.form.get("upvote")
+  # if request.method == "POST":
+  #   votes = request.form.get("upvote")
     
     # Create cursor
     cur = mysql.connection.cursor()
@@ -383,10 +389,8 @@ def upvote_answer(answer_id):
 @is_logged_in
 def downvote_answer(answer_id):
   # Send request
-  if request.method == "POST":
-    votes = request.form.get("downvote")
-    
-    # downvote = votes - 1
+  # if request.method == "POST":
+  #   votes = request.form.get("downvote")
     
     # Create cursor
     cur = mysql.connection.cursor()
@@ -475,7 +479,7 @@ def post_comment(id):
     
     if not comment:
       print("Please fill in the comment field")
-      return render_template("post_comment.html")
+      return render_template("post_comment.html", answer=answer)
       
       # Create cursor
     cur = mysql.connection.cursor()
@@ -488,8 +492,41 @@ def post_comment(id):
     
     # Close cursor
     cur.close()
-      
+    
+    return redirect(url_for("dashboard"))  
   return render_template("post_comment.html", answer=answer)
+
+# View comments
+@app.route("/view_comments/<string:id>", methods=["GET", "POST"])
+@is_logged_in
+def view_comments(id):
+  # create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute get answer query
+  # cur.execute("SELECT * FROM questions INNER JOIN answers ON answers.question_id WHERE answers.id = %s", [id])
+  cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+  
+  answer = cur.fetchone()
+  
+  # Commit to db
+  mysql.connection.commit()
+  
+  # Get comments query
+  result =cur.execute("SELECT * FROM comments WHERE comment_answer_id = %s", [id])
+  
+  if not result  > 0:
+    return redirect(url_for("dashboard"))
+  
+  comments = cur.fetchall()
+  
+  # Commit to db
+  mysql.connection.commit()
+  
+  # Close connection
+  cur.close()
+   
+  return render_template("view_comments.html", answer=answer, comments=comments)
   
 #Edit my question
 @app.route("/edit_question/<string:id>", methods=["GET", "POST"])

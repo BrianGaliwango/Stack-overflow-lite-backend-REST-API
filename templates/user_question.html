@@ -6,23 +6,12 @@
       <h1 class="selected-qtn-title">Answered question</h1>
       <ul class="qtns-list">            
         <li class="qtn-content">
-          
-          
-          <div class="question-date">
-          <small>{{question.date_asked}}</small>   
-          {% if question.username != session["username"] %}
-          <div class="qtn-btns">
-            <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
-          </div> 
-          {% endif %}
-        </div>        
         <small>Posted by {{question.username}}</small>
         <br>
-        {{question.body | safe}}  
-               
+        {{question.body | safe}}              
         </li>
       </ul>
-  </div>
+    </div>
 
   <div class="answers-container">
     <h1 class="answers-title">Answers</h1>
@@ -66,12 +55,13 @@
         </div>  
         
         <div class="comments-btn">
-          <a href="/post_comment/{{answer.id}}" class="answer-btn">Add comment</a>
+          <a href="/post_comment/{{answer.id}}" class="add-comments-btn">Add comment</a>
+
+          <a href="/view_comments/{{answer.id}}" class="view-comments-btn">View comments</a>
         </div> 
-        
       </li>  
       {% endfor %}  
-      </ul>
+    </ul>
   </div>
 </div>
 {% endblock %}

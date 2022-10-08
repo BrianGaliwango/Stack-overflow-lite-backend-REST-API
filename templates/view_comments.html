@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <div class="selected-qtn">
+    <h1 class="selected-qtn-title">Answered question</h1>
+    <ul class="qtns-list">            
+      <li class="qtn-content">
+          <small>{{answer.answered_date}}</small>
+        <br>
+          <small>{{answer.answer_username}}</small>
+        <br>
+          <div>
+            {{answer.answer_body | safe}}
+          </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="selected-qtn">
+    <h2 class="selected-qtn-title">Comments</h2>
+    <ul class="qtns-list">    
+      {% for comment in comments %}        
+      <li class="qtn-content">
+          <small class="comment-date">{{comment.comment_date}}</small>
+        <br>  
+          <small class="comment-author">Posted by {{comment.comment_author}}</small>
+          <div class="comment_body">
+            {{comment.comment_body | safe}}
+          </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+{% endblock %}
