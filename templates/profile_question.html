@@ -19,34 +19,33 @@
     <ul class="profile-answers-list"> 
       {% for answer in answers %}     
       <li class="profile-answer-content {% if answer.marked_answer %}picked-answer {% endif %}">
-        <div class="votes-container">
 
-          <div class="votes">
-            <small>Votes</small>
-            :&nbsp{{answer.votes}}
-          </div>
-          <div class="vote-btns">
-            
-            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
-              <input type="hidden" name="method" value="<">       
-              <input type="submit" value="<" class="downvote-btn">
-            </form>
+        <div class="votes-container">     
+            <small class="votes-title">Votes</small>
 
             <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
-              <input type="hidden" name="method" value=">">
+              <input type="hidden" name="method" value="<">
               <input type="submit" value=">" class="upvote-btn">
             </form>
-          </div>
-          
+            
+            <div class="votes">
+              {{answer.votes}}
+            </div>
+           
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+              <input type="hidden" name="method" value=">">       
+              <input type="submit" value="<" class="downvote-btn">
+            </form>          
         </div>
+         
+        <small>{{answer.answered_date}}</small>
+        <br>
+        <small>Answered by {{answer.answer_username}}</small>
         <div class="answer-body-container">
           {{answer.answer_body | safe}}         
-      </div>
-        <small>Answered by {{answer.answer_username}}</small>
-        <br>
-        <small>{{answer.answered_date}}</small>
+        </div>
         
-        <div class="date-answer-container"> 
+        <div class="allMark-btns-container"> 
           {% if answer.marked_answer != True %}
           <div class="allMark btns">
             <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
@@ -54,13 +53,13 @@
               <input type="submit" value="mark answer" class="pick-answer-btn">
             </form> 
             {% else %}
-            <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
-              <input type="hidden" name="method" value="MARK ANSWER">
-              <input type="submit" value="unmark answer" class="pick-answer-btn">
-            </form> 
+              <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
+                <input type="hidden" name="method" value="MARK ANSWER">
+                <input type="submit" value="unmark answer" class="pick-answer-btn">
+              </form> 
+          </div>
           {% endif %}
           
-         </div>
       </div>
       </li>  
       {% endfor %}  

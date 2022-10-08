@@ -6,10 +6,8 @@
       <h1 class="selected-qtn-title">Answered question</h1>
       <ul class="qtns-list">            
         <li class="qtn-content">
-          {{question.body | safe}}  
-          <br>
-          <small>Posted by {{question.username}}</small>
-          <br>
+          
+          
           <div class="question-date">
           <small>{{question.date_asked}}</small>   
           {% if question.username != session["username"] %}
@@ -18,6 +16,10 @@
           </div> 
           {% endif %}
         </div>        
+        <small>Posted by {{question.username}}</small>
+        <br>
+        {{question.body | safe}}  
+               
         </li>
       </ul>
   </div>
@@ -27,35 +29,34 @@
     <ul class="answers-list"> 
       {% for answer in answers %}     
       <li class="user-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
-        <div class="votes-container">
 
-          <div class="votes">
-            <small>Votes</small>            
-           :&nbsp{{answer.votes}}
-          </div>
-
-          {% if answer.answer_username != session["username"] %}
-          <div class="vote-btns">           
-            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
-              <input type="hidden" name="method" value="<">       
-              <input type="submit" value="<" class="downvote-btn">
-            </form>
-
+        <div class="votes-container"> 
+          {% if answer.answer_username != session["username"] %} 
+            <small class="votes-title">Votes</small>
             <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
               <input type="hidden" name="method" value=">">
               <input type="submit" value=">" class="upvote-btn">
             </form>
-          </div>
-          {% endif %}
+
+            <div class="votes">                   
+              {{answer.votes}}
+            </div>
+
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+              <input type="hidden" name="method" value="<">       
+              <input type="submit" value="<" class="downvote-btn">
+            </form>          
           
+          {% endif %}         
         </div>
+             
+        <small class="answered-date">{{answer.answered_date}}</small> 
+        <br>
+        <small class="answer-author">Answered by {{answer.answer_username}}</small>
+        <br>
         {{answer.answer_body | safe}}  
-        <br>
-        <small>Answered by {{answer.answer_username}}</small>
-        <br>
-        <small>{{answer.answered_date}}</small> 
-        <div class="date-answer-container">
           
+        <div class="user-deleteAnswer-container">        
           {% if answer.answer_username == session["username"] %}
           <form action="{{url_for('dashboard_delete_answer', id=answer.id)}}" method="POST">
             <input type="hidden" name="method" value="DELETE">
