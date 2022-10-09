@@ -1,8 +1,10 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class="answers-container">
-    <h1 class="myPro-selectedQtn-title">Question</h1>
+
+  <h1 class="myPro-selectedQtn-title">Question</h1>
+
+  <!-- <div class="answers-container">    -->
     <div class="profile-selected-qtn">
       <ul class="profile-selectedQtn-list">            
         <li class="profile-selectedQtn-content"> 
@@ -12,8 +14,9 @@
           <div class="profile-selectedQtn-body">{{question.body | safe}}</div>
         </li>
       </ul>
-  </div>
+    </div>
   <h1 class="answers-title">Answers</h1>
+
   <div class="profile-question-answers">
     <ul class="profile-answers-list"> 
       {% for answer in answers %}     
@@ -40,15 +43,15 @@
 
           <a href="/view_comments/{{answer.id}}" class="view-comments-btn">View comments</a>
         </div> 
+
           <small class="profile-qtnAnswer-date">Answered date : {{answer.answered_date}}</small>
         <br>
           <small class="profile-qtnAnswer-username">Answer author : {{answer.answer_username}}</small>
         <div class="answer-body-container">
           <div class="profile-qtnAnswer-body">{{answer.answer_body | safe}} </div>        
         </div>        
-        <div class="allMark-btns-container"> 
-          {% if answer.marked_answer != True %}
-          <div class="allMark btns">
+        <div class="allMark-btns-container">                    
+            {% if answer.marked_answer != True %}
             <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
               <input type="hidden" name="method" value="MARK ANSWER">
               <input type="submit" value="mark answer" class="pick-answer-btn">
@@ -58,13 +61,12 @@
                 <input type="hidden" name="method" value="MARK ANSWER">
                 <input type="submit" value="unmark answer" class="pick-answer-btn">
               </form> 
-          </div>
-          {% endif %}
-          
+            {% endif %}           
         </div>
+
       </li>  
       {% endfor %}  
     </ul>
   </div> 
-</div>
+<!-- </div> -->
 {% endblock %}

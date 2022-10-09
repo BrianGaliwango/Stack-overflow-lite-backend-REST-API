@@ -197,7 +197,9 @@ a {
 }
 
 .post-qtn:hover , 
-.myPro-answers-btn:hover {
+.myPro-answers-btn:hover ,
+.myPro-ask-questionBtn:hover ,
+.dashboard-ask-questionBtn:hover {
   background-color: rgba(136, 136, 136, 0.5);
 }
 
@@ -226,6 +228,7 @@ a {
 .edit-question-title ,
 .edit-comment-title ,
 .ask-question-title ,
+.post-answer-title ,
 .myPro-selectedQtn-title ,
 .home-selectedQtn-title ,
 .home-questions-title { 
@@ -379,7 +382,7 @@ a {
 
 .profile-answer-btns ,
 .profile-question-btns ,
-.dashboard-answer-btn {
+.dashboard-answerBtn-container {
   display: inline-flex;
 }
 
@@ -390,7 +393,7 @@ a {
 
 .allMark-btns-container ,
 .user-deleteAnswer-container ,
-.dashboard-answer-btn {
+.dashboard-answerBtn-container {
   position: absolute;
   top: 25;
   right: 20;
@@ -413,7 +416,7 @@ a {
 .edit-comment-btn ,
 .delete-btn ,
 .pick-answer-btn ,
-.view-comments-btn,
+.view-comments-btn ,
 .add-comments-btn {
   background-color: whitesmoke;
   border: none;
@@ -473,9 +476,12 @@ a {
   font-family: inherit;
 }
 
+.answer-btn:active ,
+.delete-btn:active ,
+.pick-answer-btn:active ,
 .submit-answer-btn:active ,
 .submit-comment-btn:active ,
-.submit-answer-btn:active {
+.submit-question-btn:active {
   transform: scale(0.98);
 }
 
