@@ -1,21 +1,24 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class="answers-container">
-    <div class="selected-qtn">
-      <h1 class="selected-qtn-title">Answered question</h1>
-      <ul class="qtns-list">            
-        <li class="qtn-content">
-        <small>Posted by {{question.username}}</small>
+  <div class="user-answers-container">
+    <div class="user-selected-qtn">
+      <h1 class="user-selectedQtn-title">Question</h1>
+      <ul class="user-selectedQtns-list">            
+        <li class="user-selectedQtn-content">
+          <small class="user-SelectedQtn-askedDate">Date asked : {{question.date_asked}}</small>
         <br>
-        {{question.body | safe}}              
+          <small class="user-SelectedQtn-author">Question author : {{question.username}}</small>
+        <br>
+        <div class="user-SelectedQtn-body">{{question.body | safe}}  </div>
+                      
         </li>
       </ul>
     </div>
 
-  <div class="answers-container">
+  <div class="user-answers-container">
     <h1 class="answers-title">Answers</h1>
-    <ul class="answers-list"> 
+    <ul class="user-answers-list"> 
       {% for answer in answers %}     
       <li class="user-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
 
@@ -39,11 +42,13 @@
           {% endif %}         
         </div>
              
-        <small class="answered-date">{{answer.answered_date}}</small> 
+          <small class="user-answered-date">Date answered : {{answer.answered_date}}</small> 
         <br>
-        <small class="answer-author">Answered by {{answer.answer_username}}</small>
+          <small class="user-answer-author">Answer author : {{answer.answer_username}}</small>
         <br>
-        {{answer.answer_body | safe}}  
+        <div class="user-answer-body">
+          {{answer.answer_body | safe}} 
+        </div> 
           
         <div class="user-deleteAnswer-container">        
           {% if answer.answer_username == session["username"] %}
@@ -54,7 +59,7 @@
           {% endif %}
         </div>  
         
-        <div class="comments-btn">
+        <div class="comments-btn-container">
           <a href="/post_comment/{{answer.id}}" class="add-comments-btn">Add comment</a>
 
           <a href="/view_comments/{{answer.id}}" class="view-comments-btn">View comments</a>

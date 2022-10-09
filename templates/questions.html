@@ -2,16 +2,19 @@
 
 {% block body %} 
 
-  <h1>Questions</h1>
+  <h1 class="home-questions-title">Questions</h1>
   <hr>
 
-  <div class="qtns-container">
-    <ul class="qtns-list">
+  <div class="home-qtns-container">
+    <ul class="home-qtns-list">
       {% for question in questions %}
-      <li class="qtn-content">
-        {{question.title}}
+      <li class="home-qtns-content">
+        <small class="home-question-date">Date asked : {{question.date_asked}}</small>             
         <br>
+        <small class="home-question-title">Title : {{question.title}}</small>        
+       <div class="home-qtn-body">
         <a href="question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+      </div>
       </li>
       {% endfor %}
     </ul>

@@ -2,35 +2,38 @@
 
 {% block body %}
     
-    <h1 class="dashboard-header">
-        Welcome!
-      <br>
-      Don't get stuck
-    </h1>
-    
-    <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
-    <hr>
+  <h2 class="dashboard-header">
+      Welcome!
+    <br>
+     Don't get stuck, 
+    <br>
+     millions of people find answers to solve technical problems
+  </h2>
+ 
+  <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
 
-    <div class="asked-qtns">
-      <ul class="qtns-list">
-        {% for question in questions %}         
-        <li class="qtn-content">
-          <small>Asked by : {{question.username}}</small>
-        <br>
-          <small>{{question.title}}</small>
-        <br>
-          <div class="qtn-body">
-            <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
-            {% if question.username != session["username"]%}                    
-             <div class="qtn-btns">
-              <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
-            </div>  
-            {% endif %}   
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
+  <div class="dashboard-questions-container">
+    <ul class="dashboard-qtns-list">
+      {% for question in questions %}         
+      <li class="dashboard-qtn-content">
+        <small class="dashboard-qtn-title">Title : {{question.title}}</small>
+      <br>
+        <small class="dashboard-qtn-author">Question author : {{question.username}}</small>
+    
+        <div class="dashboard-qtn-body">
+          <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
+        </div>
+                        
+        <div class="dashboard-answer-btn">
+          {% if question.username != session["username"]%}  
+            <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
+          {% endif %} 
+      </div>  
+            
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
 
 {% endblock %}
 

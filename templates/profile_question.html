@@ -2,15 +2,14 @@
 
 {% block body %}
   <div class="answers-container">
-    <h1 class="selected-qtn-title">Question</h1>
+    <h1 class="myPro-selectedQtn-title">Question</h1>
     <div class="profile-selected-qtn">
-      <ul class="qtns-list">            
-        <li class="qtn-content">
-          {{question.body | safe}}  
+      <ul class="profile-selectedQtn-list">            
+        <li class="profile-selectedQtn-content"> 
+           <small class="profile-selectedQtn-date">Asked date : {{question.date_asked}}</small>  
           <br>
-          <small>Posted by {{question.username}}</small>
-          <br>
-          <small>{{question.date_asked}}</small>          
+           <small class="profile-selectedQtn-username">Question author :  {{question.username}}</small>         
+          <div class="profile-selectedQtn-body">{{question.body | safe}}</div>
         </li>
       </ul>
   </div>
@@ -19,15 +18,13 @@
     <ul class="profile-answers-list"> 
       {% for answer in answers %}     
       <li class="profile-answer-content {% if answer.marked_answer %}picked-answer {% endif %}">
-
         <div class="votes-container">     
             <small class="votes-title">Votes</small>
-
             <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
               <input type="hidden" name="method" value="<">
               <input type="submit" value=">" class="upvote-btn">
-            </form>
-            
+            </form>   
+
             <div class="votes">
               {{answer.votes}}
             </div>
@@ -36,15 +33,19 @@
               <input type="hidden" name="method" value=">">       
               <input type="submit" value="<" class="downvote-btn">
             </form>          
-        </div>
-         
-        <small>{{answer.answered_date}}</small>
-        <br>
-        <small>Answered by {{answer.answer_username}}</small>
-        <div class="answer-body-container">
-          {{answer.answer_body | safe}}         
-        </div>
+        </div> 
         
+        <div class="comments-btn-container">
+          <a href="/post_comment/{{answer.id}}" class="add-comments-btn">Add comment</a>
+
+          <a href="/view_comments/{{answer.id}}" class="view-comments-btn">View comments</a>
+        </div> 
+          <small class="profile-qtnAnswer-date">Answered date : {{answer.answered_date}}</small>
+        <br>
+          <small class="profile-qtnAnswer-username">Answer author : {{answer.answer_username}}</small>
+        <div class="answer-body-container">
+          <div class="profile-qtnAnswer-body">{{answer.answer_body | safe}} </div>        
+        </div>        
         <div class="allMark-btns-container"> 
           {% if answer.marked_answer != True %}
           <div class="allMark btns">
@@ -60,12 +61,10 @@
           </div>
           {% endif %}
           
-      </div>
+        </div>
       </li>  
       {% endfor %}  
     </ul>
-  </div>
-
-  
+  </div> 
 </div>
 {% endblock %}

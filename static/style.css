@@ -3,6 +3,7 @@
 }
 
 .navbar {
+  width: 100vw;
   position: fixed;
   top: 0;
   left: 0;
@@ -68,15 +69,24 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 35px;
 }
 
 .home-container {
-  background-color: rgb(111, 111, 111);
-  width: 600px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.home-container-content {
+  background-color: rgb(111, 111, 111);
+  width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 50px;
 }
 
 .form-group {
@@ -97,21 +107,38 @@ a {
 }
 
 .login-btn ,
-.register-btn {
-  padding: 8px;
+.register-btn ,
+.logout-btn {
+  padding: 10 25px;
   border: none;
   border-radius: 3px;
   margin  : 0 5px;
   color: #fff;
+  cursor: pointer;
 }
 
 .login-btn {
-  width: 50px;
   background-color: green;
 }
 
 .register-btn {
   background-color: blueviolet;
+}
+
+.logout-btn {
+  background-color: skyblue;
+}
+
+.login-btn:hover ,
+.register-btn:hover ,
+.logout-btn:hover {
+  background-color: rgba(136, 136, 136, 0.5);
+}
+
+.login-btn:active ,
+.register-btn:active ,
+.logout-btn:active {
+  transform: scale(0.98);
 }
 
 .main-pro-container {
@@ -181,7 +208,7 @@ a {
 }
 
 .dashboard-container ,
-.answers-container {
+.user-answers-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -189,8 +216,19 @@ a {
 }
 
 .dashboard-header , 
-.selected-qtn-title ,
-.answers-title {
+.user-selectedQtn-title ,
+.answers-title ,
+.user-name-title ,
+.selected-comments-title ,
+.add-comments-title ,
+.selected-answer-title ,
+.edit-answer-title ,
+.edit-question-title ,
+.edit-comment-title ,
+.ask-question-title ,
+.myPro-selectedQtn-title ,
+.home-selectedQtn-title ,
+.home-questions-title { 
   text-align: center;
   text-decoration: underline 2px solid gray;
   text-underline-offset: 2px;
@@ -201,13 +239,22 @@ a {
   text-decoration: underline 2px solid gray;
 }
 
-.answers-title {
+.answers-title ,
+.selected-comments-title {
   color: orange;
 }
 
-.qtns-list ,
-.answers-list ,
-.profile-answers-list {
+.dashboard-qtns-list ,
+.user-selectedQtns-list ,
+.myPro-answers-list ,
+.profile-answers-list ,
+.comments-list ,
+.comment-selectedQtns-list,
+.selected-answer-list ,
+.profile-selectedQtn-list ,
+.search-qtns-list ,
+.user-answers-list ,
+.home-qtns-list {
   list-style-type: none;
 }
 
@@ -218,10 +265,20 @@ a {
   list-style-type: none;
 }
 
-.qtn-content ,
+
+.dashboard-qtn-content ,
+.user-selectedQtn-content ,
 .answer-content ,
 .profile-answer-content ,
-.user-answer-content {
+.user-answer-content ,
+.profile-qtn-content ,
+.profile-selectedQtn-content ,
+.selected-commentAnswer-content ,
+.comment-content ,
+.comment-selectedQtn-content ,
+.search-qtns-content ,
+.home-qtn-content ,
+.home-qtns-content {
   width: 800px;
   list-style-type: none;
   border-top: 1px solid gray;
@@ -232,15 +289,16 @@ a {
   letter-spacing: 1px;
   word-wrap: break-word;
   word-break: break-all;
+  position: relative;
 }
 
 .profile-answer-content ,
 .user-answer-content {
-  position: relative;
   padding-left: 45px;
+  padding-bottom:30px ;
 } 
 
-.qtn-body ,
+.myPro-answers-container ,
 .date-answer-container ,
 .question-date ,
 .myPro-qtns-title-container {
@@ -250,22 +308,109 @@ a {
   margin: 0;
 }
 
-.qtn-btns {
+.dashboard-qtn-author ,
+.dashboard-qtn-title ,
+.user-answer-author ,
+.user-answered-date ,
+.user-SelectedQtn-askedDate ,
+.user-SelectedQtn-author ,
+.comment-author ,
+.comment-date ,
+.home-question-title ,
+.home-question-date ,
+.selected-homeQtn-date ,
+.selected-homeQtn-username ,
+.home-qtnAnswer-username ,
+.home-qtnAnswer-date ,
+.searched-qtn-date ,
+.searched-qtn-title ,
+.profile-questions-title ,
+.profile-questions-date ,
+.profile-selectedQtn-username ,
+.profile-selectedQtn-date ,
+.profile-qtnAnswer-date ,
+.profile-qtnAnswer-username ,
+.selected-commentAnswer-username ,
+.selected-commentAnswer-date ,
+.myPro-answer-author ,
+.myPro-answer-date {
+  text-decoration: underline 1px solid gray;
+  text-underline-offset: 2px;
+  line-height: 20px;
+}
+
+.answer-author {
+  margin-bottom: 10px;
+}
+
+.dashboard-qtn-title ,
+.home-question-title ,
+.selected-homeQtn-username ,
+.home-qtnAnswer-username ,
+.searched-qtn-title ,
+.profile-questions-title ,
+.profile-selectedQtn-username ,
+.profile-qtnAnswer-username ,
+.selected-commentAnswer-username ,
+.comment-author ,
+.myPro-answer-author ,
+.dashboard-qtn-author ,
+.user-SelectedQtn-author ,
+.user-answer-author {
+  font-size: 17px;
+}
+
+.selected-homeQtn-body ,
+.home-qtnAnswer-body ,
+.profile-selectedQtn-body ,
+.profile-qtnAnswer-body ,
+.selected-commentAnswer-body ,
+.comment-body ,
+.myPro-answer-body ,
+.user-SelectedQtn-body ,
+.user-answer-body , 
+.profile-qtn-body ,
+.searched-qtn-body ,
+.dashboard-qtn-body ,
+.home-qtn-body {
+  margin-top: 5px;
+  font-size: 19px;
+}
+
+.profile-answer-btns ,
+.profile-question-btns ,
+.dashboard-answer-btn {
   display: inline-flex;
 }
 
-.qtn-btns form {
+.profile-answer-btns form ,
+.profile-question-btns form{
   margin: 0;
 }
 
 .allMark-btns-container ,
-.user-deleteAnswer-container {
+.user-deleteAnswer-container ,
+.dashboard-answer-btn {
   position: absolute;
   top: 25;
   right: 20;
 }
 
+.comments-btn-container {
+  position: absolute;
+  left: 40;
+  bottom: 5;
+}
+
+.edit-commentBtns-container {
+  display: flex;
+  left: 0;
+  bottom: 0;
+  margin: 10px 0 -15px 0;
+}
+
 .answer-btn ,
+.edit-comment-btn ,
 .delete-btn ,
 .pick-answer-btn ,
 .view-comments-btn,
@@ -277,9 +422,11 @@ a {
   font-family: inherit;
   margin: 0 5px;
   padding: 0 5px;
+  cursor: pointer;
 }
 
 .answer-btn ,
+.edit-comment-btn ,
 .pick-answer-btn {
   color: green;
 }
@@ -314,7 +461,9 @@ a {
   outline: none;
 }
 
-.submit-answer-btn {
+.submit-answer-btn ,
+.submit-comment-btn ,
+.submit-question-btn {
   background-color: green;
   border: none;
   border-radius: 5px;
@@ -324,6 +473,8 @@ a {
   font-family: inherit;
 }
 
+.submit-answer-btn:active ,
+.submit-comment-btn:active ,
 .submit-answer-btn:active {
   transform: scale(0.98);
 }
@@ -385,15 +536,6 @@ a {
   width: 50px;
 }
 
-.answer-author ,
-.answered-date ,
-.comment-author ,
-.comment-date {
-  text-decoration: underline 1px solid gray;
-  line-height: 20px;
-}
-.answer-author {
-  margin-bottom: 10px;
-}
+
 
 

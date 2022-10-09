@@ -2,17 +2,18 @@
 
 {% block body %}
 
-  <h1>Comments</h1>
+  <h1 class="add-comments-title">Comments</h1>
 
   <div class="comments-container">
-    <div class="profile-selected-qtn">
-      <ul class="qtns-list">            
-        <li class="qtn-content">
-          {{answer.answered_date | safe}}  
+    <div class="comments-selected-qtn">
+      <ul class="comment-selectedQtns-list">            
+        <li class="comment-selectedQtn-content">
+           <small class="selected-commentAnswer-date">Date answered : {{answer.answered_date}} </small>          
           <br>
-          <small>Posted by {{answer.answer_username}}</small>
+           <small class="selected-commentAnswer-username">Answer author : {{answer.answer_username}}</small>
           <br>
-          <small>{{answer.answer_body | safe}}</small>          
+          <div class="selected-commentAnswer-body">{{answer.answer_body | safe}}    
+          </div>          
         </li>
       </ul>
     </div>
@@ -22,7 +23,7 @@
           <div class="answer-form-group">
             <textarea name="comment" cols="70" rows="6" class="add-comment" placeholder="Add comment"></textarea>
         </div>
-        <input type="submit" value="submit" class="submit-answer-btn">
+        <input type="submit" value="submit" class="submit-comment-btn">
       </form>
     </div>
 

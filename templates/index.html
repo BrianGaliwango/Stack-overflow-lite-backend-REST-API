@@ -3,15 +3,23 @@
 {% block body %}
 
   <div class="home-container">
-    <h1>Welcome to Stack overflow</h1>  
-    <div class="login-btns">
-      <form action="/login">
-      <input type="submit" value="Login" class="login-btn" >
-      </form>
-      <form action="/register">
-        <input type="submit" value="Register" class="register-btn">
-      </form>   
+    <div class="home-container-content">
+      <h1>Welcome to Stack overflow</h1> 
+      <div class="login-btns">
+        {% if session.logged_in %}
+          <form action="/logout">
+            <input type="submit" value="Logout" class="logout-btn" >
+          </form>
+        {% else %}
+          <form action="/login">
+            <input type="submit" value="Login" class="login-btn" >
+          </form>
+        {% endif %}
+          <form action="/register">
+            <input type="submit" value="Register" class="register-btn">
+          </form>   
+      </div>
     </div>
-  </div> 
+  </div>   
 
 {% endblock %}

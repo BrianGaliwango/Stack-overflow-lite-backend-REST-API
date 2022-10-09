@@ -6,14 +6,14 @@
 
   <div class="asked-qtns">
 
-    <div class="profile-selected-qtn">
-      <ul class="qtns-list">            
-        <li class="qtn-content">
-          {{question.title}} 
+    <div class="user-selectedQtn-container">
+      <ul class="user-selectedQtns-list">            
+        <li class="user-selectedQtn-content">
+          <small class="user-SelectedQtn-author">Title : {{question.title}}</small>
           <br>
-          <small>Asked by {{question.asked_by}}</small>
+          <small class="user-SelectedQtn-author">Question author : {{question.asked_by}}</small>
           <br>
-          <div class="qtn-body">
+          <div class="user-SelectedQtn-body">
             {{question.body | safe}} 
         </div>         
         </li>
@@ -22,7 +22,7 @@
             
     <form action="" method="POST" class="post-answer-form">
       <div class="answer-form-group">
-        <textarea name="answer" cols="70" rows="6" class="answer-qtn" placeholder="Answer question"></textarea>
+        <textarea name="answer" cols="70" rows="10" class="answer-qtn" placeholder="Answer question"></textarea>
     </div>
     <input type="submit" value="submit" class="submit-answer-btn">
   </form>

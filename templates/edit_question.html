@@ -2,14 +2,14 @@
 
 {% block body %} 
 
-  <h1>Edit question</h1>
+  <h1 class="edit-question-title">Edit question</h1>
 
   <form action="" method="POST" class="post-answer-form">
     <div class="answer-form-group">
       <label>Answer</label>
-      <textarea name="question" cols="50" rows="6" class="answer-qtn" placeholder="Answer question">{{question.body | safe}}</textarea>
+      <textarea name="question" cols="70" rows="10" class="answer-qtn" placeholder="Answer question" autofocus>{{question.body | safe}}</textarea>
   </div>
-  <input type="submit" value="submit" class="submit-answer-btn">
+  <input type="submit" value="submit" class="submit-question-btn">
 </form>
 
 {% endblock %}

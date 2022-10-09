@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block body %} 
+
+  <h1 class="edit-comment-title">Edit comment</h1>
+
+  <form action="" method="POST" class="post-answer-form">
+    <div class="answer-form-group">
+      <textarea name="comment" cols="70" rows="10" class="comment-answer" placeholder="Edit comment" autofocus>{{comment.comment_body | safe}}</textarea>
+  </div>
+  <input type="submit" value="submit" class="submit-comment-btn">
+</form>
+
+{% endblock %}

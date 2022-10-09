@@ -248,18 +248,12 @@ def user_get_question(id):
       
     #Execute answers query  
     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
-    # result = cur.execute("SELECT * FROM answers INNER JOIN comments ON comment_answer_id WHERE question_id = %s", [id])
     
     answers = cur.fetchall()
-    print(answers)
-    # Create cursor
-    cur = mysql.connection.cursor()
     
-    # Execute query
+    # Commit to db
+    mysql.connection.commit()
     
-     # Get comments
-    cur = mysql.connection.cursor()
-        
     # Close cursor
     cur.close()
     
@@ -367,9 +361,7 @@ def post_answer(id):
 @is_logged_in
 def upvote_answer(answer_id):
   # Send request
-  # if request.method == "POST":
-  #   votes = request.form.get("upvote")
-    
+
     # Create cursor
     cur = mysql.connection.cursor()
     
@@ -389,9 +381,7 @@ def upvote_answer(answer_id):
 @is_logged_in
 def downvote_answer(answer_id):
   # Send request
-  # if request.method == "POST":
-  #   votes = request.form.get("downvote")
-    
+  
     # Create cursor
     cur = mysql.connection.cursor()
     
@@ -471,7 +461,6 @@ def post_comment(id):
   
   # Commit to db
   mysql.connection.commit()
-  print(answer)
   
   # send request
   if request.method == "POST":
@@ -504,7 +493,6 @@ def view_comments(id):
   cur = mysql.connection.cursor()
   
   # Execute get answer query
-  # cur.execute("SELECT * FROM questions INNER JOIN answers ON answers.question_id WHERE answers.id = %s", [id])
   cur.execute("SELECT * FROM answers WHERE id = %s", [id])
   
   answer = cur.fetchone()
@@ -527,6 +515,41 @@ def view_comments(id):
   cur.close()
    
   return render_template("view_comments.html", answer=answer, comments=comments)
+
+# Edit comment 
+@app.route("/edit_comment/<string:id>", methods=["GET", "POST"])
+@is_logged_in
+def edit_comment(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Get query
+  result = cur.execute("SELECT * FROM comments WHERE id = %s", [id])
+  
+  # Get question
+  comment = cur.fetchone()
+  
+  # Get request form
+  if request.method == "POST":
+    comment = request.form["comment"]
+    
+    # Validate
+    if not comment:
+      print("please enter a comment")
+      return render_template("edit_comment.html", comment=comment)
+    # Create cursor
+    cur = mysql.connection.cursor()
+    
+    # Execute query
+    cur.execute("UPDATE comments SET comment_body = %s WHERE id = %s", [comment, id])
+  
+    # Commit to db
+    mysql.connection.commit()
+    
+    # Close cursor
+    cur.close()
+    return redirect(url_for("dashboard"))  
+  return render_template("edit_comment.html", comment=comment)
   
 #Edit my question
 @app.route("/edit_question/<string:id>", methods=["GET", "POST"])
@@ -663,6 +686,24 @@ def dashboard_delete_answer(id):
   
   # Execute query
   cur.execute("DELETE FROM answers WHERE id = %s", [id])
+  
+  # Commit to db
+  cur.connection.commit()
+  
+  # Close cursor
+  cur.close()
+  
+  return redirect(url_for("dashboard"))
+
+#Delete comment
+@app.route("/delete_comment/<string:id>", methods=["POST"])
+@is_logged_in
+def delete_comment(id):
+  # Create cursor
+  cur = mysql.connection.cursor()
+  
+  # Execute query
+  cur.execute("DELETE FROM comments WHERE id = %s", [id])
   
   # Commit to db
   cur.connection.commit()

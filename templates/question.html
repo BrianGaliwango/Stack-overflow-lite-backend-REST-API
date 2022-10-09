@@ -1,16 +1,15 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class="answers-container">
-    <div class="selected-qtn">
-      <h1 class="selected-qtn-title">{{question.title}}</h1>
-      <ul class="qtns-list">            
-        <li class="qtn-content">
-          {{question.body | safe}}  
+  <div class="home-answers-container">
+    <h1 class="home-selectedQtn-title">Question</h1>
+    <div class="home-selected-qtn">
+      <ul class="home-qtns-list">            
+        <li class="home-qtn-content">         
+          <small class="selected-homeQtn-date">Asked date : {{question.date_asked}}</small>    
           <br>
-          <small>Posted by {{question.username}}</small>
-          <br>
-          <small>{{question.date_asked}}</small>          
+          <small class="selected-homeQtn-username">Question author : {{question.username}}</small>
+          <div class="selected-homeQtn-body">{{question.body | safe}}</div>      
         </li>
       </ul>
   </div>
@@ -20,12 +19,11 @@
       <ul class="answers-list"> 
         {% for answer in answers %}     
         <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
-          {{answer.answer_body | safe}}  
+           <small class="home-qtnAnswer-date">Answered date : {{answer.answered_date}}</small> 
           <br>
-          <small>Answered by {{answer.answer_username}}</small>
-          <br>
-          <small>{{answer.answered_date}}</small> 
-   
+           <small class="home-qtnAnswer-username">Answer author : {{answer.answer_username}}</small>
+          <br>         
+           <div class="home-qtnAnswer-body">{{answer.answer_body | safe}}</div>
         </li>  
         {% endfor %}  
       </ul>
