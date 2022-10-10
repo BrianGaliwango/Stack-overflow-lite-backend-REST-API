@@ -15,9 +15,11 @@
             <input type="submit" value="Login" class="login-btn" >
           </form>
         {% endif %}
+        {%if not session.logged_in %}
           <form action="/register">
             <input type="submit" value="Register" class="register-btn">
-          </form>   
+          </form>  
+        {% endif %} 
       </div>
     </div>
   </div>   

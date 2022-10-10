@@ -1,5 +1,5 @@
-from unittest import result
-from flask import Flask, render_template, request, redirect, session, url_for
+from codecs import register_error
+from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_login import login_manager ,current_user
 from passlib.hash import sha256_crypt
@@ -69,7 +69,6 @@ def search_questions():
     
     if not search_questions:
       return redirect(url_for("questions"))
-    print(search_questions)
     
     # Create cursor 
     cur = mysql.connection.cursor()
@@ -89,8 +88,7 @@ def search_questions():
     cur.close()
     
   return render_template("search_questions.html", questions=questions) 
-
-    
+   
 #Register route 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -103,23 +101,39 @@ def register():
     
     # Validate form
     if not first_name or not last_name or not username or not email or not password or not first_name or not last_name:
-      print("Please valid inputs")
-      return render_template("register.html")
+      flash("Please fill in all fields", "danger")    
+      return render_template("register.html") 
     
     # Create cursor
     cur = mysql.connection.cursor()
-      
-    # Execute query
-    cur.execute("INSERT INTO users(first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s)", (first_name, last_name, username, email, password))
     
+    # Execute  check  existing users query  
+    cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+    existing_username = cur.fetchone()
+    if existing_username is not None:
+      flash("Username already exists", "danger")     
+      return render_template("register.html")
+    
+    # Check for existing email
+    cur.execute("SELECT * FROM users WHERE email = %s", (email,)) 
+    existing_email = cur.fetchone()
+    if existing_email is not None:
+      flash("Email already exists", "danger")
+      return render_template("register.html")
+        
+    # Insert users query
+    cur.execute("INSERT INTO users(first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s)", (first_name, last_name, username, email, password))
+      
     # commit to db
     mysql.connection.commit()
     
     # Close connection
-    cur.close() 
-    return redirect(url_for("index"))
+    cur.close()   
+    
+    flash("You are now registered", "success")   
+    return redirect(url_for("login"))      
   return render_template("register.html")
-
+     
 # User login
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -130,7 +144,7 @@ def login():
     
     # Validate username and password_candidate
     if not username or not password_candidate:
-      print(username, password_candidate, "invalid inputs")   
+      flash("Please fill all fields", "danger")   
       return render_template("login.html")
     
     # Create cursor
@@ -148,20 +162,22 @@ def login():
       # Compare passwords
       if sha256_crypt.verify(password_candidate, password):
         # When passed login
+        session.permanent = False
         session["logged_in"] = True
         session["username"] = username
-        # session["id"] = id
 
+        flash("You are now logged in", "success")
         return redirect(url_for("dashboard"))
       else:
-        return render_template("login.html")
+        error = "Invalid inputs"
+        return render_template("login.html", error=error)
       # Close connection
-    cur.close()
-  else:
-    return render_template("login.html") 
-  return render_template("login.html") 
-      
-
+      cur.close()
+    else:
+      error = "Username not found"
+      return render_template("login.html", error=error)
+  return render_template("login.html")
+ 
 # Check if the user is logged in decorator
 def is_logged_in(f):
   @wraps(f)

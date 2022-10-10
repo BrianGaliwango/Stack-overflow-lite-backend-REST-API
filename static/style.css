@@ -542,6 +542,28 @@ a {
   width: 50px;
 }
 
+.success {
+  width: 600px;
+  background-color:green;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.danger ,
+.error {
+  
+  width: 600px;
+  background-color: red;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
 
 
 
