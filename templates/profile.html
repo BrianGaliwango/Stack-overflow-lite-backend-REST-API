@@ -4,7 +4,7 @@
 
   <h1 class="user-name-title">@{{session["username"]}}</h1>
   
-  <div class="main-pro-container">
+  <!-- <div class="main-pro-container"> -->
 
     <div class="profile-askQtnBtn-container">
       <a href="/post_question" class="myPro-ask-questionBtn">Ask Question</a>
@@ -13,12 +13,11 @@
 
     <div class="myPro-asked-qtns-container">  
       <h3 class="myPro-questions-title">My Questions</h3>    
-      <ul class="qtns-list">
+      <ul class="profile-qtns-list">
         {% for question in questions %}         
-        <li class="profile-qtn-content">
+         <li class="profile-qtn-content">
 
           <small class="profile-questions-date">Date asked: {{question.date_asked}}</small>
-          <br>
       
           <div class="myPro-qtns-title-container">
             <small class="profile-questions-title">Title : {{question.title}}</small>
@@ -27,19 +26,19 @@
               <a href="/edit_question/{{question.id}}" class="answer-btn">edit question</a>
             
               <form action="{{url_for('delete_question', id=question.id)}}" method="POST">
-              <input type="hidden" name="method" value="DELETE">
-              <input type="submit" value="delete" class="delete-btn">
+                <input type="hidden" name="method" value="DELETE">
+                <input type="submit" value="delete" class="delete-btn">
               </form>
             </div>
-          </div>
+           </div>
           
           <div class="profile-qtn-body">
             <a href="profile_question/{{question.id}}" class="qtn-link">{{question.body}}</a>
           </div>
-        </li>
+         </li>
         {% endfor %}
       </ul>
     </div>
-  </div>
+  <!-- </div> -->
 
 {% endblock %}

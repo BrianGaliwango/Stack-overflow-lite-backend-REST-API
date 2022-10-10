@@ -1,39 +1,41 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    
-  <h2 class="dashboard-header">
+  <!-- <div class="dashboard-main-container">  -->
+    <div> 
+    <h2 class="dashboard-header">
       Welcome!
     <br>
-     Don't get stuck, 
+      Don't get stuck, 
     <br>
-     millions of people find answers to solve technical problems
-  </h2>
+      millions of people find answers to solve technical problems
+    </h2>
+  </div> 
  
-  <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
+    <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
 
-  <div class="dashboard-questions-container">
-    <ul class="dashboard-qtns-list">
-      {% for question in questions %}         
-      <li class="dashboard-qtn-content">
-        <small class="dashboard-qtn-title">Title : {{question.title}}</small>
-      <br>
-        <small class="dashboard-qtn-author">Question author : {{question.username}}</small>
-    
-        <div class="dashboard-qtn-body">
-          <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
-        </div>
-                        
-        <div class="dashboard-answerBtn-container">
+    <div class="dashboard-questions-container"> 
+      <ul class="dashboard-qtns-list">
+        {% for question in questions %}         
+        <li class="dashboard-qtn-content">
+          <small class="dashboard-qtn-title">Title : {{question.title}}</small>
+        <br>
+          <small class="dashboard-qtn-author">Question author : {{question.username}}</small>
+      
+          <div class="dashboard-qtn-body">
+            <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
+          </div>
+                                  
           {% if question.username != session["username"]%}  
-            <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
-          {% endif %} 
-      </div>  
-            
-      </li>
-      {% endfor %}
-    </ul>
-  </div>
+            <div class="dashboard-answerBtn-container">
+              <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
+            </div>
+          {% endif %}            
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+ <!-- </div> -->
 
 {% endblock %}
 

@@ -1,5 +1,15 @@
-*{
+* {
   box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  padding: 0;
+  margin: 0;
 }
 
 .navbar {
@@ -15,6 +25,7 @@
   display: flex;
   align-items: center;
   justify-content: space-around;
+  text-align: center;
   background-color: rgb(33, 33, 33);
   color: #fff;
   padding: 15px;
@@ -23,12 +34,12 @@
 .nav-header {
   display: flex;
   align-items: center;
+  text-align: center;
 }
 
 .search-container {
   display: flex;
   align-items: center;
-  margin-top: 15px;
 }
 
 .search-form {
@@ -37,6 +48,7 @@
   border-radius: 35px;
   text-align: center;
   font-size: 16px;
+  padding: 2px;
 }
 
 .search-form:focus {
@@ -56,7 +68,7 @@
 }
 
 .nav-list li {
-  margin: 0 10px;
+  margin: 10px;
 } 
 
 a {
@@ -66,10 +78,13 @@ a {
 }
 
 .main-container {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 35px;
+  overflow-y: auto;
+  padding: 20px;
 }
 
 .home-container {
@@ -86,6 +101,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: orange;
   padding: 50px;
 }
 
@@ -141,7 +157,8 @@ a {
   transform: scale(0.98);
 }
 
-.main-pro-container {
+.main-pro-container ,
+.post-answer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -158,16 +175,18 @@ a {
 }
 
 .ask-question-body {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+}
+
+.ask-question-body label {
+  margin-left: 10px;
 }
 
 .profile-askQtnBtn-container {
   width: 800px;
   display: flex;
-  justify-content: space-around;
-  position: relative;
-  margin-left: 38px;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .dashboard-ask-questionBtn ,
@@ -183,17 +202,8 @@ a {
   padding: 10px;
 }
 
-.myPro-ask-questionBtn {
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 .myPro-answers-btn {
   background-color: orange;
-  position: absolute;
-  top: 0;
-  right: 0;
 }
 
 .post-qtn:hover , 
@@ -201,20 +211,6 @@ a {
 .myPro-ask-questionBtn:hover ,
 .dashboard-ask-questionBtn:hover {
   background-color: rgba(136, 136, 136, 0.5);
-}
-
-.myPro-asked-qtns-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.dashboard-container ,
-.user-answers-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: none;
 }
 
 .dashboard-header , 
@@ -229,12 +225,14 @@ a {
 .edit-comment-title ,
 .ask-question-title ,
 .post-answer-title ,
+.searched-questions-title ,
 .myPro-selectedQtn-title ,
 .home-selectedQtn-title ,
 .home-questions-title { 
   text-align: center;
   text-decoration: underline 2px solid gray;
   text-underline-offset: 2px;
+  margin-top: 40px;
 }
 
 .myPro-questions-title {
@@ -255,19 +253,15 @@ a {
 .comment-selectedQtns-list,
 .selected-answer-list ,
 .profile-selectedQtn-list ,
+.profile-qtns-list ,
 .search-qtns-list ,
 .user-answers-list ,
 .home-qtns-list {
-  list-style-type: none;
-}
-
-.profile-answers-list {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   list-style-type: none;
 }
-
 
 .dashboard-qtn-content ,
 .user-selectedQtn-content ,
@@ -287,12 +281,16 @@ a {
   border-top: 1px solid gray;
   border-bottom: 1px solid gray;
   border-radius: 5px;
-  margin: 5px 0;
+  margin: 5px 30px 5px 0;
   padding: 16px;
   letter-spacing: 1px;
   word-wrap: break-word;
   word-break: break-all;
   position: relative;
+}
+
+.profile-qtn-content {
+  margin-right: 40px;
 }
 
 .profile-answer-content ,
@@ -303,7 +301,6 @@ a {
 
 .myPro-answers-container ,
 .date-answer-container ,
-.question-date ,
 .myPro-qtns-title-container {
   display: flex;
   align-items: center;
@@ -457,6 +454,7 @@ a {
 
 .post-answer-form textarea ,
 .post-comment-form textarea {
+  margin-left: 10px;
   font-size: 18.5px;
 }
 
@@ -553,8 +551,7 @@ a {
 }
 
 .danger ,
-.error {
-  
+.error {  
   width: 600px;
   background-color: red;
   padding: 10px;
@@ -563,6 +560,7 @@ a {
   font-size: 16px;
   margin-top: 20px;
 }
+
 
 
 

@@ -1,4 +1,3 @@
-from codecs import register_error
 from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_mysqldb import MySQL
 from flask_login import login_manager ,current_user
@@ -55,9 +54,9 @@ def get_question(id):
     # Fetch answers
     answers = cur.fetchall()
     
+    # Close cursor
     cur.close()
     
-    # answers = cur.fetchall()
     return render_template("question.html", question=question, answers=answers)
   
 #Search Route
@@ -68,6 +67,7 @@ def search_questions():
     search_questions = request.form.get("q")
     
     if not search_questions:
+      flash("Please fill in field", "danger")
       return redirect(url_for("questions"))
     
     # Create cursor 
@@ -79,6 +79,7 @@ def search_questions():
     if result > 0:
       questions = cur.fetchall()
     else:
+      flash("No questions found", "success")
       return redirect(url_for("questions"))  
        
     # Commit to db
@@ -193,6 +194,7 @@ def is_logged_in(f):
 @is_logged_in
 def logout():
   session.clear()
+  flash("Logged out successfully", "success")
   return redirect(url_for("login"))
 
 # Profile route
