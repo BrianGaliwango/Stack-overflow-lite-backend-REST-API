@@ -275,7 +275,7 @@ def user_get_question(id):
     # Close cursor
     cur.close()
     
-    context = {"question":question,"answers":answers}
+    context = {"question":question, "answers":answers}
     
     return render_template("user_question.html", **context)
 
@@ -310,7 +310,7 @@ def post_question():
     body = request.form.get("body")
     
     if not title or not body:
-      print("Please fill fields")
+      flash("Please fill field", "danger")
       return render_template("post_question.html")
     
     # Create cursor connection
@@ -325,6 +325,7 @@ def post_question():
     # Close connection
     cur.close()
     
+    flash("Question created successfully", "success")
     return redirect(url_for("dashboard"))  
   return render_template("post_question.html")
 
@@ -346,8 +347,7 @@ def post_answer(id):
     
     # Validate answer input
     if not question_answer:
-      print("Please fill field")
-      # return redirect(url_for("dashboard"))
+      flash("Please fill field", "danger")
       return render_template("answer_question.html", answer=question_answer, question=question)
 
     #  create cursor
@@ -371,6 +371,7 @@ def post_answer(id):
     # Close cursor
     cur.close()
     # return redirect(url_for("dashboard"))
+    flash("Answer posted successfully", "success")
     return render_template("user_question.html", question=question, answers=answers)
   return render_template("answer_question.html", question=question)
 
@@ -378,7 +379,6 @@ def post_answer(id):
 @app.route("/upvote_answer/<answer_id>", methods=["POST"])
 @is_logged_in
 def upvote_answer(answer_id):
-  # Send request
 
     # Create cursor
     cur = mysql.connection.cursor()
@@ -391,15 +391,13 @@ def upvote_answer(answer_id):
               
     # Close cursor
     cur.close()
-  
+    flash("Voted successfully", "success")
     return redirect(url_for("dashboard"))
 
 # DownVote answer
 @app.route("/downvote_answer/<answer_id>", methods=["POST"])
 @is_logged_in
 def downvote_answer(answer_id):
-  # Send request
-  
     # Create cursor
     cur = mysql.connection.cursor()
     
@@ -411,7 +409,8 @@ def downvote_answer(answer_id):
               
     # Close cursor
     cur.close()
-  
+
+    flash("Voted successfully", "success")
     return redirect(url_for("dashboard"))
 
 # Mark answer
@@ -424,9 +423,7 @@ def mark_answer(answer_id):
   # Execute query
   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
   
-  # Get marked_answer
-  # marked_answer = cur.fetchone()
-  
+  # Get marked_answer 
   cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
   
   # Commit to db
@@ -437,6 +434,7 @@ def mark_answer(answer_id):
   # Close cursor
   cur.close()
   
+  flash("Marked answer successfully", "success")
   return redirect(url_for("profile"))
 
 # UnMark answer
@@ -449,9 +447,7 @@ def unmark_answer(answer_id):
   # Execute query
   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
   
-  # Get marked_answer
-  # marked_answer = cur.fetchone()
-  
+  # Get marked_answer  
   cur.execute("UPDATE answers SET marked_answer = '0' WHERE id = %s", [answer_id])
   
   # Commit to db
@@ -461,7 +457,7 @@ def unmark_answer(answer_id):
 
   # Close cursor
   cur.close()
-  
+  flash("Un-marked answer successfully", "success")
   return redirect(url_for("profile"))
  
 # Add comment
@@ -485,7 +481,7 @@ def post_comment(id):
     comment = request.form.get("comment")
     
     if not comment:
-      print("Please fill in the comment field")
+      flash("Please fill in the comment field", "danger")
       return render_template("post_comment.html", answer=answer)
       
       # Create cursor
@@ -500,6 +496,7 @@ def post_comment(id):
     # Close cursor
     cur.close()
     
+    flash("Comment created successfully", "success")
     return redirect(url_for("dashboard"))  
   return render_template("post_comment.html", answer=answer)
 
@@ -522,6 +519,7 @@ def view_comments(id):
   result =cur.execute("SELECT * FROM comments WHERE comment_answer_id = %s", [id])
   
   if not result  > 0:
+    flash("No comments found", "success")
     return redirect(url_for("dashboard"))
   
   comments = cur.fetchall()
@@ -553,7 +551,7 @@ def edit_comment(id):
     
     # Validate
     if not comment:
-      print("please enter a comment")
+      flash("Please fill comment field", "danger")
       return render_template("edit_comment.html", comment=comment)
     # Create cursor
     cur = mysql.connection.cursor()
@@ -566,6 +564,7 @@ def edit_comment(id):
     
     # Close cursor
     cur.close()
+    flash("Comment edited successfully", "success")
     return redirect(url_for("dashboard"))  
   return render_template("edit_comment.html", comment=comment)
   
@@ -588,7 +587,7 @@ def edit_question(id):
     
     # Validate
     if not question:
-      print("please enter a questions")
+      flash("Please fill question field", "danger")
       return render_template("edit_question.html", question=question)
     # Create cursor
     cur = mysql.connection.cursor()
@@ -601,6 +600,7 @@ def edit_question(id):
     
     # Close cursor
     cur.close()
+    flash("Question edited successfully", "success")
     return redirect(url_for("profile"))  
   return render_template("edit_question.html", question=question)
 
@@ -622,7 +622,7 @@ def edit_answer(id):
     
     # Validate answer
     if not answer:
-      print("Please fill in answer")
+      flash("Please fill in answer field", "danger")
       return render_template("edit_answer.html", answer=answer)
   
     # Create cursor
@@ -645,6 +645,8 @@ def edit_answer(id):
     
     # Close cursor
     cur.close()
+    
+    flash("Answer edited successfully", "success")
     # return redirect(url_for("profile"))
     return render_template("myPro_answers.html", answers=answers)
     
@@ -665,7 +667,7 @@ def delete_question(id):
   
   # Close cursor
   cur.close()
-  
+  flash("Question deleted successfully", "danger")
   return redirect(url_for("profile"))
 
 # Profile Delete answer 
@@ -692,6 +694,7 @@ def delete_answer(id):
   # Close cursor
   cur.close()
   
+  flash("Answer deleted successfully", "danger")
   # return redirect(url_for("myPro_answers"))
   return render_template("myPro_answers.html", answers=answers)
 
@@ -711,6 +714,7 @@ def dashboard_delete_answer(id):
   # Close cursor
   cur.close()
   
+  flash("Answer deleted successfully", "danger")
   return redirect(url_for("dashboard"))
 
 #Delete comment
@@ -728,7 +732,7 @@ def delete_comment(id):
   
   # Close cursor
   cur.close()
-  
+  flash("Comment deleted successfully", "danger")
   return redirect(url_for("dashboard"))
   
 if __name__ == "__main__":

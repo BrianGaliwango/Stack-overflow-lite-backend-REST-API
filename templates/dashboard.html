@@ -1,18 +1,20 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <!-- <div class="dashboard-main-container">  -->
+
     <div> 
-    <h2 class="dashboard-header">
-      Welcome!
-    <br>
-      Don't get stuck, 
-    <br>
-      millions of people find answers to solve technical problems
-    </h2>
-  </div> 
- 
-    <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
+      <h2 class="dashboard-header">
+        Welcome!
+      <br>
+        Don't get stuck, 
+      <br>
+        millions of people find answers to solve technical problems
+      </h2>
+    </div> 
+
+    <div class="dashboard-askQtnBtn-container">
+      <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
+    </div>
 
     <div class="dashboard-questions-container"> 
       <ul class="dashboard-qtns-list">

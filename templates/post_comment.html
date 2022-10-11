@@ -2,9 +2,8 @@
 
 {% block body %}
 
-  <h1 class="add-comments-title">Comments</h1>
+  <h1 class="add-comments-header">Comments</h1>
 
-  <!-- <div class="comments-container"> -->
     <div class="comments-selected-qtn">
       <ul class="comment-selectedQtns-list">            
         <li class="comment-selectedQtn-content">
@@ -21,11 +20,10 @@
     <div class="comment-container">
         <form action="" method="POST" class="post-comment-form">
           <div class="answer-form-group">
-            <textarea name="comment" cols="70" rows="6" class="add-comment" placeholder="Add comment"></textarea>
+            <textarea name="comment" cols="70" rows="10" class="add-comment" placeholder="Add comment"></textarea>
         </div>
         <input type="submit" value="submit" class="submit-comment-btn">
       </form>
     </div>
 
-  <!-- </div> -->
 {% endblock %}

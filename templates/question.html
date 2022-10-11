@@ -2,7 +2,7 @@
 
 {% block body %}
   <div class="home-answers-container">
-    <h1 class="home-selectedQtn-title">Question</h1>
+    <h1 class="home-selectedQtn-header">Question</h1>
     <div class="home-selected-qtn">
       <ul class="home-qtns-list">            
         <li class="home-qtn-content">         
@@ -15,7 +15,7 @@
   </div>
 
     <div class="answers-">
-      <h1 class="answers-title">Answers</h1>
+      <h1 class="user-answers-header">Answers</h1>
       <ul class="answers-list"> 
         {% for answer in answers %}     
         <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">

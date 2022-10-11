@@ -3,7 +3,7 @@
 {% block body %}
   <div class="user-answers-container">
     <div class="user-selected-qtn">
-      <h1 class="user-selectedQtn-title">Question</h1>
+      <h1 class="user-selectedQtn-header">Question</h1>
       <ul class="user-selectedQtns-list">            
         <li class="user-selectedQtn-content">
           <small class="user-SelectedQtn-askedDate">Date asked : {{question.date_asked}}</small>
@@ -17,7 +17,7 @@
     </div>
 
   <div class="user-answers-container">
-    <h1 class="answers-title">Answers</h1>
+    <h1 class="user-answers-header">Answers</h1>
     <ul class="user-answers-list"> 
       {% for answer in answers %}     
       <li class="user-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">

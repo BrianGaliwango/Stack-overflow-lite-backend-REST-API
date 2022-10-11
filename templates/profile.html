@@ -2,17 +2,15 @@
 
 {% block body %} 
 
-  <h1 class="user-name-title">@{{session["username"]}}</h1>
+  <h1 class="user-name-header">@{{session["username"]}}</h1>
   
-  <!-- <div class="main-pro-container"> -->
-
     <div class="profile-askQtnBtn-container">
       <a href="/post_question" class="myPro-ask-questionBtn">Ask Question</a>
       <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
     </div>
 
     <div class="myPro-asked-qtns-container">  
-      <h3 class="myPro-questions-title">My Questions</h3>    
+      <h3 class="myPro-questions-header">My Questions</h3>    
       <ul class="profile-qtns-list">
         {% for question in questions %}         
          <li class="profile-qtn-content">

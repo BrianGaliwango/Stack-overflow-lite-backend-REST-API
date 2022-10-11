@@ -2,7 +2,7 @@
 
 {% block body %}
 
-  <h1 class="post-answer-title">Post answer to question</h1>
+  <h1 class="post-answer-header">Answer question</h1>
 
   <div class="post-answer-container">
 
@@ -11,7 +11,7 @@
         <li class="user-selectedQtn-content">
           <small class="user-SelectedQtn-author">Title : {{question.title}}</small>
           <br>
-          <small class="user-SelectedQtn-author">Question author : {{question.asked_by}}</small>
+          <small class="user-SelectedQtn-author">Question author : {{question.username}}</small>
 
           <div class="user-SelectedQtn-body">
             {{question.body | safe}} 
