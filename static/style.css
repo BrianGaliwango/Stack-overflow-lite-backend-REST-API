@@ -19,6 +19,7 @@ body {
   left: 0;
   z-index: 6;
 }
+
 .nav-container {
   width: 100vw;
   height: 5vh;
@@ -77,6 +78,19 @@ a {
   font-size: 20px;
 }
 
+.logo {
+  width: 25px;
+  height: 25px;
+}
+
+.menu-button {
+  background-color: orangered;
+  border: none;
+  border-radius: 2px;
+  padding: 3px;
+  color: whitesmoke;
+}
+
 .main-container {
   width: 100vw;
   height: 100vh;
@@ -97,7 +111,7 @@ a {
 
 .home-container-content {
   background-color: rgb(111, 111, 111);
-  width: 800px;
+  min-width: 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -593,7 +607,52 @@ a {
   background-color: red;  
 }
 
+@media screen and (max-width: 375px){
+  .nav-header h1{
+    display: none;
+  }
 
+  .menu-btn-container{
+    display: none;
+  }
+
+  .search-form{
+    width: 200px;
+    margin: 5px;
+  }
+
+  .nav-logout-btn ,
+  .nav-register-btn ,
+  .nav-login-btn ,
+  .nav-home-text {
+    display: none;
+  }
+
+  .logo-container{
+    margin: 0 -30px 0 35px;
+  }
+
+  .navbar-items a{
+    font-size: 16px;
+  }
+
+  .navbar-items ul li {
+    margin: 5px;
+  }
+
+  .nav-container{
+    align-items: center;
+  }
+
+  .home-container-content{
+    min-width: 300px;
+    text-align: center;
+  }
+
+  .home-container-content h1{
+    margin-bottom: 20px;
+  }
+}
 
 
 
