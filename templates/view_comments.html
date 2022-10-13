@@ -2,9 +2,10 @@
 
 {% block body %}
 
+  <h1 class="selected-answer-header">Answer</h1>
+
   <div class="view-comments-container">
     <div class="selected-answer-container">
-      <h1 class="selected-answer-header">Answer</h1>
       <ul class="selected-answer-list">            
         <li class="selected-commentAnswer-content">
             <small class="selected-commentAnswer-date">Answered date : {{answer.answered_date}}</small>
@@ -18,8 +19,9 @@
       </ul>
     </div>
 
+    <h2 class="selected-comments-title">Comments</h2>
+
     <div class="comments-container">
-      <h2 class="selected-comments-title">Comments</h2>
       <ul class="comments-list">    
         {% for comment in comments %}        
         <li class="comment-content">
@@ -35,7 +37,7 @@
               {% if comment.comment_author == session["username"] %}
               <div>
               <a href="/edit_comment/{{comment.id}}" class="edit-comment-btn">edit comment</a>
-            </div>
+              </div>
 
               <form action="{{url_for('delete_comment', id=comment.id)}}" method="POST">
                 <input type="hidden" name="method" value="DELETE">

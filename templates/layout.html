@@ -8,9 +8,12 @@
 </head>
 <body>
   {% include "includes/_navbar.html" %}
+  {% include "includes/_options.html" %}
   <div class="main-container">
   {% include "includes/_messages.html" %}
   {% block body %}{% endblock %}
   </div>
+
+  <script src="/static/app.js"></script>
 </body>
 </html>

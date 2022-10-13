@@ -4,7 +4,15 @@
 
   <div class="home-container">
     <div class="home-container-content">
-      <h1>Welcome to Stack overflow</h1> 
+      <div class="home-slogan">
+        <p class="slogan-text">    
+          <strong class="slogan-header">Don't get stuck.</strong>   
+        <br>      
+          <em>Millions</em> of people find answers to solve technical problems  
+          and do help others solve theirs.
+        </p> 
+      </div>
+
       <div class="login-btns">
         {% if session.logged_in %}
           <form action="/logout">

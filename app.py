@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_mysqldb import MySQL
-from flask_login import login_manager ,current_user
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -98,13 +97,21 @@ def register():
     last_name = request.form.get("last_name")
     username = request.form.get("username")
     email = request.form.get("email")
-    password = sha256_crypt.encrypt(str(request.form.get("password")))
+    # password = sha256_crypt.encrypt(str(request.form.get("password")))
+    password = request.form.get("password")
     
     # Validate form
-    if not first_name or not last_name or not username or not email or not password or not first_name or not last_name:
+    if not first_name or not last_name or not username or not email or not first_name or not last_name:
       flash("Please fill in all fields", "danger")    
       return render_template("register.html") 
     
+    if len(password) < 5:
+      flash("Password too short", "danger")
+      return render_template("register.html")
+    
+    # Encrypt password
+    password = sha256_crypt.encrypt(str(("password")))
+     
     # Create cursor
     cur = mysql.connection.cursor()
     
@@ -131,7 +138,8 @@ def register():
     # Close connection
     cur.close()   
     
-    flash("You are now registered", "success")   
+    flash("You are now registered", "success")  
+    print(password)  
     return redirect(url_for("login"))      
   return render_template("register.html")
      
@@ -358,21 +366,12 @@ def post_answer(id):
     
     # Commit to db   
     mysql.connection.commit()
-    
-    # Get answers
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute query
-    result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
-    
-    answers = cur.fetchall()
-    
+       
     # Close cursor
     cur.close()
-    # return redirect(url_for("dashboard"))
+    
     flash("Answer posted successfully", "success")
-    return render_template("user_question.html", question=question, answers=answers)
+    return redirect(url_for("dashboard"))
   return render_template("answer_question.html", question=question)
 
 # Upvote answer

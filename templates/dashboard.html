@@ -2,20 +2,18 @@
 
 {% block body %}
 
-    <div> 
-      <h2 class="dashboard-header">
-        Welcome!
-      <br>
-        Don't get stuck, 
-      <br>
-        millions of people find answers to solve technical problems
-      </h2>
-    </div> 
+  <div class="header-container"> 
+    <h2 class="dashboard-header">
+      Welcome!
+    </h2>
+  </div> 
 
-    <div class="dashboard-askQtnBtn-container">
-      <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
-    </div>
+  <div class="dashboard-askQtnBtn-container">
+    <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
+  </div>
 
+  <div class="dashboard-container">
+    
     <div class="dashboard-questions-container"> 
       <ul class="dashboard-qtns-list">
         {% for question in questions %}         
@@ -37,7 +35,7 @@
         {% endfor %}
       </ul>
     </div>
- <!-- </div> -->
+ </div>
 
 {% endblock %}
 

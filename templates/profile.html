@@ -3,32 +3,32 @@
 {% block body %} 
 
   <h1 class="user-name-header">@{{session["username"]}}</h1>
-  
-    <div class="profile-askQtnBtn-container">
-      <a href="/post_question" class="myPro-ask-questionBtn">Ask Question</a>
-      <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
-    </div>
 
-    <div class="myPro-asked-qtns-container">  
-      <h3 class="myPro-questions-header">My Questions</h3>    
+  <div class="profile-askQtnBtn-container">
+    <a href="/post_question" class="myPro-ask-questionBtn">Ask Question</a>
+    <a href="/myPro_answers" class="myPro-answers-btn">My Answers</a>
+  </div>
+
+  <h3 class="myPro-questions-header">My Questions</h3>
+  <div class="main-profile-container">
+    <div class="myPro-asked-qtns-container">      
       <ul class="profile-qtns-list">
         {% for question in questions %}         
          <li class="profile-qtn-content">
 
-          <small class="profile-questions-date">Date asked: {{question.date_asked}}</small>
-      
-          <div class="myPro-qtns-title-container">
+            <small class="profile-questions-date">Date asked: {{question.date_asked}}</small>
+          
+          <br>
             <small class="profile-questions-title">Title : {{question.title}}</small>
               
-            <div class="profile-question-btns">
-              <a href="/edit_question/{{question.id}}" class="answer-btn">edit question</a>
-            
-              <form action="{{url_for('delete_question', id=question.id)}}" method="POST">
-                <input type="hidden" name="method" value="DELETE">
-                <input type="submit" value="delete" class="delete-btn">
-              </form>
-            </div>
-           </div>
+          <div class="profile-question-btns">
+            <a href="/edit_question/{{question.id}}" class="answer-btn">edit question</a>
+          
+            <form action="{{url_for('delete_question', id=question.id)}}" method="POST">
+              <input type="hidden" name="method" value="DELETE">
+              <input type="submit" value="delete" class="delete-btn">
+            </form>
+          </div>
           
           <div class="profile-qtn-body">
             <a href="profile_question/{{question.id}}" class="qtn-link">{{question.body}}</a>
@@ -37,6 +37,6 @@
         {% endfor %}
       </ul>
     </div>
-  <!-- </div> -->
+  </div>
 
 {% endblock %}

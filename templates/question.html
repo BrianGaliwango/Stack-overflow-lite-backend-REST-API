@@ -1,8 +1,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class="home-answers-container">
-    <h1 class="home-selectedQtn-header">Question</h1>
+
+ <h1 class="home-selectedQtn-header">Question</h1>
+
+  <div class="home-qtnAnswers-container">
+
     <div class="home-selected-qtn">
       <ul class="home-qtns-list">            
         <li class="home-qtn-content">         
@@ -12,9 +15,9 @@
           <div class="selected-homeQtn-body">{{question.body | safe}}</div>      
         </li>
       </ul>
-  </div>
+    </div>
 
-    <div class="answers-">
+    <div class="answers-container">
       <h1 class="user-answers-header">Answers</h1>
       <ul class="answers-list"> 
         {% for answer in answers %}     
@@ -27,6 +30,6 @@
         </li>  
         {% endfor %}  
       </ul>
+    </div>
   </div>
-</div>
 {% endblock %}
