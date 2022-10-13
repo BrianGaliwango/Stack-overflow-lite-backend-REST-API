@@ -20,7 +20,7 @@
             {{answer.answer_body | safe}}
           </div>
 
-          <div class="profile-editanswer-btns">
+          <div class="profile-editAnswer-btns">
             <a href="/edit_answer/{{answer.id}}" class="answer-btn">edit answer</a>
 
             <form action="{{url_for('delete_answer', id=answer.id)}}" method="POST">

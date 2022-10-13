@@ -4,10 +4,18 @@
     <ul class="options-list">
       <li class="options-profile-link"><a href="/profile">@{{session["username"]}}</a></li>
       <li class="home-btn"><a href="/">Home</a></li>
-      <li class="options-mainQtns-btn"><a href="/questions">Questions</a></li>
-      <li class="options-login-btn"><a href="/login">Login</a></li>
-      <li class="options-register-btn"><a href="/register">Register</a></li>
-      <li class="options-logout-btn"><a href="/logout">Logout</a></li>
+      {% if not session.logged_in%}
+        <li class="options-mainQtns-btn"><a href="/questions">Questions</a></li>
+      {% else %}
+        <li class="options-dashboard-btn"><a href="/dashboard">Dashboard</a></li>
+      {% endif %}
+
+      {% if not session.logged_in %}
+        <li class="options-login-btn"><a href="/login">Login</a></li>
+        <li class="options-register-btn"><a href="/register">Register</a></li>
+      {% else %}
+        <li class="options-logout-btn"><a href="/logout">Logout</a></li>
+      {% endif %}
     </ul>
   </div>
 </div>

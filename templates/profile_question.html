@@ -47,9 +47,9 @@
           <small class="profile-qtnAnswer-date">Answered date : {{answer.answered_date}}</small>
         <br>
           <small class="profile-qtnAnswer-username">Answer author : {{answer.answer_username}}</small>
-        <div class="answer-body-container">
+        <!-- <div class="answer-body-container"> -->
           <div class="profile-qtnAnswer-body">{{answer.answer_body | safe}} </div>        
-        </div>        
+        <!-- </div>         -->
         <div class="allMark-btns-container">                    
             {% if answer.marked_answer != True %}
             <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">

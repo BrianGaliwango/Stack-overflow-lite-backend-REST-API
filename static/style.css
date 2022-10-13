@@ -905,7 +905,7 @@ a {
   .post-answer-form textarea ,
   .edit-comment-form textarea ,
   .post-comment-form textarea {
-    width: 90%;
+    width: 91%;
   }
 
   .edit-comment-formBtn {
@@ -1108,9 +1108,63 @@ a {
   }
 }
 
+/* Media 414 */
+@media screen and (max-width: 414px){
+  .post-answer-form textarea ,
+  .edit-comment-form textarea ,
+  .post-comment-form textarea {
+    width: 88%;
+  }
+}
+
+/* Media 395 */
+@media screen and (max-width: 395px){
+  .post-answer-form textarea ,
+  .edit-comment-form textarea ,
+  .post-comment-form textarea {
+    width: 87%;
+  }
+}
+
+@media screen and (max-width: 375px){
+  .danger ,
+  .error ,
+  .success {
+    
+    margin-top: 38px;
+    /* margin-bottom: -48px; */
+    
+  }
+}
+
+/* Media 360 */
+@media screen and (max-width: 360px) {
+  .nav-mainQtns-btn ,
+  .nav-dashboard-btn {
+    display: none;
+  }
+
+  .view-comments-btn {
+    margin-left: -5px;
+  }
+
+  .danger ,
+  .error ,
+  .success {
+    margin-top: 40px;
+    margin-bottom: -48px;
+  }
+  
+  .post-answer-form textarea ,
+  .edit-comment-form textarea ,
+  .post-comment-form textarea {
+    width: 86%;
+  }
+}
+
 
 /* Media 300px */
-@media screen and (max-width: 300px){
+@media screen and (max-width: 350px){
   .nav-mainQtns-btn ,
   .nav-dashboard-btn {
     display: none;
@@ -1122,17 +1176,110 @@ a {
     margin-top: 35px;
   }
 
+  .dashboard-header , 
+  .user-selectedQtn-header ,
+  .user-answers-header ,
+  .myPro-answers-header ,
+  .user-name-header ,
+  .selected-comments-title ,
+  .add-comments-header ,
+  .selected-answer-header ,
+  .edit-answer-header ,
+  .edit-question-header ,
+  .edit-comment-header ,
+  .ask-question-header ,
+  .post-answer-header ,
+  .searched-questions-header ,
+  .myPro-selectedQtn-header ,
+  .home-selectedQtn-header ,
+  .home-questions-header ,
+  .login-header ,
+  .register-header { 
+    font-size: 25px;
+  }
+
+  .user-answer-content {
+    padding-bottom: 35px;
+  }
+
+  .header-container {
+    margin-top: 0;
+  }
+
+  .dashboard-header {
+    font-size: 18px;
+  }
+
+  .dashboard-ask-questionBtn {
+    font-size: 16px;
+    padding: 8px;
+  }
+
+  .user-SelectedQtn-askedDate ,
+  .user-answered-date ,
+  .selected-homeQtn-date ,
+  .home-qtnAnswer-date ,
+  .profile-questions-date ,
+  .profile-selectedQtn-date ,
+  .profile-qtnAnswer-date ,
+  .selected-commentAnswer-date ,
+  .comment-date ,
+  .myPro-answer-date ,
+  .searched-qtn-date {
+    font-size: 11px;
+  }
+
+  .user-SelectedQtn-author ,
+  .user-answer-author ,
+  .selected-homeQtn-username ,
+  .home-qtnAnswer-username ,
+  .dashboard-qtn-author ,
+  .profile-questions-title ,
+  .profile-selectedQtn-username ,
+  .profile-qtnAnswer-username ,
+  .selected-commentAnswer-username ,
+  .comment-author ,
+  .myPro-answer-author ,
+  .searched-qtn-title {
+    font-size: 15px;
+  }
+
+  .user-SelectedQtn-body ,
+  .user-answer-body ,
+  .selected-homeQtn-body ,
+  .searched-qtn-body a,
+  .home-qtnAnswer-body ,
+  .profile-selectedQtn-body ,
+  .profile-qtnAnswer-body ,
+  .selected-commentAnswer-body ,
+  .comment-body ,
+  .myPro-answer-body ,
+  .dashboard-qtn-body a ,
+  .profile-qtn-body a {
+    font-size: 18px;
+  }
+
   .allMark-btns-container {
     position: absolute;
     bottom: 20;
     left: 118;
   }
 
-  .allMark-btns-container input {
+  .allMark-btns-container input ,
+  .user-deleteAnswer-container input {
     font-size: 8px;
   }
 
-  .comments-btn-container {
+  .edit-commentBtns-container a,
+  .edit-commentBtns-container .delete-btn ,
+  .profile-question-btns a,
+  .profile-question-btns .delete-btn ,
+  .profile-editAnswer-btns a ,
+  .profile-editAnswer-btns .delete-btn {
+    font-size: 12px;
+  }
+
+  .comments-btn-container { 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1140,7 +1287,20 @@ a {
 
   .comments-btn-container a{
     font-size: 8px;
-    margin: 5px;
+    margin: 3px;
+  }
+
+  .post-answer-form textarea ,
+  .post-comment-form textarea {
+    width: 82%;
+  }
+
+  .user-deleteAnswer-container {
+     bottom: 15;
+  }
+
+  .dashboard-qtn-title {
+    font-size: 16px;
   }
 
 }
