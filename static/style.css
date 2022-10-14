@@ -38,6 +38,10 @@ body {
   text-align: center;
 }
 
+.nav-header {
+  color: orange;
+}
+
 .search-container {
   display: flex;
   align-items: center;
@@ -60,6 +64,7 @@ body {
    display: flex;
    align-items: center; 
    justify-content: space-between; 
+   margin-right: 40px;
 }
 
 .nav-list {
@@ -97,12 +102,18 @@ a {
   text-align: center;
 }
 
+.menu-button:active {
+  outline: none;
+  transform: scale(0.98);
+  color: orange;
+}
+
 .options-container {
   background-color: rgba(33, 33, 33, 0.7);
   position: absolute;
-  top: 30px;
+  top: 30;
   left: 0;
-  height: 40vh;
+  min-height: 40vh;
   max-width: 25vw;
   border-bottom-right-radius: 2px;
   display: flex;
@@ -125,20 +136,25 @@ a {
   margin: 5px;
 }
 
-.options-login-btn {
-  top: 10px;
-}
-
 .options-container a {
   color: #fff;
   font-size: 16px;
 }
+
+.nav-container a:active ,
+.options-container a:active {
+  color: orange;
+} 
 
 .options-profile-link a {
   color: orange;
   text-decoration: underline 2px solid #fff;
   text-underline-offset: 2px;
 
+}
+
+.mainQtns-btn-link {
+  display: none;
 }
 
 .main-container {
@@ -735,14 +751,174 @@ a {
   display: none;
 }
 
-/* Media 540 */
-@media screen and (max-width: 540px) {
+/* Media 1980 */
+@media screen and (max-width: 1980px) {
+  .menu-button {
+    display: none;
+  }
+
+  .options-container {
+    visibility: hidden;
+  } 
+  
+  .dashboard-header , 
+  .user-selectedQtn-header ,
+  .user-name-header ,
+  .add-comments-header ,
+  .selected-answer-header ,
+  .edit-answer-header ,
+  .edit-question-header ,
+  .edit-comment-header ,
+  .ask-question-header ,
+  .post-answer-header ,
+  .searched-questions-header ,
+  .myPro-selectedQtn-header ,
+  .home-selectedQtn-header ,
+  .home-questions-header ,
+  .login-header ,
+  .register-header { 
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  .danger ,
+  .error ,
+  .success {
+    width: 30vw;
+    font-size: 17px;
+    margin: 60px 20px -60px ;
+    padding:5px;
+  }
+}
+
+/* Media 1280 */
+@media screen and (max-width: 1000px) {
   .body{
     width: 100vw;
   }
 
   .nav-header h1 {
     display: none;
+  }
+
+  .logo-container {
+    margin-left: -13px;
+  }
+
+  .nav-header {
+    margin: 0 15px 0 -15px;
+  }
+
+  .nav-header a {
+    font-size: 18px;
+  }
+
+  .logo-container {
+    margin-left: 25px;
+  }
+
+  .menu-button {
+    display: flex;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .search-form {
+    width: 350px;
+    margin-right: -20px;
+    padding: 2px;
+  }
+
+  .nav-register-btn ,
+  .nav-mainQtns-btn ,
+  .nav-dashboard-btn {
+    display: none;
+  }
+
+  .options-container {
+    visibility: visible;
+  } 
+
+  .options-container-list {
+    margin-top: 25px;
+  }
+
+  .options-container-list li {
+    margin: 15px;
+  }
+
+
+  .dashboard-header , 
+  .user-selectedQtn-header ,
+  .user-name-header ,
+  .add-comments-header ,
+  .selected-answer-header ,
+  .edit-answer-header ,
+  .edit-question-header ,
+  .edit-comment-header ,
+  .ask-question-header ,
+  .post-answer-header ,
+  .searched-questions-header ,
+  .myPro-selectedQtn-header ,
+  .home-selectedQtn-header ,
+  .home-questions-header ,
+  .login-header ,
+  .register-header { 
+    margin-top: 65px;
+    text-align: center;
+  }
+
+  .edit-question-container ,
+  .edit-answer-container ,
+  .profile-qtn-container ,
+  .main-profileAnswers-container ,
+  .main-profile-container ,
+  .post-answer-container ,
+  .edit-comment-container ,
+  .view-comments-container ,
+  .post-comments-container ,
+  .user-qtnAnswers-container ,
+  .searched-qtns-container ,
+  .home-qtnAnswers-container ,
+  .dashboard-container ,
+  .user-mainQtns-container ,
+  .post-question-container {
+    width: 80vw;
+  }
+
+  .post-answer-form textarea ,
+  .post-comment-form textarea {
+    width: 94.5%;
+  }
+
+  .edit-question-container ,
+  .edit-answer-container {
+    margin: 0;
+  }
+
+  .danger ,
+  .error ,
+  .success {
+    width: 60vw;
+    font-size: 17px;
+    margin:40px 20px -60px ;
+    padding:5px;
+  }
+
+}
+
+/* Media 830 */
+@media screen and (max-width: 830px) {
+  .body{
+    width: 100vw;
+  }
+
+  .nav-header h1 {
+    display: none;
+  }
+
+  .logo-container {
+    margin-left: 25px;
   }
 
   .nav-header {
@@ -759,26 +935,155 @@ a {
   }
 
   .search-form {
-    width: 230px;
+    width: 300px;
     margin-right: -20px;
-    padding: 0;
+    padding: 2px;
   }
 
-  .nav-logout-btn ,
   .nav-register-btn ,
-  .nav-login-btn ,
   .profile-link ,
-  .nav-logout-btn ,
-  .dashboard-link {
+  .nav-mainQtns-btn ,
+  .nav-dashboard-btn {
     display: none;
+  }
+
+  .options-container-list {
+    margin-top: 25px;
+  }
+
+  .home-container {
+    width: 80vw;
+    text-align: center;
+  }
+
+  .edit-question-container ,
+  .edit-answer-container ,
+  .profile-qtn-container ,
+  .main-profileAnswers-container ,
+  .main-profile-container ,
+  .post-answer-container ,
+  .edit-comment-container ,
+  .view-comments-container ,
+  .post-comments-container ,
+  .user-qtnAnswers-container ,
+  .searched-qtns-container ,
+  .home-qtnAnswers-container ,
+  .dashboard-container ,
+  .user-mainQtns-container ,
+  .post-question-container {
+    width: 80vw;
+    margin-top: 20px;
+  }
+
+  .edit-question-container ,
+  .edit-answer-container {
+    margin: 0;
+  }
+
+  .user-qtnAnswers-container {
+    margin-right: 45px;
+  }
+
+  .dashboard-header , 
+  .user-selectedQtn-header ,
+  .user-name-header ,
+  .add-comments-header ,
+  .selected-answer-header ,
+  .edit-answer-header ,
+  .edit-question-header ,
+  .edit-comment-header ,
+  .ask-question-header ,
+  .post-answer-header ,
+  .searched-questions-header ,
+  .myPro-selectedQtn-header ,
+  .home-selectedQtn-header ,
+  .home-questions-header ,
+  .login-header ,
+  .register-header { 
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  .user-answers-header ,
+  .selected-comments-title {
+    margin-left: 35px;
+  }
+
+  .danger ,
+  .error ,
+  .success {
+    width: 70vw;
+    font-size: 17px;
+    margin: 70px 20px -60px ;
+    padding:5px;
+  }
+
+  .post-answer-form textarea ,
+  .edit-comment-form textarea ,
+  .post-comment-form textarea {
+    width: 93.5%;
+  }
+}
+
+/* Media 768px */
+@media screen and (max-width: 768px) {
+  .post-answer-form textarea ,
+  .post-comment-form textarea {
+    width: 92.5%;
+  }
+
+  .danger ,
+  .error ,
+  .success {
+    margin: 55px 20px -60px ;  
+  } 
+}
+
+/* Media 680px */
+@media screen and (max-width: 680px) {
+  .body{
+    width: 100vw;
   }
 
   .nav-container {
     align-items: center;
   }
 
-  .home-container {
+  .nav-header h1 {
+    display: none;
+  }
 
+  .nav-header {
+    margin: 0 15px 0 -15px;
+  }
+
+  .nav-header a {
+    font-size: 18px;
+  }
+
+  .logo-container {
+    margin-left: 25px;
+  }
+
+  .menu-button {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .search-form {
+    width: 350px;
+    margin-right: -30px;
+  }
+
+  .nav-register-btn ,
+  .profile-link ,
+  .nav-logout-btn ,
+  .dashboard-link ,
+  .navQtns-btn-link {
+    display: none;
+  }
+
+  .home-container {
     text-align: center;
   }
 
@@ -905,7 +1210,7 @@ a {
   .post-answer-form textarea ,
   .edit-comment-form textarea ,
   .post-comment-form textarea {
-    width: 91%;
+    width: 91.5%;
   }
 
   .edit-comment-formBtn {
@@ -918,10 +1223,45 @@ a {
 
 } 
 
-/* Media 530 */
-@media screen and (max-width: 530px){
+/* Media 561px */
+@media screen and (max-width: 590px) {
+
+  .nav-login-btn {
+    display: none;
+  }
+
+  .post-answer-form textarea ,
+  .post-comment-form textarea {
+    width: 91%;
+  }
+
+  .allMark-btns-container {
+    position: absolute;
+    left: 40;
+    bottom: 25;
+  }
+}
+
+/* Media 540 */
+@media screen and (max-width: 540px) {
+  .logo-container {
+    margin-left: 39px;
+  }
+
+  .options-container-list {
+    margin-top: 0;
+  }
+
+}
+
+/* Media 539 */
+@media screen and (max-width: 539px){
   .body{
     width: 100vw;
+  }
+
+  .nav-container {
+    align-items: center;
   }
 
   .nav-header h1 {
@@ -936,13 +1276,17 @@ a {
     font-size: 18px;
   }
 
+  .logo-container {
+    margin-left: 35px;
+  }
+
   .menu-button {
     font-size: 16px;
     text-align: center;
   }
 
   .search-form {
-    width: 180px;
+    width: 300px;
     margin-right: -20px;
     padding: 0;
   }
@@ -957,8 +1301,8 @@ a {
     display: none;
   }
 
-  .nav-container {
-    align-items: center;
+  .options-container-list {
+    margin-top: 20px;
   }
 
   .home-container {
@@ -1070,8 +1414,12 @@ a {
 
   .allMark-btns-container {
     position: absolute;
-    bottom: 25;
-    left: 40;
+    right: 0;
+    bottom: 5;
+  }
+
+  .allMark-btns-container input {
+    font-size: 12px;
   }
 
   .danger ,
@@ -1079,8 +1427,7 @@ a {
   .success {
     width: 265px;
     font-size: 14px;
-    margin-top: 48px;
-    margin-bottom: -48px;
+    margin: 48px 0 -48px 0;
     padding:5px;
   }
 
@@ -1095,7 +1442,7 @@ a {
   .post-answer-form textarea ,
   .edit-comment-form textarea ,
   .post-comment-form textarea {
-    width: 86.5%;
+    width: 90.5%;
   }
 
   .edit-comment-formBtn {
@@ -1108,8 +1455,21 @@ a {
   }
 }
 
-/* Media 414 */
-@media screen and (max-width: 414px){
+/* Media 431 */
+@media screen and (max-width: 431px){
+  .logo-container {
+    margin-left: 30px;
+  }
+
+  .search-form {
+    width: 250px;
+    margin-right: -20px;
+  }
+
+  .options-container-list {
+    margin-top: 5px;
+  }
+
   .post-answer-form textarea ,
   .edit-comment-form textarea ,
   .post-comment-form textarea {
@@ -1119,6 +1479,11 @@ a {
 
 /* Media 395 */
 @media screen and (max-width: 395px){
+
+  .logo-container {
+    margin-left: 35px;
+  }
+
   .post-answer-form textarea ,
   .edit-comment-form textarea ,
   .post-comment-form textarea {
@@ -1126,14 +1491,16 @@ a {
   }
 }
 
+/* Media 375 */
 @media screen and (max-width: 375px){
   .danger ,
   .error ,
-  .success {
-    
-    margin-top: 38px;
-    /* margin-bottom: -48px; */
-    
+  .success {   
+    margin-top: 38px;    
+  }
+
+  .options-container-list {
+    margin-top: 0;
   }
 }
 
@@ -1162,12 +1529,26 @@ a {
   }
 }
 
-
-/* Media 300px */
+/* Media 350px */
 @media screen and (max-width: 350px){
   .nav-mainQtns-btn ,
-  .nav-dashboard-btn {
+  .nav-dashboard-btn ,
+  .navQtns-btn-link {
     display: none;
+  }
+
+  .logo-container {
+    margin-left: 35px;
+  }
+
+  .search-form {
+    width: 180px;
+    margin-right: -20px;
+    padding: 0;
+  }
+
+  .options-list li a {
+    font-size: 10px;
   }
 
   .danger ,
@@ -1292,7 +1673,7 @@ a {
 
   .post-answer-form textarea ,
   .post-comment-form textarea {
-    width: 82%;
+    width: 86%;
   }
 
   .user-deleteAnswer-container {
@@ -1305,7 +1686,15 @@ a {
 
 }
 
-
-
-
-
+/* Media 310 */
+@media screen and (max-width: 290px) {
+  .post-answer-form textarea ,
+  .post-comment-form textarea {
+    width: 82.5%;
+  }
+  
+  .logo-container {
+    margin-left: 40px;
+  }
+  
+}
