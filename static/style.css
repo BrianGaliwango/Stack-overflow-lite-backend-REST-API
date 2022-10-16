@@ -83,6 +83,7 @@ a {
   font-size: 20px;
 }
 
+
 .logo {
   width: 17px;
   height: 17px;
@@ -150,11 +151,17 @@ a {
   color: orange;
   text-decoration: underline 2px solid #fff;
   text-underline-offset: 2px;
-
 }
 
 .mainQtns-btn-link {
   display: none;
+}
+
+.options-profile-link ,
+.profile-link a ,
+.user-name-header ,
+.user-name-header {
+  text-transform: lowercase;
 }
 
 .main-container {
