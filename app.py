@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 from flask import Flask, render_template, request
-=======
 from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
@@ -739,4 +737,4 @@ def delete_comment(id):
   
 if __name__ == "__main__":
   app.run(debug=True)
->>>>>>> final
+
