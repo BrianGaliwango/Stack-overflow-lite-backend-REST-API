@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <h1 class="ask-question-header">Ask Question</h1>
+
+  <div class="post-question-container">
+    
+
+    <div class="post-question-container">
+      <form action="" method="POST" class="post-question-form">
+          
+          <div class="ask-question-titleInput">
+            <label>Title</label>
+            <input type="text" name="title" class="ask-title-form">  
+          </div> 
+          
+          <div class="ask-question-area">
+            <label>Body</label>
+            <textarea name="body" cols="70" rows="10" placeholder="Ask question" class></textarea>       
+          </div>  
+
+          <div class="submit-qtnBtn-container">
+            <input type="submit" value="submit" class="submit-question-btn">  
+         </div>
+
+      </form>  
+    </div>  
+  </div>
+
+{% endblock %}

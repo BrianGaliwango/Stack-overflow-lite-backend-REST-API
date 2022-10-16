@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1 class="searched-questions-header">Results</h1>
+
+  <div class="searched-qtns-container">
+    <div class="searched-qtns-content">
+      <ul class="search-qtns-list">
+        {% for question in questions %}
+        <li class="search-qtns-content">
+          <small class="searched-qtn-date">Date asked : {{question.date_asked}}</small>
+          <br>
+          <small class="searched-qtn-title">Title : {{question.title}}</small>       
+          <br>
+          <div class="searched-qtn-body">
+          <a href="question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+        </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

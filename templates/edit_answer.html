@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %} 
+
+  <h1 class="edit-answer-header">Edit Answer</h1>
+  <div class="edit-answer-container">
+    <div class="edit-answer-area">
+      <form action="" method="POST" class="edit-answer-form">
+        <textarea name="answer" cols="70" rows="10" class="edit-answer" placeholder="Edit question" autofocus>{{answer.answer_body | safe}}</textarea>   
+        <input type="submit" value="submit" class="edit-answer-btn">
+      </form>
+    </div>
+  </div>
+
+{% endblock %}

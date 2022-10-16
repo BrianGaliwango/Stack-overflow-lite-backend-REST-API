@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1 class="myPro-selectedQtn-header">Question</h1>
+  <div class="profile-qtn-container">
+    <div class="profile-selected-qtn">
+      <ul class="profile-selectedQtn-list">            
+        <li class="profile-selectedQtn-content"> 
+           <small class="profile-selectedQtn-date">Asked date : {{question.date_asked}}</small>  
+          <br>
+           <small class="profile-selectedQtn-username">Question author :  {{question.username}}</small>         
+          <div class="profile-selectedQtn-body">{{question.body | safe}}</div>
+        </li>
+      </ul>
+    </div>
+
+  <h1 class="user-answers-header">Answers</h1>
+
+  <div class="profile-question-answers">
+    <ul class="profile-answers-list"> 
+      {% for answer in answers %}     
+      <li class="profile-answer-content {% if answer.marked_answer %}picked-answer {% endif %}">
+        <div class="votes-container">     
+            <small class="votes-title">Votes</small>
+            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+              <input type="hidden" name="method" value="<">
+              <input type="submit" value=">" class="upvote-btn">
+            </form>   
+
+            <div class="votes">
+              {{answer.votes}}
+            </div>
+           
+            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+              <input type="hidden" name="method" value=">">       
+              <input type="submit" value="<" class="downvote-btn">
+            </form>          
+        </div> 
+        
+        <div class="comments-btn-container">
+          <a href="/post_comment/{{answer.id}}" class="add-comments-btn">Add comment</a>
+
+          <a href="/view_comments/{{answer.id}}" class="view-comments-btn">View comments</a>
+        </div> 
+
+          <small class="profile-qtnAnswer-date">Answered date : {{answer.answered_date}}</small>
+        <br>
+          <small class="profile-qtnAnswer-username">Answer author : {{answer.answer_username}}</small>
+        
+          <div class="profile-qtnAnswer-body">{{answer.answer_body | safe}} </div>        
+       
+        <div class="allMark-btns-container">                    
+            {% if answer.marked_answer != True %}
+            <form action="{{url_for('mark_answer', answer_id=answer.id)}}" method="PUT">
+              <input type="hidden" name="method" value="MARK ANSWER">
+              <input type="submit" value="mark answer" class="pick-answer-btn">
+            </form> 
+            {% else %}
+              <form action="{{url_for('unmark_answer', answer_id=answer.id)}}" method="PUT">
+                <input type="hidden" name="method" value="MARK ANSWER">
+                <input type="submit" value="unmark answer" class="pick-answer-btn">
+              </form> 
+            {% endif %}           
+        </div>
+
+      </li>  
+      {% endfor %}  
+    </ul>
+  </div> 
+  </div>
+
+{% endblock %}

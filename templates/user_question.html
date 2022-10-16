@@ -1,0 +1,75 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1 class="user-selectedQtn-header">Question</h1>
+
+  <div class="user-qtnAnswers-container">
+    <div class="user-selected-qtn">
+      <ul class="user-selectedQtns-list">            
+        <li class="user-selectedQtn-content">
+          <small class="user-SelectedQtn-askedDate">Date asked : {{question.date_asked}}</small>
+        <br>
+          <small class="user-SelectedQtn-author">Question author : {{question.username}}</small>
+        <br>
+        <div class="user-SelectedQtn-body">{{question.body | safe}}  </div>
+                      
+        </li>
+      </ul>
+    </div>
+  
+    <h1 class="user-answers-header">Answers</h1>
+
+    <div class="user-answers-container">
+      <ul class="user-answers-list"> 
+        {% for answer in answers %}     
+        <li class="user-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+
+          <div class="votes-container"> 
+            {% if answer.answer_username != session["username"] %} 
+              <small class="votes-title">Votes</small>
+              <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+                <input type="hidden" name="method" value=">">
+                <input type="submit" value=">" class="upvote-btn">
+              </form>
+
+              <div class="votes">                   
+                {{answer.votes}}
+              </div>
+
+              <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+                <input type="hidden" name="method" value="<">       
+                <input type="submit" value="<" class="downvote-btn">
+              </form>          
+            
+            {% endif %}         
+          </div>
+              
+            <small class="user-answered-date">Date answered : {{answer.answered_date}}</small> 
+          <br>
+            <small class="user-answer-author">Answer author : {{answer.answer_username}}</small>
+          <br>
+          <div class="user-answer-body">
+            {{answer.answer_body | safe}} 
+          </div> 
+          
+          {% if answer.answer_username == session["username"] %}
+          <div class="user-deleteAnswer-container">                 
+            <form action="{{url_for('dashboard_delete_answer', id=answer.id)}}" method="POST">
+              <input type="hidden" name="method" value="DELETE">
+              <input type="submit" value="delete" class="delete-btn">
+            </form>
+          </div> 
+          {% endif %} 
+          
+          <div class="comments-btn-container">
+            <a href="/post_comment/{{answer.id}}" class="add-comments-btn">Add comment</a>
+
+            <a href="/view_comments/{{answer.id}}" class="view-comments-btn">Comments</a>
+          </div> 
+        </li>  
+        {% endfor %}  
+      </ul>
+    </div>
+</div>
+{% endblock %}

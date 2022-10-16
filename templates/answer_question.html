@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1 class="post-answer-header">Answer question</h1>
+
+  <div class="post-answer-container">
+
+    <div class="user-selectedQtn-container">
+      <ul class="user-selectedQtns-list">            
+        <li class="user-selectedQtn-content">
+          <small class="user-SelectedQtn-author">Title : {{question.title}}</small>
+          <br>
+          <small class="user-SelectedQtn-author">Question author : {{question.username}}</small>
+
+          <div class="user-SelectedQtn-body">
+            {{question.body | safe}} 
+          </div>         
+        </li>
+      </ul>
+    </div>
+    
+    <div class="post-answer-area">
+    <form action="" method="POST" class="post-answer-form">
+      <textarea name="answer" cols="70" rows="10" class="answer-qtn" placeholder="Answer question"></textarea>
+      <input type="submit" value="submit" class="submit-answer-btn">
+    </form>
+    </div>
+
+  </div>
+
+{% endblock %}
+

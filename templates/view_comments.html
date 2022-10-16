@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1 class="selected-answer-header">Answer</h1>
+
+  <div class="view-comments-container">
+    <div class="selected-answer-container">
+      <ul class="selected-answer-list">            
+        <li class="selected-commentAnswer-content">
+            <small class="selected-commentAnswer-date">Answered date : {{answer.answered_date}}</small>
+          <br>
+            <small class="selected-commentAnswer-username">Answer author : {{answer.answer_username}}</small>
+          <br>
+            <div class="selected-commentAnswer-body">
+              {{answer.answer_body | safe}}
+            </div>
+        </li>
+      </ul>
+    </div>
+
+    <h2 class="selected-comments-title">Comments</h2>
+
+    <div class="comments-container">
+      <ul class="comments-list">    
+        {% for comment in comments %}        
+        <li class="comment-content">
+            <small class="comment-date">Date commented : {{comment.comment_date}}</small>
+          <br>  
+            <small class="comment-author">Comment author : {{comment.comment_author}}</small>
+
+            <div class="comment-body">
+              {{comment.comment_body | safe}}
+            </div> 
+            
+            <div class="edit-commentBtns-container">        
+              {% if comment.comment_author == session["username"] %}
+              <div>
+              <a href="/edit_comment/{{comment.id}}" class="edit-comment-btn">edit comment</a>
+              </div>
+
+              <form action="{{url_for('delete_comment', id=comment.id)}}" method="POST">
+                <input type="hidden" name="method" value="DELETE">
+                <input type="submit" value="delete" class="delete-btn">
+              </form>
+              {% endif %}
+            </div>  
+
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

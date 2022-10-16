@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block body %} 
+
+  <h1 class="home-questions-header">Questions</h1>  
+
+  <div class="user-mainQtns-container">
+    <div class="home-qtns-container">
+      <ul class="home-qtns-list">
+        {% for question in questions %}
+        <li class="home-qtns-content">
+          <small class="home-question-date">Date asked : {{question.date_asked}}</small>             
+          <br>
+          <small class="home-question-title">Title : {{question.title}}</small>        
+        <div class="home-qtn-body">
+          <a href="question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+        </div>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+{% endblock %}

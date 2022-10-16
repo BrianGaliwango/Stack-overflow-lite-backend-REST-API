@@ -1,0 +1,36 @@
+<nav class="navbar">
+  
+  <div class="nav-container">
+
+    <div class="logo-container">
+        <button class="menu-button"><img src="/static/img/stack-overflow.svg" alt="" class="logo">Options</button>
+    </div>
+    
+    <div class="nav-header">
+      <h1>Stack overflow lite</h1>
+      <ul class="nav-list">
+        <li class="nav-home-text"><a href="/">Home</a></li>
+      </ul>
+    </div>
+
+    <div class="search-container">
+      <form action="/search_questions" method="POST">
+        <input type="search" name="q" class="search-form" autocomplete="off" placeholder="search question">
+      </form>
+    </div>
+
+    <div class="navbar-items">  
+      <ul class="nav-list">
+        {% if session.logged_in %}
+        <li class="profile-link"><a href="/profile">@{{session["username"]}}</a></li>
+        <li class="dashboard-link"><a href="/dashboard">Dashboard</a></li>
+        <li class="nav-logout-btn"><a href="/logout">Logout</a></li>
+        {% else %}
+        <li class="navQtns-btn-link"><a href="/questions">Questions</a></li>
+        <li class="nav-login-btn"><a href="/login">Login</a></li>
+        <li class="nav-register-btn"><a href="/register">Register</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</nav>

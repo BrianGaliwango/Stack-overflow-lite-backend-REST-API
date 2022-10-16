@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+
+{% block body %} 
+
+  <h1 class="user-name-header">@{{session["username"]}}</h1>
+    
+  <h1 class="myPro-answers-header">My Answers</h1>
+  <div class="main-profileAnswers-container">
+    <div class="myPro-answers-container">  
+      <ul class="myPro-answers-list"> 
+        {% for answer in answers %}     
+        <li class="myPro-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+          
+          <small class="myPro-answer-date">Answered date : {{answer.answered_date}}</small> 
+        <br>
+             
+          <small class="myPro-answer-author">Answer author : {{answer.answer_username}}</small>
+        <br>
+          <div class="myPro-answer-body">
+            {{answer.answer_body | safe}}
+          </div>
+
+          <div class="profile-editAnswer-btns">
+            <a href="/edit_answer/{{answer.id}}" class="answer-btn">edit answer</a>
+
+            <form action="{{url_for('delete_answer', id=answer.id)}}" method="POST">
+              <input type="hidden" name="method" value="DELETE">
+              <input type="submit" value="delete" class="delete-btn">
+            </form>
+          </div>
+                  
+        </li>  
+        {% endfor %}  
+      </ul>
+    </div>   
+  </div> 
+  
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <div class="header-container"> 
+    <h2 class="dashboard-header">
+      Welcome!
+    </h2>
+  </div> 
+
+  <div class="dashboard-askQtnBtn-container">
+    <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
+  </div>
+
+  <div class="dashboard-container">
+    
+    <div class="dashboard-questions-container"> 
+      <ul class="dashboard-qtns-list">
+        {% for question in questions %}         
+        <li class="dashboard-qtn-content">
+          <small class="dashboard-qtn-title">Title : {{question.title}}</small>
+        <br>
+          <small class="dashboard-qtn-author">Question author : {{question.username}}</small>
+      
+          <div class="dashboard-qtn-body">
+            <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
+          </div>
+                                  
+          {% if question.username != session["username"]%}  
+            <div class="dashboard-answerBtn-container">
+              <a href="/answer_question/{{question.id}}" class="answer-btn">answer</a>
+            </div>
+          {% endif %}            
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+ </div>
+
+{% endblock %}
+

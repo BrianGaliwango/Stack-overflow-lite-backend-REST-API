@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+ <h1 class="home-selectedQtn-header">Question</h1>
+
+  <div class="home-qtnAnswers-container">
+
+    <div class="home-selected-qtn">
+      <ul class="home-qtns-list">            
+        <li class="home-qtn-content">         
+          <small class="selected-homeQtn-date">Asked date : {{question.date_asked}}</small>    
+          <br>
+          <small class="selected-homeQtn-username">Question author : {{question.username}}</small>
+          <div class="selected-homeQtn-body">{{question.body | safe}}</div>      
+        </li>
+      </ul>
+    </div>
+
+    <div class="answers-container">
+      <h1 class="user-answers-header">Answers</h1>
+      <ul class="answers-list"> 
+        {% for answer in answers %}     
+        <li class="answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
+           <small class="home-qtnAnswer-date">Answered date : {{answer.answered_date}}</small> 
+          <br>
+           <small class="home-qtnAnswer-username">Answer author : {{answer.answer_username}}</small>
+          <br>         
+           <div class="home-qtnAnswer-body">{{answer.answer_body | safe}}</div>
+        </li>  
+        {% endfor %}  
+      </ul>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <h1 class="add-comments-header">Comments</h1>
+
+  <div class="post-comments-container">
+    <div class="comments-selectedQtn-container">
+      <ul class="comment-selectedQtns-list">            
+        <li class="comment-selectedQtn-content">
+           <small class="selected-commentAnswer-date">Date answered : {{answer.answered_date}} </small>          
+          <br>
+           <small class="selected-commentAnswer-username">Answer author : {{answer.answer_username}}</small>
+          <br>
+          <div class="selected-commentAnswer-body">{{answer.answer_body | safe}}    
+          </div>          
+        </li>
+      </ul>
+    </div>
+
+    <div class="comment-area-container">
+        <form action="" method="POST" class="post-comment-form">
+          <textarea name="comment" cols="70" rows="10" class="add-comment" placeholder="Add comment" autofocus></textarea>
+          <input type="submit" value="submit" class="submit-comment-btn">
+      </form>
+    </div>
+  </div> 
+
+{% endblock %}

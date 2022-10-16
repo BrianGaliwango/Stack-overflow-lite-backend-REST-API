@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+  <div class="home-container">
+    <div class="home-container-content">
+      <div class="home-slogan">
+        <p class="slogan-text">    
+          <strong class="slogan-header">Don't get stuck.</strong>   
+        <br>      
+          <em>Millions</em> of people find answers to solve technical problems  
+          and do help others solve theirs.
+        </p> 
+      </div>
+
+      <div class="login-btns">
+        {% if session.logged_in %}
+          <form action="/logout">
+            <input type="submit" value="Logout" class="logout-btn" >
+          </form>
+        {% else %}
+          <form action="/login">
+            <input type="submit" value="Login" class="login-btn" >
+          </form>
+        {% endif %}
+        {%if not session.logged_in %}
+          <form action="/register">
+            <input type="submit" value="Register" class="register-btn">
+          </form>  
+        {% endif %} 
+      </div>
+    </div>
+  </div>   
+
+{% endblock %}
