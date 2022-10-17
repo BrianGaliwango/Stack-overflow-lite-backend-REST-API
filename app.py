@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_mysqldb import MySQL
+import psycopg2
 from passlib.hash import sha256_crypt
 from functools import wraps
 
@@ -18,15 +19,33 @@ app.config["MYSQL_DB"] = "stackoverflow"
 app.config["MYSQL_CURSORCLASS"] = "DictCursor"
 
 # Create tables 
-def create_tables():
-  conn = MySQL.connect(host=self.port, port=self.port, dbname=self.dbname, password="password_candidate")
-  cur = mysql.connection.cursor()
-
-
+# def create_tables():
+#   conn = MySQL.connect(host="localhost", port=self.port, dbname=self.dbname, password="password_candidate")
+#   # Create cursor
+#   cur = mysql.connection.cursor()
+#   # Execute query
+#   # Users table
+#   cur.execute("CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY first_name VARCHAR(300) NOT NULL,last_name VARCHAR(300) NOT NULL,username VARCHAR(255) UNIQUE,email VARCHAR(100) NOT NULL,password VARCHAR(100) NOT NULL,register_date DATETIME DEFAULT CURRENT_TIMESTAMP);")
+  
+#   # Questions table 
+#   cur.execute("CREATE TABLE IF NOT EXISTS questions(id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),title VARCHAR(300) NOT NULL,body TEXT NOT NULL,date_asked TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);")
+  
+#   # Answers table 
+#   cur.execute("CREATE TABLE IF NOT EXISTS answers(id INT AUTO_INCREMENT PRIMARY KEY,question_id INT,answer_username VARCHAR(255),answer_body TEXT NOT NULL,marked_answer TINYINT(1),votes VARCHAR(100),answered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,FOREIGN KEY(answer_username) REFERENCES users(username) ON DELETE CASCADE);")
+  
+#   # Comments table
+#   cur.execute("CREATE TABLE comments(id INT AUTO_INCREMENT PRIMARY KEY,comment_answer_id INT,comment_author VARCHAR(255),comment_body TEXT,comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(comment_answer_id) REFERENCES answers(id));")
+  
+#   # Commit to db
+#   conn.commit()
+#   # Close connection
+#   conn.close()
+  
 @app.route("/")
 def index():
   return render_template("index.html")
 
+# Home questions routes
 @app.route("/questions")
 def questions():
   # Create cursor
