@@ -6,16 +6,22 @@ from functools import wraps
 
 app = Flask(__name__)
 
-# config MYSQL
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = ""
-app.config["MYSQL_PASSWORD"] = ""
-app.config["MYSQL_DB"] = "stackoverflow"
-app.config["MYSQL_CURSORCLASS"] = "DictCursor"
-
 # Init mysql
 mysql = MySQL(app)
 app.secret_key = "secret123456"
+
+# config MYSQL
+app.config["MYSQL_HOST"] = "localhost"
+app.config["MYSQL_USER"] = "galice"
+app.config["MYSQL_PASSWORD"] = "12345678"
+app.config["MYSQL_DB"] = "stackoverflow"
+app.config["MYSQL_CURSORCLASS"] = "DictCursor"
+
+# Create tables 
+def create_tables():
+  conn = MySQL.connect(host=self.port, port=self.port, dbname=self.dbname, password="password_candidate")
+  cur = mysql.connection.cursor()
+
 
 @app.route("/")
 def index():
@@ -98,7 +104,6 @@ def register():
     last_name = request.form.get("last_name")
     username = request.form.get("username")
     email = request.form.get("email")
-    # password = sha256_crypt.encrypt(str(request.form.get("password")))
     password = request.form.get("password")
     
     # Validate form
@@ -634,21 +639,8 @@ def edit_answer(id):
     # Commit to db
     mysql.connection.commit()
     
-    # Get answers 
-    # Create cursor
-    cur = mysql.connection.cursor()
-    
-    # Execute query
-    result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
-    
-    answers = cur.fetchall()
-    
-    # Close cursor
-    cur.close()
-    
     flash("Answer edited successfully", "success")
-    # return redirect(url_for("profile"))
-    return render_template("myPro_answers.html", answers=answers)
+    return redirect(url_for("profile"))
     
   return render_template("edit_answer.html", answer=answer)
 
@@ -695,7 +687,6 @@ def delete_answer(id):
   cur.close()
   
   flash("Answer deleted successfully", "danger")
-  # return redirect(url_for("myPro_answers"))
   return render_template("myPro_answers.html", answers=answers)
 
 # Dashboard Delete answer 

@@ -3,9 +3,9 @@
     <div class="options-container-list">
     <ul class="options-list">
       {%if session.logged_in %}
-      <li class="options-profile-link"><a href="/profile">@{{session["username"]}}</a></li>
+        <li class="options-profile-link"><a href="/profile">@{{session["username"]}}</a></li>
       {% endif %}
-      <li class="home-btn"><a href="/">Home</a></li>
+        <li class="home-btn"><a href="/">Home</a></li>
       {% if not session.logged_in%}
         <li class="options-mainQtns-btn"><a href="/questions">Questions</a></li>
       {% else %}

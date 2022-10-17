@@ -94,7 +94,7 @@ a {
   background-color: transparent;
   border: none;
   border-radius: 2px;
-  display: inline-flex;
+  display: none;
   padding: 3px;
   color: whitesmoke;
   font-size: 18px;
@@ -122,6 +122,7 @@ a {
   align-items: center;
   z-index: 5;
   margin: 0;
+  visibility: hidden;
 }
 
 .options-list {  
@@ -760,14 +761,6 @@ a {
 
 /* Media 1980 */
 @media screen and (max-width: 1980px) {
-  .menu-button {
-    display: none;
-  }
-
-  .options-container {
-    visibility: hidden;
-  } 
-  
   .dashboard-header , 
   .user-selectedQtn-header ,
   .user-name-header ,
@@ -825,7 +818,7 @@ a {
   }
 
   .menu-button {
-    display: flex;
+    display: inline-flex;
     font-size: 16px;
     text-align: center;
   }
@@ -1690,7 +1683,6 @@ a {
   .dashboard-qtn-title {
     font-size: 16px;
   }
-
 }
 
 /* Media 310 */
@@ -1703,5 +1695,4 @@ a {
   .logo-container {
     margin-left: 40px;
   }
-  
 }

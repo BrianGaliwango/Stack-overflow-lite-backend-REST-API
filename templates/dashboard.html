@@ -12,16 +12,14 @@
     <a href="/post_question" class="dashboard-ask-questionBtn">Ask Question</a>
   </div>
 
-  <div class="dashboard-container">
-    
+  <div class="dashboard-container">    
     <div class="dashboard-questions-container"> 
       <ul class="dashboard-qtns-list">
         {% for question in questions %}         
         <li class="dashboard-qtn-content">
           <small class="dashboard-qtn-title">Title : {{question.title}}</small>
         <br>
-          <small class="dashboard-qtn-author">Question author : {{question.username}}</small>
-      
+          <small class="dashboard-qtn-author">Question author : {{question.username}}</small>     
           <div class="dashboard-qtn-body">
             <a href="user_question/{{question.id}}" class="qtn-link">{{question.body}}</a>  
           </div>
