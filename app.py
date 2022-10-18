@@ -2,45 +2,24 @@ from flask import Flask, render_template, request
 from flask import Flask, render_template, request, redirect, flash, session, url_for
 from flask_mysqldb import MySQL
 import psycopg2
+import psycopg2.extras
 from passlib.hash import sha256_crypt
 from functools import wraps
 
 app = Flask(__name__)
 
-# Init mysql
-mysql = MySQL(app)
 app.secret_key = "secret123456"
 
-# config MYSQL
-app.config["MYSQL_HOST"] = "localhost"
-app.config["MYSQL_USER"] = "galice"
-app.config["MYSQL_PASSWORD"] = "12345678"
-app.config["MYSQL_DB"] = "stackoverflow"
-app.config["MYSQL_CURSORCLASS"] = "DictCursor"
+# Config pyscopg2
 
-# Create tables 
-# def create_tables():
-#   conn = MySQL.connect(host="localhost", port=self.port, dbname=self.dbname, password="password_candidate")
-#   # Create cursor
-#   cur = mysql.connection.cursor()
-#   # Execute query
-#   # Users table
-#   cur.execute("CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY first_name VARCHAR(300) NOT NULL,last_name VARCHAR(300) NOT NULL,username VARCHAR(255) UNIQUE,email VARCHAR(100) NOT NULL,password VARCHAR(100) NOT NULL,register_date DATETIME DEFAULT CURRENT_TIMESTAMP);")
-  
-#   # Questions table 
-#   cur.execute("CREATE TABLE IF NOT EXISTS questions(id INT AUTO_INCREMENT PRIMARY KEY,username VARCHAR(255),title VARCHAR(300) NOT NULL,body TEXT NOT NULL,date_asked TIMESTAMP DEFAULT CURRENT_TIMESTAMP ,FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);")
-  
-#   # Answers table 
-#   cur.execute("CREATE TABLE IF NOT EXISTS answers(id INT AUTO_INCREMENT PRIMARY KEY,question_id INT,answer_username VARCHAR(255),answer_body TEXT NOT NULL,marked_answer TINYINT(1),votes VARCHAR(100),answered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,FOREIGN KEY(answer_username) REFERENCES users(username) ON DELETE CASCADE);")
-  
-#   # Comments table
-#   cur.execute("CREATE TABLE comments(id INT AUTO_INCREMENT PRIMARY KEY,comment_answer_id INT,comment_author VARCHAR(255),comment_body TEXT,comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,FOREIGN KEY(comment_answer_id) REFERENCES answers(id));")
-  
-#   # Commit to db
-#   conn.commit()
-#   # Close connection
-#   conn.close()
-  
+DB_HOST = "localhost"
+DB_NAME = "stackoverflow_lite"
+DB_USER = "brian"
+DB_PASS = "12345678"
+DB_PORT ="5430"
+
+conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+
 @app.route("/")
 def index():
   return render_template("index.html")
@@ -49,7 +28,7 @@ def index():
 @app.route("/questions")
 def questions():
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute get questions query
   result = cur.execute("SELECT * FROM questions")
@@ -67,7 +46,7 @@ def questions():
 @app.route("/question/<string:id>/")
 def get_question(id):
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
@@ -96,7 +75,7 @@ def search_questions():
       return redirect(url_for("questions"))
     
     # Create cursor 
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     result = cur.execute("SELECT * FROM questions WHERE title LIKE %s", [search_questions])
@@ -108,7 +87,7 @@ def search_questions():
       return redirect(url_for("questions"))  
        
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close cursor
     cur.close()
@@ -138,7 +117,7 @@ def register():
     password = sha256_crypt.encrypt(str(("password")))
      
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute  check  existing users query  
     cur.execute("SELECT * FROM users WHERE username = %s", (username,))
@@ -158,7 +137,7 @@ def register():
     cur.execute("INSERT INTO users(first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s)", (first_name, last_name, username, email, password))
       
     # commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close connection
     cur.close()   
@@ -182,21 +161,19 @@ def login():
       return render_template("login.html")
     
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-    # Get user by email
+    # Get user by username
     result = cur.execute("SELECT * FROM users WHERE username = %s", [username])
-
+     
     # Verify result
-    if result > 0:
+    if result:  
       # Get stored hash
       data = cur.fetchone()
-      password = data["password"]
-      
+      password = data["password"]   
       # Compare passwords
       if sha256_crypt.verify(password_candidate, password):
         # When passed login
-        session.permanent = False
         session["logged_in"] = True
         session["username"] = username
 
@@ -205,11 +182,15 @@ def login():
       else:
         error = "Invalid inputs"
         return render_template("login.html", error=error)
-      # Close connection
-      cur.close()
-    else:
-      error = "Username not found"
-      return render_template("login.html", error=error)
+      
+     
+    else:   
+      error = "Username not found" 
+    return render_template("login.html", error=error)
+  
+    # Close connection
+    cur.close()
+    
   return render_template("login.html")
  
 # Check if the user is logged in decorator
@@ -235,12 +216,15 @@ def logout():
 @is_logged_in
 def profile():
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute questions query
   result = cur.execute("SELECT * FROM questions WHERE username = %s", [session["username"]])
   
   questions = cur.fetchall()
+  
+  # Close cursor
+  cur.close()
   
   return render_template("profile.html", questions=questions)
 
@@ -249,16 +233,13 @@ def profile():
 @is_logged_in
 def get_myPro_answers():
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+  
   # Execute  answers query
   result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
   
   # Get answers
   answers = cur.fetchall()
-  
-  # Get answered questions
-  # create cursor
-  cur = mysql.connection.cursor()
   
   # close cursor
   cur.close()
@@ -270,7 +251,7 @@ def get_myPro_answers():
 @is_logged_in
 def dashboard():
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute get questions query
   result = cur.execute("SELECT * FROM questions")
@@ -278,7 +259,7 @@ def dashboard():
   # Init questions from db
   questions = cur.fetchall()
   
-  if result > 0:
+  if result:
     return render_template("dashboard.html", questions=questions) 
   else:
     return render_template("dashboard.html")
@@ -290,7 +271,7 @@ def dashboard():
 def user_get_question(id):
     
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
@@ -303,7 +284,7 @@ def user_get_question(id):
     answers = cur.fetchall()
     
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close cursor
     cur.close()
@@ -317,7 +298,7 @@ def user_get_question(id):
 @is_logged_in
 def profile_get_question(id):
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
@@ -347,13 +328,13 @@ def post_question():
       return render_template("post_question.html")
     
     # Create cursor connection
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("INSERT INTO questions(username, title, body) VALUES (%s, %s, %s)", (session["username"], title, body))
     
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close connection
     cur.close()
@@ -367,7 +348,7 @@ def post_question():
 # @is_logged_in()
 def post_answer(id): 
   # create cursor 
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   result = cur.execute("SELECT * FROM questions WHERE id = %s", [id])
@@ -384,13 +365,13 @@ def post_answer(id):
       return render_template("answer_question.html", answer=question_answer, question=question)
 
     #  create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("INSERT INTO answers (question_id, answer_username, answer_body) VALUES (%s, %s, %s)", [id, session["username"], question_answer])
     
     # Commit to db   
-    mysql.connection.commit()
+    conn.commit()
        
     # Close cursor
     cur.close()
@@ -405,16 +386,17 @@ def post_answer(id):
 def upvote_answer(answer_id):
 
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("UPDATE answers SET votes = votes + 1 WHERE id = %s", [answer_id])
     
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
               
     # Close cursor
     cur.close()
+    
     flash("Voted successfully", "success")
     return redirect(url_for("dashboard"))
 
@@ -423,13 +405,13 @@ def upvote_answer(answer_id):
 @is_logged_in
 def downvote_answer(answer_id):
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("UPDATE answers SET votes = votes - 1 WHERE id = %s", [answer_id])
     
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
               
     # Close cursor
     cur.close()
@@ -442,7 +424,7 @@ def downvote_answer(answer_id):
 @is_logged_in
 def mark_answer(answer_id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
@@ -451,7 +433,7 @@ def mark_answer(answer_id):
   cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
   
   # Commit to db
-  cur.connection.commit()
+  conn.commit()
   
   question = cur.fetchone()
   
@@ -466,7 +448,7 @@ def mark_answer(answer_id):
 @is_logged_in
 def unmark_answer(answer_id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
@@ -475,12 +457,13 @@ def unmark_answer(answer_id):
   cur.execute("UPDATE answers SET marked_answer = '0' WHERE id = %s", [answer_id])
   
   # Commit to db
-  cur.connection.commit()
+  conn.commit()
   
   question = cur.fetchone()
 
   # Close cursor
   cur.close()
+  
   flash("Un-marked answer successfully", "success")
   return redirect(url_for("profile"))
  
@@ -489,7 +472,7 @@ def unmark_answer(answer_id):
 @is_logged_in
 def post_comment(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute question query
   result = cur.execute("SELECT * FROM answers WHERE id = %s", [id])
@@ -498,7 +481,7 @@ def post_comment(id):
   answer = cur.fetchone()
   
   # Commit to db
-  mysql.connection.commit()
+  conn.commit()
   
   # send request
   if request.method == "POST":
@@ -509,13 +492,13 @@ def post_comment(id):
       return render_template("post_comment.html", answer=answer)
       
       # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("INSERT INTO comments (comment_answer_id, comment_author, comment_body) VALUES (%s, %s, %s)", [id, session["username"], comment])
     
     #Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close cursor
     cur.close()
@@ -529,16 +512,13 @@ def post_comment(id):
 @is_logged_in
 def view_comments(id):
   # create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute get answer query
   cur.execute("SELECT * FROM answers WHERE id = %s", [id])
   
   answer = cur.fetchone()
-  
-  # Commit to db
-  mysql.connection.commit()
-  
+   
   # Get comments query
   result =cur.execute("SELECT * FROM comments WHERE comment_answer_id = %s", [id])
   
@@ -549,7 +529,7 @@ def view_comments(id):
   comments = cur.fetchall()
   
   # Commit to db
-  mysql.connection.commit()
+  conn.commit()
   
   # Close connection
   cur.close()
@@ -561,7 +541,7 @@ def view_comments(id):
 @is_logged_in
 def edit_comment(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Get query
   result = cur.execute("SELECT * FROM comments WHERE id = %s", [id])
@@ -578,13 +558,13 @@ def edit_comment(id):
       flash("Please fill comment field", "danger")
       return render_template("edit_comment.html", comment=comment)
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("UPDATE comments SET comment_body = %s WHERE id = %s", [comment, id])
   
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close cursor
     cur.close()
@@ -597,7 +577,7 @@ def edit_comment(id):
 @is_logged_in
 def edit_question(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Get query
   result = cur.execute("SELECT * FROM questions WHERE id = %s", [id])
@@ -613,17 +593,19 @@ def edit_question(id):
     if not question:
       flash("Please fill question field", "danger")
       return render_template("edit_question.html", question=question)
+    
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, id])
   
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     # Close cursor
     cur.close()
+    
     flash("Question edited successfully", "success")
     return redirect(url_for("profile"))  
   return render_template("edit_question.html", question=question)
@@ -632,7 +614,7 @@ def edit_question(id):
 @app.route("/edit_answer/<string:id>", methods=["GET", "POST"])
 def edit_answer(id):
   #Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Get query
   result = cur.execute("SELECT * FROM answers WHERE id = %s", [id])
@@ -650,13 +632,13 @@ def edit_answer(id):
       return render_template("edit_answer.html", answer=answer)
   
     # Create cursor
-    cur = mysql.connection.cursor()
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
     # Execute query
     cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, id])
     
     # Commit to db
-    mysql.connection.commit()
+    conn.commit()
     
     flash("Answer edited successfully", "success")
     return redirect(url_for("profile"))
@@ -668,13 +650,13 @@ def edit_answer(id):
 @is_logged_in
 def delete_question(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   cur.execute("DELETE FROM questions WHERE id = %s", [id])
   
   # Commit to db
-  cur.connection.commit()
+  conn.commit()
   
   # Close cursor
   cur.close()
@@ -686,16 +668,16 @@ def delete_question(id):
 @is_logged_in
 def delete_answer(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   cur.execute("DELETE FROM answers WHERE id = %s", [id])
   
   # Commit to db
-  cur.connection.commit()
+  conn.commit()
   
   # Create get answers cursor 
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
@@ -713,13 +695,13 @@ def delete_answer(id):
 @is_logged_in
 def dashboard_delete_answer(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   cur.execute("DELETE FROM answers WHERE id = %s", [id])
   
   # Commit to db
-  cur.connection.commit()
+  conn.commit()
   
   # Close cursor
   cur.close()
@@ -732,13 +714,13 @@ def dashboard_delete_answer(id):
 @is_logged_in
 def delete_comment(id):
   # Create cursor
-  cur = mysql.connection.cursor()
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Execute query
   cur.execute("DELETE FROM comments WHERE id = %s", [id])
   
   # Commit to db
-  cur.connection.commit()
+  conn.commit()
   
   # Close cursor
   cur.close()
