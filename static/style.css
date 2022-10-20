@@ -305,7 +305,8 @@ a {
 .searched-qtns-content ,
 .home-selected-qtn ,
 .answers-container ,
-.dashboard-questions-container {
+.dashboard-questions-container ,
+.home-qtns-container {
   width: 100%;
 }
 

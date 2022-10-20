@@ -28,7 +28,6 @@
         <li class="user-answer-content {% if answer.marked_answer %}picked-answer{% endif %}">
 
           <div class="votes-container"> 
-            {% if answer.answer_username != session["username"] %} 
               <small class="votes-title">Votes</small>
               <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
                 <input type="hidden" name="method" value=">">
@@ -43,8 +42,6 @@
                 <input type="hidden" name="method" value="<">       
                 <input type="submit" value="<" class="downvote-btn">
               </form>          
-            
-            {% endif %}         
           </div>
               
             <small class="user-answered-date">Date answered : {{answer.answered_date}}</small> 

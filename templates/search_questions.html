@@ -14,7 +14,16 @@
           <small class="searched-qtn-title">Title : {{question.title}}</small>       
           <br>
           <div class="searched-qtn-body">
-          <a href="question/{{question.id}}" class="qtn-link">{{question.body}}</a>
+            {% if not session.logged_in %}
+              <a href="question/{{question.id}}" class="qtn-link">
+              {{question.body}}
+              </a>
+            {% else %}
+              <a href="user_question/{{question.id}}" class="qtn-link">
+                {{question.body}}
+              </a> 
+            {% endif %}  
+
         </div>
         </li>
         {% endfor %}

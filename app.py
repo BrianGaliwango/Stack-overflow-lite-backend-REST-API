@@ -26,74 +26,72 @@ def index():
   return render_template("index.html")
 
 # Home questions routes
-# @app.route("/questions")
-# def questions():
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+@app.route("/questions")
+def questions():
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
-#   # Execute get questions query
-#   result = cur.execute("SELECT * FROM questions")
+  # Execute get questions query
+  cur.execute("SELECT * FROM questions ORDER BY date_asked ASC")
   
-#   # Init questions from db
-#   questions = cur.fetchall()
+  # Init questions from db
+  questions = cur.fetchall()
   
-#   if result > 0:
-#     return render_template("questions.html", questions=questions) 
-#   else:
-#     return render_template("questions.html")
-#   cur.close()
+  cur.close()
+  return render_template("questions.html", questions=questions) 
   
 # Get single question
-# @app.route("/question/<string:id>/")
-# def get_question(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+@app.route("/question/<string:id>/")
+def get_question(id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-#     # Execute query
-#     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    # Execute query
+    cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
     
-#     #Fetch question 
-#     question = cur.fetchone()
+    #Fetch question 
+    question = cur.fetchone()
        
-#     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
-#     # Fetch answers
-#     answers = cur.fetchall()
+    result = cur.execute("SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date ASC", [id])
+    # Fetch answers
+    answers = cur.fetchall()
     
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
     
-#     return render_template("question.html", question=question, answers=answers)
+    return render_template("question.html", question=question, answers=answers)
   
 #Search Route
-# @app.route("/search_questions", methods=["GET", "POST"])
-# def search_questions():
-#   # Send request
-#   if request.method == "POST":
-#     search_questions = request.form.get("q")
+@app.route("/search_questions", methods=["GET", "POST"])
+def search_questions():
+   # Create cursor 
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+  
+  # Send request
+  if request.method == "POST":
+    search_questions = request.form.get("q")
     
-#     if not search_questions:
-#       flash("Please fill in field", "danger")
-#       return redirect(url_for("questions"))
+    # Validate form
+    if not search_questions:
+      flash("Please fill in field", "danger")
+      return redirect(url_for("questions"))
     
-#     # Create cursor 
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # Execute query
+    result = cur.execute("SELECT * FROM questions WHERE title LIKE %s ORDER BY date_asked ASC ", [search_questions])
     
-#     # Execute query
-#     result = cur.execute("SELECT * FROM questions WHERE title LIKE %s", [search_questions])
-
-#     if result > 0:
-#       questions = cur.fetchall()
-#     else:
-#       flash("No questions found", "success")
-#       return redirect(url_for("questions"))  
-       
-#     # Commit to db
-#     conn.commit()
+    questions = cur.fetchall()
     
-#     # Close cursor
-#     cur.close()
+    if not questions:     
+      flash("No questions found", "success")
+      return redirect(url_for("questions"))  
+          
+    # Commit to db
+    conn.commit()
     
-#   return render_template("search_questions.html", questions=questions) 
+    # Close cursor
+    cur.close()
+    
+  return render_template("search_questions.html", questions=questions) 
    
 #Register route 
 @app.route("/register", methods=["GET", "POST"])
@@ -153,11 +151,9 @@ def login():
     cur.execute("SELECT * FROM users WHERE username = %s", (username,))
     # Fetch result
     account = cur.fetchone()
-    print(account)
     
     if account:
       password_rs = account["password"]
-      print(password_rs)
       
       # Compare passwords if account exists
       if check_password_hash(password_rs, password):
@@ -196,39 +192,40 @@ def logout():
   return redirect(url_for("login"))
 
 # Profile route
-# @app.route("/profile", methods=["GET", "POST"])
-# @is_logged_in
-# def profile():
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+@app.route("/profile", methods=["GET", "POST"])
+@is_logged_in
+def profile():
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
-#   # Execute questions query
-#   result = cur.execute("SELECT * FROM questions WHERE username = %s", [session["username"]])
+  # Execute questions query
+  cur.execute("SELECT * FROM questions WHERE username = %s", [session["username"]])
   
-#   questions = cur.fetchall()
+  # Fetch all questions
+  questions = cur.fetchall()
   
-#   # Close cursor
-#   cur.close()
+  # Close cursor
+  cur.close()
   
-#   return render_template("profile.html", questions=questions)
+  return render_template("profile.html", questions=questions)
 
-# #Get myPro profile answers
-# @app.route("/myPro_answers", methods=["GET", "POST"])
-# @is_logged_in
-# def get_myPro_answers():
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#Get myPro profile answers
+@app.route("/myPro_answers", methods=["GET", "POST"])
+@is_logged_in
+def get_myPro_answers():
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
-#   # Execute  answers query
-#   result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
+  # Execute  answers query
+  cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
   
-#   # Get answers
-#   answers = cur.fetchall()
+  # Get answers
+  answers = cur.fetchall()
   
-#   # close cursor
-#   cur.close()
+  # close cursor
+  cur.close()
   
-#   return render_template("myPro_answers.html", answers=answers, questions=questions)
+  return render_template("myPro_answers.html", answers=answers)
 
 # Dashboard
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -288,8 +285,10 @@ def user_get_question(id):
       
     #Execute answers query  
     cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    # cur.execute("SELECT * FROM answers AS a INNER JOIN votes As v ON a.id = v.answer_id WHERE a.question_id = %s", [id])
     
     answers = cur.fetchall()
+    print(answers)
     
     # Commit to db
     conn.commit()
@@ -300,6 +299,41 @@ def user_get_question(id):
     context = {"question":question, "answers" : answers}
     
     return render_template("user_question.html", **context)
+  
+  #Edit my question
+@app.route("/edit_question/<string:id>", methods=["GET", "POST"])
+@is_logged_in
+def edit_question(id):
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+  
+  # Get query
+  cur.execute("SELECT * FROM questions WHERE id = %s", [id])
+  
+  # Get question
+  question = cur.fetchone()
+  
+  # Get request form
+  if request.method == "POST":
+    question = request.form["question"]
+    
+    # Validate
+    if not question:
+      flash("Please fill question field", "danger")
+      return render_template("edit_question.html", question=question)
+
+    # Execute query
+    cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, id])
+  
+    # Commit to db
+    conn.commit()
+    
+    # Close cursor
+    cur.close()
+    
+    flash("Question edited successfully", "success")
+    return redirect(url_for("profile"))  
+  return render_template("edit_question.html", question=question)
   
   # Answer question
 @app.route("/answer_question/<string:id>/", methods=["GET", "POST"])
@@ -336,117 +370,97 @@ def post_answer(id):
     return redirect(url_for("dashboard"))
   return render_template("answer_question.html", question=question)
 
-#Get profile question 
-# @app.route("/profile_question/<string:id>/")
-# @is_logged_in
-# def profile_get_question(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+## Edit my answer
+@app.route("/edit_answer/<string:id>", methods=["GET", "POST"])
+def edit_answer(id):
+  #Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+  
+  # Get query
+  cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+  
+  # Get answer
+  answer = cur.fetchone()
+  
+  # Get request
+  if request.method == "POST":
+    answer = request.form["answer"]
     
-#     # Execute query
-#     result = cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    # Validate answer
+    if not answer:
+      flash("Please fill in answer field", "danger")
+      return render_template("edit_answer.html", answer=answer)
+   
+    # Execute query
+    cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, id])
     
-#     question = cur.fetchone()
+    # Commit to db
+    conn.commit()
     
-#     #Get answers query 
-#     result = cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    flash("Answer edited successfully", "success")
+    return redirect(url_for("profile"))
     
-#     answers = cur.fetchall()
-    
-#     # Close cursor
-#     cur.close()
-    
-#     return render_template("profile_question.html", question=question, answers=answers)   
-    
-
+  return render_template("edit_answer.html", answer=answer)
 
 # # Upvote answer
-# @app.route("/upvote_answer/<answer_id>", methods=["POST"])
-# @is_logged_in
-# def upvote_answer(answer_id):
+@app.route("/upvote_answer/<answer_id>", methods=["POST"])
+@is_logged_in
+def upvote_answer(answer_id):
 
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-#     # Execute query
-#     cur.execute("UPDATE answers SET votes = votes + 1 WHERE id = %s", [answer_id])
+    cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
     
-#     # Commit to db
-#     conn.commit()
+    answer = cur.fetchone()
+    answer_username = answer["answer_username"]
+        
+    # Check if not user
+    if session["username"] != answer_username:
+     # Execute query
+      cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
+    else:  
+      flash("You can't vote your answer", "success")
+      return redirect(url_for("dashboard"))
+       
+    # Commit to db
+    conn.commit()
               
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
     
-#     flash("Voted successfully", "success")
-#     return redirect(url_for("dashboard"))
+    flash("Voted successfully", "success")
+    return redirect(url_for("dashboard"))
 
 # # DownVote answer
-# @app.route("/downvote_answer/<answer_id>", methods=["POST"])
-# @is_logged_in
-# def downvote_answer(answer_id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+@app.route("/downvote_answer/<answer_id>", methods=["POST"])
+@is_logged_in
+def downvote_answer(answer_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
     
-#     # Execute query
-#     cur.execute("UPDATE answers SET votes = votes - 1 WHERE id = %s", [answer_id])
+    # Fetch answer
+    cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
+    # 
+    answer = cur.fetchone()
+    answer_username = answer["answer_username"]
     
-#     # Commit to db
-#     conn.commit()
+    if session["username"] != answer_username:
+    # Execute query
+     cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
+    else:  
+      flash("You can't vote your answer", "success")
+      return redirect(url_for("dashboard")) 
+    
+    # Commit to db
+    conn.commit()
               
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
 
-#     flash("Voted successfully", "success")
-#     return redirect(url_for("dashboard"))
-
-# # Mark answer
-# @app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
-# @is_logged_in
-# def mark_answer(answer_id):
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    flash("Voted successfully", "success")
+    return redirect(url_for("dashboard"))
   
-#   # Execute query
-#   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
-  
-#   # Get marked_answer 
-#   cur.execute("UPDATE answers SET marked_answer = '1' WHERE id = %s", [answer_id])
-  
-#   # Commit to db
-#   conn.commit()
-  
-#   question = cur.fetchone()
-  
-#   # Close cursor
-#   cur.close()
-  
-#   flash("Marked answer successfully", "success")
-#   return redirect(url_for("profile"))
-
-# # UnMark answer
-# @app.route("/unmark_answer/<string:answer_id>", methods=["GET", "PUT"])
-# @is_logged_in
-# def unmark_answer(answer_id):
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-  
-#   # Execute query
-#   result = cur.execute("SELECT marked_answer FROM answers WHERE marked_answer = %s", [answer_id])
-  
-#   # Get marked_answer  
-#   cur.execute("UPDATE answers SET marked_answer = '0' WHERE id = %s", [answer_id])
-  
-#   # Commit to db
-#   conn.commit()
-  
-#   question = cur.fetchone()
-
-#   # Close cursor
-#   cur.close()
-  
-#   flash("Un-marked answer successfully", "success")
-#   return redirect(url_for("profile"))
- 
 # # Add comment
 @app.route("/post_comment/<string:id>", methods=["GET", "POST"]) 
 @is_logged_in
@@ -542,125 +556,107 @@ def edit_comment(id):
     cur.close()
     flash("Comment edited successfully", "success")
     return redirect(url_for("dashboard"))  
-  return render_template("edit_comment.html", comment=comment)
-  
-# #Edit my question
-# @app.route("/edit_question/<string:id>", methods=["GET", "POST"])
-# @is_logged_in
-# def edit_question(id):
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-  
-#   # Get query
-#   result = cur.execute("SELECT * FROM questions WHERE id = %s", [id])
-  
-#   # Get question
-#   question = cur.fetchone()
-  
-#   # Get request form
-#   if request.method == "POST":
-#     question = request.form["question"]
-    
-#     # Validate
-#     if not question:
-#       flash("Please fill question field", "danger")
-#       return render_template("edit_question.html", question=question)
-    
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-#     # Execute query
-#     cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, id])
-  
-#     # Commit to db
-#     conn.commit()
-    
-#     # Close cursor
-#     cur.close()
-    
-#     flash("Question edited successfully", "success")
-#     return redirect(url_for("profile"))  
-#   return render_template("edit_question.html", question=question)
+  return render_template("edit_comment.html", comment=comment)  
 
-# #Edit my answer
-# @app.route("/edit_answer/<string:id>", methods=["GET", "POST"])
-# def edit_answer(id):
-#   #Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+#Get profile question 
+@app.route("/profile_question/<string:id>/")
+@is_logged_in
+def profile_get_question(id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    
+    # Execute query
+    cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+    
+    # Fetch questions
+    question = cur.fetchone()
+    
+    #Get answers query 
+    cur.execute("SELECT * FROM answers WHERE question_id = %s", [id])
+    
+    answers = cur.fetchall()
+    
+    # Close cursor
+    cur.close()
+    
+    return render_template("profile_question.html", question=question, answers=answers)   
+    
+# # Mark answer
+@app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
+@is_logged_in
+def mark_answer(answer_id):
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
-#   # Get query
-#   result = cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+  # Get marked_answer 
+  cur.execute("UPDATE answers SET marked_answer = 'True' WHERE id = %s", [answer_id])
   
-#   # Get result
-#   answer = cur.fetchone()
+  # Commit to db
+  conn.commit()
   
-#   # Get request
-#   if request.method == "POST":
-#     answer = request.form["answer"]
-    
-#     # Validate answer
-#     if not answer:
-#       flash("Please fill in answer field", "danger")
-#       return render_template("edit_answer.html", answer=answer)
+  # Close cursor
+  cur.close()
   
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-    
-#     # Execute query
-#     cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, id])
-    
-#     # Commit to db
-#     conn.commit()
-    
-#     flash("Answer edited successfully", "success")
-#     return redirect(url_for("profile"))
-    
-#   return render_template("edit_answer.html", answer=answer)
+  flash("Marked answer successfully", "success")
+  return redirect(url_for("profile"))
 
-# # Profile Delete question
-# @app.route("/delete_question/<string:id>", methods=["POST"])
-# @is_logged_in
-# def delete_question(id):
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+# # UnMark answer
+@app.route("/unmark_answer/<string:answer_id>", methods=["GET", "PUT"])
+@is_logged_in
+def unmark_answer(answer_id):
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
-#   # Execute query
-#   cur.execute("DELETE FROM questions WHERE id = %s", [id])
+  # Get marked_answer  
+  cur.execute("UPDATE answers SET marked_answer = 'False' WHERE id = %s", [answer_id])
   
-#   # Commit to db
-#   conn.commit()
+  # Commit to db
+  conn.commit()
   
-#   # Close cursor
-#   cur.close()
-#   flash("Question deleted successfully", "danger")
-#   return redirect(url_for("profile"))
+  # Close cursor
+  cur.close()
+  
+  flash("Un-marked answer successfully", "success")
+  return redirect(url_for("profile"))
+ 
+
+
+## Profile Delete question
+@app.route("/delete_question/<string:id>", methods=["POST"])
+@is_logged_in
+def delete_question(id):
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+  
+  # Execute query
+  cur.execute("DELETE FROM questions WHERE id = %s", [id])
+  
+  # Commit to db
+  conn.commit()
+  
+  # Close cursor
+  cur.close()
+  flash("Question deleted successfully", "danger")
+  return redirect(url_for("profile"))
 
 # # Profile Delete answer 
-# @app.route("/delete_answer/<string:id>", methods=["POST"])
-# @is_logged_in
-# def delete_answer(id):
-#   # Create cursor
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+@app.route("/delete_answer/<string:id>", methods=["POST"])
+@is_logged_in
+def delete_answer(id):
+  # Create cursor
+  cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
-#   # Execute query
-#   cur.execute("DELETE FROM answers WHERE id = %s", [id])
+  # Execute query
+  cur.execute("DELETE FROM answers WHERE id = %s", [id])
   
-#   # Commit to db
-#   conn.commit()
+  # Commit to db
+  conn.commit()
   
-#   # Create get answers cursor 
-#   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+  # Close cursor
+  cur.close()
   
-#   # Execute query
-#   result = cur.execute("SELECT * FROM answers WHERE answer_username = %s", [session["username"]])
-  
-#   answers = cur.fetchall()
-  
-#   # Close cursor
-#   cur.close()
-  
-#   flash("Answer deleted successfully", "danger")
-#   return render_template("myPro_answers.html", answers=answers)
+  flash("Answer deleted successfully", "danger")
+  return redirect(url_for("profile"))
 
 # Dashboard Delete answer 
 @app.route("/dashboard_delete_answer/<string:id>", methods=["POST"])
