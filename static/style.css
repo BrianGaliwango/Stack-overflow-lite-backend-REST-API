@@ -109,11 +109,16 @@ a {
   color: orange;
 }
 
+.menu-button:focus{
+  outline: none;
+}
+
 .options-container {
   background-color: rgba(33, 33, 33, 0.7);
   position: absolute;
   top: 30;
   left: 0;
+  max-height: 200px;
   min-height: 40vh;
   max-width: 25vw;
   border-bottom-right-radius: 2px;
@@ -762,7 +767,7 @@ a {
 }
 
 /* Media 1980 */
-@media screen and (max-width: 1980px) {
+@media screen and (max-width: 5000px) {
   .dashboard-header , 
   .user-selectedQtn-header ,
   .user-name-header ,
@@ -779,7 +784,7 @@ a {
   .home-questions-header ,
   .login-header ,
   .register-header { 
-    margin-top: 60px;
+    margin-top: 70px;
     text-align: center;
   }
 
