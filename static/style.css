@@ -1,3 +1,13 @@
+:root {
+  --main-color: orange;
+  --secondary-color: #fff;
+  --primary-color: whitesmoke;
+  --universal-color: gray;
+  --happy-color: green;
+  --danger-color: red;
+  --chill-color: blue;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -28,7 +38,7 @@ body {
   justify-content: space-around;
   text-align: center;
   background-color: rgb(33, 33, 33);
-  color: #fff;
+  color: var(--secondary-color);
   padding: 15px;
 }
 
@@ -39,7 +49,7 @@ body {
 }
 
 .nav-header {
-  color: orange;
+  color: var(--main-color);
 }
 
 .search-container {
@@ -78,7 +88,7 @@ body {
 } 
 
 a {
-  color: #fff;
+  color: var(--secondary-color);
   text-decoration: none;
   font-size: 20px;
 }
@@ -96,7 +106,7 @@ a {
   border-radius: 2px;
   display: none;
   padding: 3px;
-  color: whitesmoke;
+  color: var(--primary-color);
   font-size: 18px;
   margin-left: 15px;
   margin-right: -15px;
@@ -106,7 +116,7 @@ a {
 .menu-button:active {
   outline: none;
   transform: scale(0.98);
-  color: orange;
+  color: var(--main-color);
 }
 
 .menu-button:focus{
@@ -144,18 +154,18 @@ a {
 }
 
 .options-container a {
-  color: #fff;
+  color: var(--secondary-color);
   font-size: 16px;
 }
 
 .nav-container a:active ,
 .options-container a:active {
-  color: orange;
+  color: var(--main-color);
 } 
 
 .options-profile-link a {
-  color: orange;
-  text-decoration: underline 2px solid #fff;
+  color: var(--main-color);
+  text-decoration: underline 2px solid var(--secondary-color);
   text-underline-offset: 2px;
 }
 
@@ -222,12 +232,12 @@ a {
   border: none;
   border-radius: 3px;
   margin  : 0 5px;
-  color: #fff;
+  color: var(--secondary-color);
   cursor: pointer;
 }
 
 .login-btn {
-  background-color: green;
+  background-color: var(--happy-color);
 }
 
 .register-btn {
@@ -255,7 +265,7 @@ a {
   font-size: 25px;
   letter-spacing: 1px;
   margin-bottom: 20px;
-  color: whitesmoke;
+  color: var(--primary-color);
 }
 
 .slogan-text strong {
@@ -362,11 +372,11 @@ a {
 
 .dashboard-ask-questionBtn ,
 .myPro-ask-questionBtn {
-  background-color: green;
+  background-color: var(--happy-color);
 }
 
 .myPro-answers-btn {
-  background-color: orange;
+  background-color: var(--main-color);
 }
 
 .post-qtn:hover , 
@@ -395,20 +405,20 @@ a {
 .login-header ,
 .register-header { 
   text-align: center;
-  text-decoration: underline 2px solid gray;
+  text-decoration: underline 2px solid var(--universal-color);
   text-underline-offset: 2px;
   margin-top: 40px;
 }
 
 .myPro-questions-header {
   text-align: center;
-  text-decoration: underline 2px solid gray;
+  text-decoration: underline 2px solid var(--universal-color);
 }
 
 .selected-comments-title ,
 .user-answers-header {
   text-align: center;
-  text-decoration: underline 2px solid gray;
+  text-decoration: underline 2px solid var(--universal-color);
   text-underline-offset: 2px;
   margin-top: 0;
   margin-left: 26px;
@@ -417,7 +427,7 @@ a {
 .myPro-answers-header ,
 .selected-comments-header ,
 .user-answers-header {
-  color: orange;
+  color: var(--main-color);
 }
 
 .dashboard-qtns-list ,
@@ -454,8 +464,8 @@ a {
 .home-qtns-content {
   width: 100%;
   list-style-type: none;
-  border-top: 1px solid gray;
-  border-bottom: 1px solid gray;
+  border-top: 1px solid var(--universal-color);
+  border-bottom: 1px solid var(--universal-color);
   border-radius: 5px;
   margin-bottom: 6px;
   padding: 16px;
@@ -508,7 +518,7 @@ a {
 .selected-commentAnswer-date ,
 .myPro-answer-author ,
 .myPro-answer-date {
-  text-decoration: underline 1px solid gray;
+  text-decoration: underline 1px solid var(--universal-color);
   text-underline-offset: 2px;
   line-height: 20px;
 }
@@ -596,7 +606,7 @@ a {
 .pick-answer-btn ,
 .view-comments-btn ,
 .add-comments-btn {
-  background-color: whitesmoke;
+  background-color: var(--primary-color);
   border: none;
   border-radius: 35px;
   font-size: 14px;
@@ -609,21 +619,21 @@ a {
 .answer-btn ,
 .edit-comment-btn ,
 .pick-answer-btn {
-  color: green;
+  color: var(--happy-color);
 }
 
 .view-comments-btn ,
 .add-comments-btn {
-  color: blue;
+  color: var(--chill-color);
 }
 
 .delete-btn {
-  color: red;
+  color: var(--danger-color);
   font-size: 13px;
 }
 
 .qtn-link {
-  color: blue;
+  color: var(--chill-color);
 }
 
 .post-answer-form ,
@@ -666,12 +676,12 @@ a {
 .edit-answer-btn ,
 .edit-question-btn ,
 .edit-comment-formBtn {
-  background-color: green;
+  background-color: var(--happy-color);
   border: none;
   border-radius: 5px;
   padding: 5px;
   margin: 5px 0;
-  color: #fff;
+  color: var(--secondary-color);
   font-family: inherit;
 }
 
@@ -695,7 +705,7 @@ a {
 }
 
 .picked-answer {
-  border-top: 5px solid green;
+  border-top: 5px solid var(--happy-color);
 }
 
 .answer-body-container {
@@ -720,12 +730,12 @@ a {
 
 .votes {
   text-align: center;
-  color: green;
+  color: var(--happy-color);
   margin-bottom: 10px;
 }
 
 .votes-title {
-  color: whitesmoke;
+  color: var(--primary-color);
   text-align: center;
 }
 
@@ -746,7 +756,7 @@ a {
 .success {
   width: 600px;
   border-radius: 2px;
-  color: #fff;
+  color: var(--secondary-color);
   text-align: center;
   font-size: 16px;
   margin: 40px 0 -40px 0; 
@@ -754,12 +764,12 @@ a {
 }
 
 .success {
-  background-color:green;  
+  background-color: var(--happy-color);  
 }
 
 .danger ,
 .error {  
-  background-color: red;  
+  background-color: var(--danger-color);  
 }
 
 .hide {
