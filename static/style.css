@@ -426,7 +426,8 @@ a {
 
 .myPro-answers-header ,
 .selected-comments-header ,
-.user-answers-header {
+.user-answers-header ,
+.selected-comments-title {
   color: var(--main-color);
 }
 
