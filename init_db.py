@@ -1,7 +1,5 @@
 import os
 import psycopg2
-from flask import Flask
-app = Flask(__name__)
 
 # app.config['POSTGRES_DATABASE_URI'] = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e' 
 
