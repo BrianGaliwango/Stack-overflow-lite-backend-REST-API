@@ -25,7 +25,10 @@ ENV = 'dev'
 
 # Connect to heroku database
 app.debug = False
-conn = psycopg2.connect(DATABASE_URI = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e')
+DATABASE_URI = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
+  
+
+conn = psycopg2.connect(database_uri=DATABASE_URI)
 
 @app.route("/")
 def index():
