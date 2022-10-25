@@ -10,16 +10,21 @@ app = Flask(__name__)
 
 app.secret_key = "secret123456"
 
-# Config pyscopg2
-
-DB_HOST = "localhost"
-DB_NAME = "stack_over_flow_psycopg2"
-DB_USER = os.environ["DB_USERNAME"]
-DB_PASS = os.environ["DB_PASSWORD"]
-DB_PORT ="5432"
-
+ENV = 'dev'
+  
+if ENV == 'dev':
+  app.debug = True
+  DB_HOST = "localhost"
+  DB_NAME = "stack_over_flow_psycopg2"
+  DB_USER = os.environ["DB_USERNAME"]
+  DB_PASS = os.environ["DB_PASSWORD"]
+  DB_PORT ="5432"
 # Connect to db
-conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+  conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+else:
+# Connect to heroku database
+  app.debug = False
+  conn = psycopg2.connect(DATABASE_URI = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e')
 
 @app.route("/")
 def index():
@@ -704,5 +709,5 @@ def delete_comment(id):
   return redirect(url_for("dashboard"))
   
 if __name__ == "__main__":
-  app.run(debug=True)
+  app.run()
 
