@@ -1,4 +1,4 @@
-/* edit-question-btn */
+/* home-slogan */
 
 :root {
   --main-color: orange;
@@ -271,6 +271,7 @@ a {
 
 .slogan-text strong {
   font-size: 35px;
+  color: var(--main-color); ;
 }
 
 .main-profileAnswers-container ,
@@ -354,7 +355,8 @@ a {
 .ask-title-form ,
 .edit-title-form { 
   width: 100%;
-  padding: 10px;
+  padding: 8px;
+  font-size: 14px;
 }
 
 .profile-askQtnBtn-container {
