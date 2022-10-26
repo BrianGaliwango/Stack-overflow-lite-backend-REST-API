@@ -1,6 +1,6 @@
 import psycopg2
 
-DATABASE_URL = 'postgres://pzwgjgxenonrwv:2665da43cfb3e10c3a5bc7bc03c35c5c778336f7cbc3b6e312f43b79a6f6e5f4@ec2-3-93-206-109.compute-1.amazonaws.com:5432/db5blc3fv3nvm0'
+DATABASE_URL = 'postgres://kxnzrwrnylrcci:cf34b26419657c114654936aafc830a78f57d532b31a6aa19373b2adcfca3c7f@ec2-3-220-207-90.compute-1.amazonaws.com:5432/dcncbvdin6esl0'
     
 conn = psycopg2.connect(DATABASE_URL)
 
