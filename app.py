@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, session, url_for
 import psycopg2
 import psycopg2.extras
-import os
 from functools import wraps
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
