@@ -6,15 +6,25 @@ import re
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-
 app.secret_key = "secret123456"
+  
+#Init db 
+DATABASE_URL = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
+ 
+#Connect to database 
+conn = psycopg2.connect(DATABASE_URL)
 
+<<<<<<< HEAD
 DATABASE_URL = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
     
 conn = psycopg2.connect(DATABASE_URL)
 
 cur = conn.cursor()
 
+=======
+cur = conn.cursor()
+     
+>>>>>>> deploy2
 @app.route("/")
 def index():
   return render_template("index.html")
@@ -111,7 +121,7 @@ def register():
     
     # Fetch account
     account = cur.fetchone()
- 
+  
     # If account exists show error and validation
     if account:
       flash("Account already exists", "danger")
@@ -337,6 +347,7 @@ def edit_question(id):
   
   # Get question
   question = cur.fetchone()
+  title = question["title"]
   
   # Get request form
   if request.method == "POST":
@@ -346,7 +357,7 @@ def edit_question(id):
     # Validate
     if not question or not title:
       flash("Please fill all fields", "danger")
-      return render_template("edit_question.html", question=question)
+      return redirect(url_for("profile"))
 
     # Execute query 
     # Update title
