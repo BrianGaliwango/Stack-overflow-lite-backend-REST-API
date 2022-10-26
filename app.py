@@ -12,47 +12,46 @@ app.secret_key = "secret123456"
 
 ENV = 'dev'
   
-# if ENV == 'dev':
-#   app.debug = True
-#   DB_HOST = "localhost"
-#   DB_NAME = "stack_over_flow_psycopg2"
-#   DB_USER = os.environ["DB_USERNAME"]
-#   DB_PASS = os.environ["DB_PASSWORD"]
-#   DB_PORT ="5432"
-# # Connect to db
-#   conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
-# else:
-
+if ENV == 'dev':
+  app.debug = True
+  DB_HOST = "localhost"
+  DB_NAME = "stack_over_flow_psycopg2"
+  DB_USER = os.environ["DB_USERNAME"]
+  DB_PASS = os.environ["DB_PASSWORD"]
+  DB_PORT ="5432"
+# Connect to db
+  conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+else:
 # Connect to heroku database
-app.debug = False
-DATABASE_URL = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
-  
-conn = psycopg2.connect(DATABASE_URL)
+  app.debug = False
+  DATABASE_URL = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
+    
+# conn = psycopg2.connect(DATABASE_URL)
 
-cur = conn.cursor()
+# cur = conn.cursor()
 
 ## Create tables 
 
-def create_tables():
-  # Users table
-  cur.execute("CREATE TABLE users(id SERIAL PRIMARY KEY,first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, username VARCHAR(255) UNIQUE, email VARCHAR(100) NOT NULL, password VARCHAR(255) NOT NULL, register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);")
+# def create_tables():
+#   # Users table
+#   cur.execute("CREATE TABLE users(id SERIAL PRIMARY KEY,first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, username VARCHAR(255) UNIQUE, email VARCHAR(100) NOT NULL, password VARCHAR(255) NOT NULL, register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);")
     
-    # Questions table
-  cur.execute("CREATE TABLE questions(id SERIAL PRIMARY KEY, username VARCHAR(255), title VARCHAR(300) NOT NULL, body TEXT NOT NULL,date_asked TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);")
+#     # Questions table
+#   cur.execute("CREATE TABLE questions(id SERIAL PRIMARY KEY, username VARCHAR(255), title VARCHAR(300) NOT NULL, body TEXT NOT NULL,date_asked TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(username) REFERENCES users(username) ON DELETE CASCADE);")
 
-  # Answers table 
-  cur.execute("CREATE TABLE answers(id SERIAL PRIMARY KEY, question_id INT, answer_username VARCHAR(255), answer_body TEXT NOT NULL,marked_answer BOOLEAN, votes INTEGER DEFAULT 0,answered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,FOREIGN KEY(answer_username) REFERENCES users(username) ON DELETE CASCADE);")
+#   # Answers table 
+#   cur.execute("CREATE TABLE answers(id SERIAL PRIMARY KEY, question_id INT, answer_username VARCHAR(255), answer_body TEXT NOT NULL,marked_answer BOOLEAN, votes INTEGER DEFAULT 0,answered_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(question_id) REFERENCES questions(id) ON DELETE CASCADE,FOREIGN KEY(answer_username) REFERENCES users(username) ON DELETE CASCADE);")
 
-  # Comments table 
-  cur.execute("CREATE TABLE comments(id SERIAL PRIMARY KEY, comment_answer_id INT, comment_author VARCHAR(255), comment_body TEXT,comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(comment_author) REFERENCES users(username)ON DELETE CASCADE, FOREIGN KEY(comment_answer_id) REFERENCES answers(id) ON DELETE CASCADE);")
+#   # Comments table 
+#   cur.execute("CREATE TABLE comments(id SERIAL PRIMARY KEY, comment_answer_id INT, comment_author VARCHAR(255), comment_body TEXT,comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY(comment_author) REFERENCES users(username)ON DELETE CASCADE, FOREIGN KEY(comment_answer_id) REFERENCES answers(id) ON DELETE CASCADE);")
 
-  # Commit to db
-  conn.commit()
+#   # Commit to db
+#   conn.commit()
 
-  # Close cursor
-  cur.close()
+#   # Close cursor
+#   cur.close()
 
-  conn.close()    
+#   conn.close()    
 
 @app.route("/")
 def index():
@@ -69,6 +68,8 @@ def questions():
   
   # Init questions from db
   questions = cur.fetchall()
+  
+  conn.commit()
   
   cur.close()
   return render_template("questions.html", questions=questions) 
@@ -377,14 +378,19 @@ def edit_question(id):
   
   # Get request form
   if request.method == "POST":
-    question = request.form["question"]
+    title = request.form["title"]
+    question = request.form["body"]
     
     # Validate
-    if not question:
-      flash("Please fill question field", "danger")
+    if not question or not title:
+      flash("Please fill all fields", "danger")
       return render_template("edit_question.html", question=question)
 
-    # Execute query
+    # Execute query 
+    # Update title
+    cur.execute("UPDATE questions SET title = %s WHERE id = %s", [title, id])
+    
+    # Update body
     cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, id])
   
     # Commit to db

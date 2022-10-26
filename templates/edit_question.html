@@ -3,13 +3,25 @@
 {% block body %} 
 
   <h1 class="edit-question-header">Edit question</h1>
+
   <div class="edit-question-container">
-    <div class="edit-question-area">
-      <form action="" method="POST" class="edit-question-form">      
-          <textarea name="question" cols="70" rows="10" class="edit-question" placeholder="Edit question" autofocus>{{question.body | safe}}</textarea>     
-        <input type="submit" value="submit" class="edit-question-btn">
-      </form>
-    </div>
-</div>
+    <form action="" method="POST" class="edit-question-form">
+        
+        <div class="edit-question-titleInput">
+          <label>Title</label>
+          <input type="text" name="title" class="edit-title-form" value="{{question.title | safe}}">  
+        </div> 
+        
+        <div class="ask-question-area">
+          <label>Body</label>
+          <textarea name="body" cols="70" rows="10" placeholder="Edit question">{{question.body | safe}}</textarea>       
+        </div>  
+
+        <div class="submit-qtnBtn-container">
+          <input type="submit" value="submit" class="edit-question-btn">  
+       </div>
+
+    </form>  
+  </div>  
 
 {% endblock %}

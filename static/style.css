@@ -1,3 +1,5 @@
+/* .submit-question-btn */
+
 :root {
   --main-color: orange;
   --secondary-color: #fff;
@@ -273,7 +275,6 @@ a {
 
 .edit-answer-container ,
 .main-profileAnswers-container ,
-.edit-question-container ,
 .profile-qtn-container ,
 .main-profile-container ,
 .edit-comment-container ,
@@ -297,12 +298,12 @@ a {
   margin-left: 65px;
 }
 
-.post-question-container {
-  width: 800px;
+.post-question-container ,
+.edit-question-container {
+  width: 80vw;
   position: relative;
 }
 
-.edit-question-area ,
 .profile-selected-qtn ,
 .profile-question-answers ,
 .myPro-asked-qtns-container ,
@@ -324,15 +325,18 @@ a {
   width: 100%;
 }
 
-.ask-question-area {
+.ask-question-area ,
+.edit-question-area {
   display: grid;
 }
 
-.post-question-form label {
+.post-question-form label ,
+.edit-question-form label {
   margin: 0;
 }
 
-.post-question-form textarea {
+.post-question-form textarea ,
+.edit-question-form textarea {
   font-size: 18.5px;
 }
 
@@ -341,11 +345,13 @@ a {
   right: 0;
 }
 
-.ask-question-titleInput {
+.ask-question-titleInput ,
+.edit-question-titleInput {
   margin: 10px 0 10px 0;
 }
 
-.ask-title-form {
+.ask-title-form ,
+.edit-title-form { 
   width: 100%;
   padding: 10px;
 }
@@ -638,7 +644,6 @@ a {
 
 .post-answer-form ,
 .post-comment-form ,
-.edit-question-form ,
 .edit-answer-form ,
 .edit-comment-form {
   display: flex;
@@ -648,14 +653,12 @@ a {
 
 .post-answer-form textarea ,
 .post-comment-form textarea ,
-.edit-question-form textarea ,
 .edit-answer-form textarea ,
 .edit-comment-form textarea {
   width: 95.5%;
   font-size: 18.5px;
 }
 
-.edit-question-form textarea ,
 .edit-answer-form textarea ,
 .edit-comment-form textarea {
   margin: 15px;
@@ -686,7 +689,6 @@ a {
 }
 
 .edit-answer-btn ,
-.edit-question-btn ,
 .edit-comment-formBtn {
   margin-right: 15px;
 }
@@ -885,7 +887,6 @@ a {
     text-align: center;
   }
 
-  .edit-question-container ,
   .edit-answer-container ,
   .profile-qtn-container ,
   .main-profileAnswers-container ,
@@ -899,7 +900,8 @@ a {
   .home-qtnAnswers-container ,
   .dashboard-container ,
   .user-mainQtns-container ,
-  .post-question-container {
+  .post-question-container ,
+  .edit-question-container {
     width: 80vw;
   }
 
@@ -908,7 +910,6 @@ a {
     width: 94.5%;
   }
 
-  .edit-question-container ,
   .edit-answer-container {
     margin: 0;
   }
@@ -973,7 +974,6 @@ a {
     text-align: center;
   }
 
-  .edit-question-container ,
   .edit-answer-container ,
   .profile-qtn-container ,
   .main-profileAnswers-container ,
@@ -987,12 +987,12 @@ a {
   .home-qtnAnswers-container ,
   .dashboard-container ,
   .user-mainQtns-container ,
-  .post-question-container {
+  .post-question-container ,
+  .edit-question-container {
     width: 80vw;
     margin-top: 20px;
   }
 
-  .edit-question-container ,
   .edit-answer-container {
     margin: 0;
   }
@@ -1104,7 +1104,6 @@ a {
     text-align: center;
   }
 
-  .edit-question-container ,
   .edit-answer-container ,
   .profile-qtn-container ,
   .main-profileAnswers-container ,
@@ -1123,8 +1122,7 @@ a {
   }
 
   .main-profile-container ,
-  .edit-answer-area ,
-  .edit-question-area {
+  .edit-answer-area  {
     margin-left: 65px;
   }
 
@@ -1220,7 +1218,8 @@ a {
     width: 80vw; 
   }
 
-  .post-question-container {
+  .post-question-container ,
+  .edit-question-container {
     width: 75vw;
   }
 
@@ -1327,7 +1326,6 @@ a {
     text-align: center;
   }
 
-  .edit-question-container ,
   .edit-answer-container ,
   .profile-qtn-container ,
   .main-profileAnswers-container ,
@@ -1346,8 +1344,7 @@ a {
   }
 
   .main-profile-container ,
-  .edit-answer-area ,
-  .edit-question-area {
+  .edit-answer-area {
     margin-left: 65px;
   }
 
@@ -1452,7 +1449,8 @@ a {
     width: 80vw; 
   }
 
-  .post-question-container {
+  .post-question-container ,
+  .edit-question-container {
     width: 75vw;
   }
 
