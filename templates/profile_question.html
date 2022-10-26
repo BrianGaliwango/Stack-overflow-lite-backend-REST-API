@@ -22,20 +22,20 @@
       {% for answer in answers %}     
       <li class="profile-answer-content {% if answer.marked_answer %}picked-answer {% endif %}">
         <div class="votes-container">     
-            <small class="votes-title">Votes</small>
-            <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
-              <input type="hidden" name="method" value="<">
-              <input type="submit" value=">" class="upvote-btn">
-            </form>   
+          <small class="votes-title">Votes</small>
+          <form action="{{url_for('upvote_answer', answer_id=answer.id)}}" method="POST">
+            <input type="hidden" name="method" value="<">
+            <input type="submit" value=">" class="upvote-btn">
+          </form>   
 
-            <div class="votes">
-              {{answer.votes}}
-            </div>
-           
-            <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
-              <input type="hidden" name="method" value=">">       
-              <input type="submit" value="<" class="downvote-btn">
-            </form>          
+          <div class="votes">
+            {{answer.votes}}
+          </div>
+          
+          <form action="{{url_for('downvote_answer', answer_id=answer.id)}}" method="POST"> 
+            <input type="hidden" name="method" value=">">       
+            <input type="submit" value="<" class="downvote-btn">
+          </form>          
         </div> 
         
         <div class="comments-btn-container">

@@ -10,13 +10,12 @@ app = Flask(__name__)
 app.secret_key = "secret123456"
   
 #Init db 
-DB_HOST = "localhost"
-DB_NAME = "stack_over_flow_psycopg2"
-DB_USER = os.environ["DB_USERNAME"]
-DB_PASS = os.environ["DB_PASSWORD"]
-DB_PORT ="5432"
-# Connect to db
-conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
+DATABASE_URL = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
+ 
+#Connect to database 
+conn = psycopg2.connect(DATABASE_URL)
+
+cur = conn.cursor()
      
 @app.route("/")
 def index():
