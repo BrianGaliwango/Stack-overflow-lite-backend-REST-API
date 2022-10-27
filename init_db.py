@@ -1,7 +1,9 @@
 import psycopg2
+import os
 
-DATABASE_URL = 'postgres://gchmnzgwfhctbv:62856072bcce8f993d376678297c70b498fa614ad771021dde792517b6741f85@ec2-23-20-140-229.compute-1.amazonaws.com:5432/d2barv9p59v20e'
-    
+#Init database   
+DATABASE_URL = os.environ["DATABASE_URL"]
+     
 conn = psycopg2.connect(DATABASE_URL)
 
 cur = conn.cursor()
