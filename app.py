@@ -9,7 +9,7 @@ import os
 
 app = Flask(__name__)
 
-app.secret_key = os.environ["SECRET_KEY"]
+app.secret_key = os.environ["secret_key"]
   
 #Init db 
 DATABASE_URL = os.environ["DATABASE_URL"]
