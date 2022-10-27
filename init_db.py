@@ -2,7 +2,7 @@ import psycopg2
 import os
 
 #Init database   
-DATABASE_URL = os.environ["POSTGRES_DATABASE_URL"]
+DATABASE_URL = os.environ["DATABASE_URL"]
      
 conn = psycopg2.connect(DATABASE_URL)
 
