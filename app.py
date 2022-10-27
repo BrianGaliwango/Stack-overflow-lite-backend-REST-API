@@ -5,12 +5,14 @@ from functools import wraps
 import re
 from werkzeug.security import generate_password_hash, check_password_hash
 import init_db
+import os
 
 app = Flask(__name__)
-app.secret_key = "secret123456"
+# app.secret_key = "secret123456"
+app.secret_key = os.environ("SECRET_KEY")
   
 #Init db 
-DATABASE_URL = 'postgres://ochxdbefnhrojw:a381a219347d2dc0eb6cdd6cfd2c3c6d09972e6033352a6fb4fcbd414eb05d1d@ec2-52-207-90-231.compute-1.amazonaws.com:5432/d6g89f4brdfrdc'
+DATABASE_URL = os.environ["POSTGRES_DATABASE_URL"]
  
 #Connect to database 
 conn = psycopg2.connect(DATABASE_URL)
