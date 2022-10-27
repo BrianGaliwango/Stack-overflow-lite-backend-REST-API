@@ -12,7 +12,7 @@ app = Flask(__name__)
 app.secret_key = os.environ["SECRET_KEY"]
   
 #Init db 
-DATABASE_URL = os.environ["POSTGRES_DATABASE_URL"]
+DATABASE_URL = os.environ["DATABASE_URL"]
  
 #Connect to database 
 conn = psycopg2.connect(DATABASE_URL)
