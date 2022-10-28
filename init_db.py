@@ -1,8 +1,6 @@
 import os
 import psycopg2
-
-  
-
+ 
 DB_HOST = "localhost"
 DB_NAME = "stack_over_flow_psycopg2"
 DB_USER = os.environ["DB_USERNAME"]
