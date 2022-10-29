@@ -17,7 +17,7 @@ DB_PASS = os.environ["DB_PASSWORD"]
 DB_PORT ="5432"
 # Connect to db
 conn = psycopg2.connect(host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS)
-     
+    
 @app.route("/")
 def index():
   return render_template("index.html")
@@ -50,7 +50,7 @@ def get_question(id):
     
     #Fetch question 
     question = cur.fetchone()
-       
+      
     result = cur.execute("SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC", [id])
     # Fetch answers
     answers = cur.fetchall()
@@ -63,7 +63,7 @@ def get_question(id):
 ## Search Route
 @app.route("/search_questions", methods=["GET", "POST"])
 def search_questions():
-   # Create cursor 
+  # Create cursor 
   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   
   # Send request
@@ -91,7 +91,7 @@ def search_questions():
     cur.close()
     
   return render_template("search_questions.html", questions=questions) 
-   
+  
 ## Register route 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -136,13 +136,13 @@ def register():
     flash("Please fill out form!")
             
   return render_template("register.html")  
-       
+      
 # User login
 @app.route("/login", methods=["GET", "POST"])
 def login():
   # Create cursor
   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-   
+  
   #Validate request 
   if request.method == "POST":
     # Get Form fields data
@@ -176,15 +176,15 @@ def login():
       flash("Incorrect username/password", "danger")
       
   return render_template("login.html")    
- 
+
 # Check if the user is logged in decorator
 def is_logged_in(f):
   @wraps(f)
   def wrap(*args, **kwargs):
-   if "logged_in" in session:
-     return f(*args, **kwargs)
-   else:
-     return redirect(url_for("login")) 
+    if "logged_in" in session:
+      return f(*args, **kwargs)
+    else:
+      return redirect(url_for("login")) 
   return wrap 
 
 ## Logout
@@ -396,7 +396,7 @@ def post_answer(id):
     
     # Commit to db   
     conn.commit()
-       
+      
     # Close cursor
     cur.close()
     
@@ -424,7 +424,7 @@ def edit_answer(id):
     if not answer:
       flash("Please fill in answer field", "danger")
       return render_template("edit_answer.html", answer=answer)
-   
+  
     # Execute query
     cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, id])
     
@@ -451,12 +451,12 @@ def upvote_answer(answer_id):
         
     # Check if not user
     if session["username"] != answer_username:
-     # Execute query
+    # Execute query
       cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
     else:  
       flash("You can't vote your answer", "success")
       return redirect(url_for("dashboard"))
-       
+      
     # Commit to db
     conn.commit()
               
@@ -482,7 +482,7 @@ def downvote_answer(answer_id):
     # Check if its users answer
     if session["username"] != answer_username:
     # Execute query
-     cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
+      cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
     else:  
       flash("You can't vote your answer", "success")
       return redirect(url_for("dashboard")) 
@@ -543,7 +543,7 @@ def view_comments(id):
   
   # Fetch answer
   answer = cur.fetchone()
-   
+  
   # Get comments query
   cur.execute("SELECT * FROM comments WHERE comment_answer_id = %s ORDER BY comment_date DESC", [id])
   # Fetch comments
@@ -553,13 +553,13 @@ def view_comments(id):
   if not comments:
     flash("No comments found", "success")
     return redirect(url_for("dashboard"))
-   
+  
   # Commit to db
   conn.commit()
   
   # Close connection
   cur.close()
-   
+  
   return render_template("view_comments.html", answer=answer, comments=comments)
 
 ## Edit comment 
@@ -633,7 +633,7 @@ def unmark_answer(answer_id):
   
   flash("Un-marked answer successfully", "success")
   return redirect(url_for("profile"))
- 
+
 ## Profile Delete question
 @app.route("/delete_question/<string:id>", methods=["POST"])
 @is_logged_in
@@ -707,7 +707,7 @@ def delete_comment(id):
   cur.close()
   flash("Comment deleted successfully", "danger")
   return redirect(url_for("dashboard"))
-  
+    
 if __name__ == "__main__":
-  app.run()
+  app.run(debug=True)
 
