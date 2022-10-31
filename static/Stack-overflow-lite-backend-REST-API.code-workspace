@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"name": "Stack-overflow-lite-backend-REST-API",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"liveServer.settings.port": 5501,
+		"cSpell.ignoreWords": [
+			"functools",
+			"testpath"
+		]
+	}
+}
