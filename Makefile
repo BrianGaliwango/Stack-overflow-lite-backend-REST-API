@@ -3,7 +3,7 @@ install:
 			pip install -r requirements.txt
 
 test:
-		python -m pytest -vv --cov=app tests
+		python -m pytest -vv -s --cov=app tests
 
 format:
 		black *.py
