@@ -1,12 +1,5 @@
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    flash,
-    session,
-    url_for,
-)
+from flask import Flask, render_template, request, redirect, flash, session, url_for
+
 import psycopg2
 import psycopg2.extras
 import os
