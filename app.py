@@ -3,6 +3,7 @@ import re
 from functools import wraps
 import psycopg2
 import psycopg2.extras
+from flask_swagger_ui import get_swaggerui_blueprint
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, request, redirect, flash, session, url_for
@@ -11,17 +12,45 @@ app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY", "prod")
 
-# Init db
-DATABASE_URL = os.environ["DATABASE_URL"]
-
-# Connect to database
-conn = psycopg2.connect(DATABASE_URL)
     
-conn = psycopg2.connect(DATABASE_URL)
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+swaggerui_blueprint = get_swaggerui_blueprint(
+  SWAGGER_URL, 
+  API_URL,
+  config={
+    'app_name': "stack-overflow-lite-backend-REST-API"
+  }
+) 
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL) 
 
-cur = conn.cursor()
+# Init db
+DB_HOST = "localhost"
+DB_NAME = "stack_over_flow_psycopg2"
+DB_USER = os.environ["DB_USERNAME"]
+DB_PASS = os.environ["DB_PASSWORD"]
+DB_PORT = "5432"
+# Connect to db
 
-cur = conn.cursor()
+# ENV = 'Env'
+
+# if ENV == "dev":
+#     app.debug=True
+#     conn = psycopg2.connect(
+#         host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
+#     ) 
+# else:         
+#     # Init db
+#     app.debug=False
+#     DATABASE_URL = os.environ["DATABASE_URL"]
+
+# # Connect to database
+# conn = psycopg2.connect(DATABASE_URL)
+
+
+conn = psycopg2.connect(
+    host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
+)    
      
 @app.route("/")
 def index():
@@ -42,7 +71,6 @@ def get_questions():
 
     conn.commit()
 
-    conn.close()
     cur.close()
     return render_template("questions.html", questions=questions)
 
