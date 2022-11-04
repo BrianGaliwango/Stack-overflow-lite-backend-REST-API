@@ -1,7 +1,7 @@
 import os
 import re
 
-# from functools import wraps
+from functools import wraps
 import psycopg2
 import psycopg2.extras
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -226,7 +226,7 @@ def login():
     return render_template("login.html")
 
 
-# # Check if the user is logged in decorator
+# Check if the user is logged in decorator
 # def is_logged_in(f):
 #     @wraps(f)
 #     def wrap(*args, **kwargs):
@@ -328,7 +328,9 @@ def user_get_question(question_id):
     return render_template("user_question.html", **context)
 
 
-@app.route("/answer_question/<string:id>/", methods=["GET", "POST"])
+
+#     # Answer question
+@app.route("/answer_question/<string:question_id>/", methods=["GET", "POST"])
 # @is_logged_in()
 def post_answer(question_id):
     # create cursor
@@ -414,71 +416,71 @@ def profile_get_question(question_id):
     return render_template("profile_question.html", question=question, answers=answers)
 
 
-# ## Get myPro profile answers
-# @app.route("/myPro_answers", methods=["GET", "POST"])
+
+# Edit my question
+@app.route("/edit_question/<string:question_id>/", methods=["GET", "POST"])
 # @is_logged_in
-# def get_myPro_answers():
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def edit_question(question_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute  answers query
-#     cur.execute(
-#         "SELECT * FROM answers WHERE answer_username = %s ORDER BY answered_date DESC",
-#         [session["username"]],
-#     )
+    # Get query
+    cur.execute("SELECT * FROM questions WHERE id = %s", [question_id])
 
-#     # Get answers
-#     answers = cur.fetchall()
+    # Get question
+    question = cur.fetchone()
+    title = question["title"]
 
-#     # close cursor
-#     cur.close()
+    # Get request form
+    if request.method == "POST":
+        title = request.form["title"]
+        question = request.form["body"]
 
-#     return render_template("myPro_answers.html", answers=answers)
+        # Validate
+        if not question or not title:
+            flash("Please fill all fields", "danger")
+            return redirect(url_for("profile"))
+
+        # Execute query
+        # Update title
+        cur.execute("UPDATE questions SET title = %s WHERE id = %s", [title, question_id])
+
+        # Update body
+        cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, question_id])
+
+        # Commit to db
+        conn.commit()
+
+        # Close cursor
+        cur.close()
+
+        flash("Question edited successfully", "success")
+        return redirect(url_for("profile"))
+    return render_template("edit_question.html", question=question)
 
 
-
-# # Edit my question
-# @app.route("/edit_question/<string:id>", methods=["GET", "POST"])
+## Get myPro profile answers
+@app.route("/myPro_answers", methods=["GET", "POST"])
 # @is_logged_in
-# def edit_question(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def get_myPro_answers():
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Get query
-#     cur.execute("SELECT * FROM questions WHERE id = %s", [id])
+    # Execute  answers query
+    cur.execute(
+        "SELECT * FROM answers WHERE answer_username = %s ORDER BY answered_date DESC",[session["username"]]
+    )
+    # cur.execute(
+    #     "SELECT * FROM answers"
+    #     )
 
-#     # Get question
-#     question = cur.fetchone()
-#     title = question["title"]
+    # Get answers
+    answers = cur.fetchall()
 
-#     # Get request form
-#     if request.method == "POST":
-#         title = request.form["title"]
-#         question = request.form["body"]
+    # close cursor
+    cur.close()
 
-#         # Validate
-#         if not question or not title:
-#             flash("Please fill all fields", "danger")
-#             return redirect(url_for("profile"))
-
-#         # Execute query
-#         # Update title
-#         cur.execute("UPDATE questions SET title = %s WHERE id = %s", [title, id])
-
-#         # Update body
-#         cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, id])
-
-#         # Commit to db
-#         conn.commit()
-
-#         # Close cursor
-#         cur.close()
-
-#         flash("Question edited successfully", "success")
-#         return redirect(url_for("profile"))
-#     return render_template("edit_question.html", question=question)
-
-#     # Answer question
+    return render_template("myPro_answers.html", answers=answers)
 
 
 

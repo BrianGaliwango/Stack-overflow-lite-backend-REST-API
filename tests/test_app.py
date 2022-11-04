@@ -151,3 +151,36 @@ def test_profile_get_question(app, client):
     assert result.status_code == 200
     assert b'css' in result.data
     
+
+
+#Test edit question
+def test_edit_question(app, client):
+    result = client.get("/edit_question/1/")
+    assert result.status_code == 200
+    
+    
+    
+#Test edit question
+def test_post_edit_question(app, client):
+    result = client.post("/edit_question/1/")
+    assert result.status_code == 400
+    
+    # Bad request
+    
+    
+ 
+#Test get profile answers 
+def test_myPro_answers(app, client):
+    result = client.get("/myPro_answers")
+    assert result.status_code == 200
+    assert b'answers' in result.data
+    
+    
+    # Testing when sorting questions using the username in the sql throws a key error for the username.
+    
+    
+
+
+    
+
+    

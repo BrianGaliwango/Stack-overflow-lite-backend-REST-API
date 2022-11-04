@@ -317,7 +317,7 @@
             {
               "in": "path",
               "name": "id",
-              "required": "true",
+              "required": true,
               "description": "ID for selected question to answer",
               "schema": {
                 "$ref": "#/components/schemas/questions"
@@ -348,13 +348,13 @@
           "parameters": [
             {
               "in": "path",
-              "name": "answer",
-              "required": "true",
-              "description": "Answer details",
+              "name": "id",
+              "required": true,
+              "description": "question details",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/postAnswer"
+                    "$ref": "#/components/schemas/question"
                   }
                 }
               }
@@ -362,11 +362,11 @@
           ],
           "requestBody": {
             "description": "id",
-            "required":"true",
+            "required":true,
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref":"#/components/schemas/questions"
+                  "$ref":"#/components/schemas/postAnswer"
                 }
               }
             }           
@@ -378,7 +378,7 @@
             "308": {
               "description": "redirects to dashboard",
               "schema": {
-                "$ref":"#/components/schemas/postAnswer"
+                "$ref":"#/components/schemas/questions"
               }
             },
             "200": {
@@ -437,7 +437,115 @@
             }
           }
         }     
-    }
+      },
+      "/edit_question/{id}": {
+        "get": {
+          "tags":[
+            "Get question details"
+          ],
+          "summary": "Gets question to edit",
+          "parameters":[
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "ID is used to select the question to edit",
+              "schema": {
+                "$ref": "#/components/schemas/questions"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successfully selected a question",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref":"#/components/schemas/editQuestion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags":[
+            "Save edited question"
+          ],
+          "summary": "Submitting edited question",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Id for Edited question",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref":"#/components/schemas/question"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "edited question",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/editQuestion"
+                }
+              }
+            }
+          },
+          "question": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description": "ok"
+            },
+            "308": {
+              "description":"redirects to questions"
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+      "/myPro_answers": {
+        "get": {
+          "tags":[
+            "Answers for the current user "
+          ],
+          "summary": "All answers for the current user",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "username",
+              "required": true,
+              "description":"Username to get all answers that belong to them",             
+              "schema":{
+                "$ref":"#/components/schemas/users"
+              }              
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/answers"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
     "components": {
       "schemas": {
@@ -704,6 +812,71 @@
             "answerBody": "Cascading style sheets",
             "answer_dateTimestamp":"2022-10-26 10:50;306482"
           }
+        },
+        "editQuestion": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type":"string",
+              "format":"string"
+            },
+            "body": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          "example": {
+            "title": "CSS",
+            "body": "What is css in full?"
+          }
+        },
+        "answers": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "questionId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "answer_username": {
+              "type": "string",
+              "format": "string"
+            },
+            "answer_body": {
+              "type": "string",
+              "format": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": [
+            {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            },
+            {
+              "answerId": "3",
+              "questionId": "1",
+              "answer_username": "Doe",
+              "answerBody": "Cash Soda Salary",
+              "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            },
+            {
+              "answerId": "6",
+              "questionId": "1",
+              "answer_username": "Dean",
+              "answerBody": "Cash Send Sleep",
+              "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }
+        ]
         }
       }
     }
