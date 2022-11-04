@@ -70,10 +70,10 @@
               {
                 "in": "path",
                 "name": "id",
-                "required":"true",
+                "required": true,
                 "description": "ID of the selected question to view",
                 "schema":{
-                  "$ref": "#/components/schemas/questions"
+                  "$ref": "#/components/schemas/question"
                 } 
               }
             ],
@@ -101,16 +101,16 @@
             {
               "in": "path",
               "name": "title",
-              "required":"true",
+              "required": true,
               "description": "Title of the searched question to view",
               "schema":{
-                "$ref": "#/components/schemas/questions"
+                "$ref": "#/components/schemas/question"
               } 
             }
           ],
           "requestBody": {
             "description": "Question Request Post Object",
-            "required":"true",
+            "required": true,
             "content": {
               "application/json": {
                 "schema": {
@@ -240,7 +240,7 @@
             {
               "in": "path",
               "name": "question details",
-              "required": "true",
+              "required":  true,
               "description": "Question details",
               "content": {
                 "application/json": {
@@ -286,7 +286,7 @@
             {
               "in": "path",
               "name": "id",
-              "required": "true",
+              "required": true,
               "description": "ID of the selected question to view",
               "schema": {
                 "$ref":"#/components/schemas/questions"
@@ -417,10 +417,10 @@
             {
               "in": "path",
               "name": "id",
-              "required":"true",
+              "required": true,
               "description": "ID of the selected question to view",
               "schema":{
-                "$ref": "#/components/schemas/questions"
+                "$ref": "#/components/schemas/question"
               } 
             }
           ],
@@ -656,12 +656,60 @@
               "format": "string"
             }          
           },
-          "example" : {
+          "example" : [
+            {
             "id": "4",
             "timestamp": "2022-10-26 10:57:24.609132",
             "username":"Galice",
             "title": "Javascript",
             "body": "What year was js launched?"
+            },
+            {
+            "id": "7",
+            "timestamp": "2022-10-26 12:50:24.609132",
+            "username":"Mansa",
+            "title": "Heap",
+            "body": "What is a heap?"
+            },
+            {
+            "id": "11",
+            "timestamp": "2022-10-26 09:10:24.609132",
+            "username":"Doe",
+            "title": "HTML",
+            "body": "What is HTML in full?"
+            }
+        ]
+        },
+        "question": {
+          "type": "array",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "string"
+            },
+            "username": {
+              "type":"string",
+              "format":"string"
+            },
+            "title": {
+              "type":"string",
+              "format":"string"
+            },
+            "body": {
+              "type":"string",
+              "format":"string"
+            },
+            "timestamp": {
+              "type":"string",
+              "format":"number"
+            }
+          },
+          "example" : {
+            "id": "2",
+            "username":"Galice",
+            "title": "CSS",
+            "body": "What is css in full?",
+            "timestamp": "2022-10-26 10:57:24.609132"
           }
         },
         "viewQuestionRequest" :{
