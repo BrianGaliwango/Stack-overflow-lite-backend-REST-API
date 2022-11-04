@@ -86,7 +86,6 @@ def test_dashboard(app, client):
     assert result.status_code == 200
     assert b'What is css in full' in result.data
     assert b'questions' in result.data
-    print(result.data)
     
     # Returns expected questions data
     
@@ -108,4 +107,33 @@ def test_post_question(app, client):
     assert result.status_code == 200
     
     # Post a question redirects to the dashboard
+    
+    
+# Test dashboard get single question 
+def test_get_single_question(app, client):
+    result = client.get("/user_question/1/")
+    assert result.status_code == 200
+    assert b'What is css in full' in result.data
+   
+   
+    # Works fine
+    
+ 
+# Test answer question
+def test_answer_question(app, client):
+    result = client.get("/answer_question/1")
+    assert result.status_code == 308
+    assert b'answer' in result.data
+       
+    # Comments 
+    # Redirects to requested question url  
+    
+
+#Test post request (post_answer) 
+def test_post_answer(app, client):
+    result = client.post("/answer_question/1")
+    assert result.status_code == 308
+    print(result.data)
+    
+    # Redirects to dashboard when request is successful
     

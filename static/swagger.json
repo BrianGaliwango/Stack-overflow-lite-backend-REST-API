@@ -8,7 +8,7 @@
           "email": "bryanreynolds70@gmail.com"
       },
       "license": {
-        "name": "MIT",
+        "name": "Mansa media",
         "url": "https://opensource.org/licences/MIT"
       }
     },
@@ -83,7 +83,7 @@
                 "content": {
                   "application/json": {
                     "schema":{
-                      "$ref": "#/components/schemas/viewQuestionRequest/id"
+                      "$ref": "#/components/schemas/viewQuestionRequest"
                     }
                   } 
                 }   
@@ -270,8 +270,119 @@
             "200": {
               "description":"ok",
               "schema": {
-                "$ref":"#/components/schemas/postedQuestions"
+                "$ref":"#/components/schemas/postedQuestion"
               }
+            }
+          }
+        }
+      },
+      "/user_question/{id}": {
+        "get": {
+          "tags": [
+            "Get single question"
+          ],
+          "summary": "Single question by ID for registered users",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "id",
+              "required": "true",
+              "description": "ID of the selected question to view",
+              "schema": {
+                "$ref":"#/components/schemas/questions"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/viewQuestionRequest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/answer_question/{id}": {
+        "get": {
+          "tags": [
+            "Answer question"
+          ],
+          "summary": "Selects and answers questions",
+          "parameters" :[
+            {
+              "in": "path",
+              "name": "id",
+              "required": "true",
+              "description": "ID for selected question to answer",
+              "schema": {
+                "$ref": "#/components/schemas/questions"
+              }
+            }
+          ],
+          "responses": {
+            "308": {
+              "description": "Redirects to the answer question url for answering",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/getPostAnswer"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "successful got answer page"
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Post answer"
+          ],
+          "summary": "Post answer to question",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "answer",
+              "required": "true",
+              "description": "Answer details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/postAnswer"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "id",
+            "required":"true",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/questions"
+                }
+              }
+            }           
+          },
+          "answer": [
+            "application/json"
+          ],
+          "responses": {
+            "308": {
+              "description": "redirects to dashboard",
+              "schema": {
+                "$ref":"#/components/schemas/postAnswer"
+              }
+            },
+            "200": {
+              "description": "successful answered question"
             }
           }
         }
@@ -394,7 +505,7 @@
             "body": "What year was js launched?"
           }
         },
-        "viewQuestionRequest/id" :{
+        "viewQuestionRequest" :{
           "type": "array",
           "properties": {
               "questionTimestamp": {
@@ -471,6 +582,76 @@
           "example": {
             "username": "null",
             "password": "null"
+          }
+        },
+        "getPostAnswer": {
+          "type": "array",
+          "properties": {
+            "questionId": {
+              "type": "integer", 
+              "format": "string"          
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "number"
+            },
+            "questionUsername":{
+              "type": "string",
+              "format": "string"
+            },
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            
+            "questionBody": {
+              "type": "string",
+              "format": "string"
+            },
+            "answerTextarea": {
+              "type": "string",
+              "format": "string"
+            }        
+          },
+          "example" : {
+            "questionId": "1",
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "questionUsername":"Galice",
+            "questionTitle": "Javascript",
+            "questionBody": "What year was js launched?",
+            "answerTextarea": "Answer question here"
+          }
+        },
+        "postAnswer": {
+          "type":"object",
+          "properties":{
+            "answerId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "questionId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "answer_username": {
+              "type": "string",
+              "format": "string"
+            },
+            "answer_body": {
+              "type": "string",
+              "format": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
           }
         }
       }
