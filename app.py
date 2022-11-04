@@ -1,6 +1,7 @@
 import os
 import re
-from functools import wraps
+
+# from functools import wraps
 import psycopg2
 import psycopg2.extras
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -12,17 +13,13 @@ app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY", "prod")
 
-    
-SWAGGER_URL = '/swagger'
-API_URL = '/static/swagger.json'
+
+SWAGGER_URL = "/swagger"
+API_URL = "/static/swagger.json"
 swaggerui_blueprint = get_swaggerui_blueprint(
-  SWAGGER_URL, 
-  API_URL,
-  config={
-    'app_name': "stack-overflow-lite-backend-REST-API"
-  }
-) 
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL) 
+    SWAGGER_URL, API_URL, config={"app_name": "stack-overflow-lite-backend-REST-API"}
+)
+app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
 
 # Init db
 DB_HOST = "localhost"
@@ -38,8 +35,8 @@ DB_PORT = "5432"
 #     app.debug=True
 #     conn = psycopg2.connect(
 #         host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
-#     ) 
-# else:         
+#     )
+# else:
 #     # Init db
 #     app.debug=False
 #     DATABASE_URL = os.environ["DATABASE_URL"]
@@ -50,8 +47,9 @@ DB_PORT = "5432"
 
 conn = psycopg2.connect(
     host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
-)    
-     
+)
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -88,7 +86,8 @@ def get_question(question_id):
     question = cur.fetchone()
 
     cur.execute(
-        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC", [question_id]
+        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC",
+        [question_id],
     )
     # Fetch answers
     answers = cur.fetchall()
@@ -225,7 +224,6 @@ def login():
             flash("Incorrect username/password", "danger")
             print(password)
     return render_template("login.html")
-    
 
 
 # # Check if the user is logged in decorator
@@ -248,6 +246,86 @@ def logout():
     flash("Logged out successfully", "success")
     return redirect(url_for("login"))
 
+
+## Dashboard
+@app.route("/dashboard", methods=["GET", "POST"])
+# @is_logged_in
+def dashboard():
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    # Execute get questions query
+    cur.execute("SELECT * FROM questions ORDER BY date_asked DESC")
+
+    # Init questions from db
+    questions = cur.fetchall()
+
+    return render_template("dashboard.html", questions=questions)
+
+
+## Post question
+@app.route("/post_question", methods=["GET", "POST"])
+# @is_logged_in
+def post_question():
+    # Create cursor connection
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # Validate request
+    if request.method == "POST":
+        title = request.form.get("title")
+        body = request.form.get("body")
+
+        # Validate form
+        if not title or not body:
+            flash("Please fill field", "danger")
+            return render_template("post_question.html")
+
+        # Execute query
+        cur.execute(
+            "INSERT INTO questions(username, title, body) VALUES (%s, %s, %s)",
+            (session["username"], title, body),
+        )
+
+        # Commit to db
+        conn.commit()
+
+        # Close connection
+        cur.close()
+
+        flash("Question created successfully", "success")
+        return redirect(url_for("dashboard"))
+    return render_template("post_question.html")
+
+
+# ## Get single question
+# @app.route("/user_question/<string:id>/", methods=["GET", "POST"])
+# @is_logged_in
+# def user_get_question(id):
+
+#     # Create cursor
+#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+#     # Execute query
+#     cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
+
+#     question = cur.fetchone()
+
+#     # Execute answers query
+#     cur.execute(
+#         "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC", [id]
+#     )
+
+#     # Fetch answers
+#     answers = cur.fetchall()
+
+#     # Commit to db
+#     conn.commit()
+
+#     # Close cursor
+#     cur.close()
+
+#     context = {"question": question, "answers": answers}
+
+#     return render_template("user_question.html", **context)
 
 # ## Profile route
 # @app.route("/profile", methods=["GET", "POST"])
@@ -291,87 +369,6 @@ def logout():
 #     cur.close()
 
 #     return render_template("myPro_answers.html", answers=answers)
-
-
-# ## Dashboard
-# @app.route("/dashboard", methods=["GET", "POST"])
-# @is_logged_in
-# def dashboard():
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-#     # Execute get questions query
-#     cur.execute("SELECT * FROM questions ORDER BY date_asked DESC")
-
-#     # Init questions from db
-#     questions = cur.fetchall()
-
-#     return render_template("dashboard.html", questions=questions)
-
-
-# ## Post question
-# @app.route("/post_question", methods=["GET", "POST"])
-# @is_logged_in
-# def post_question():
-#     # Create cursor connection
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-#     # Validate request
-#     if request.method == "POST":
-#         title = request.form.get("title")
-#         body = request.form.get("body")
-
-#         # Validate form
-#         if not title or not body:
-#             flash("Please fill field", "danger")
-#             return render_template("post_question.html")
-
-#         # Execute query
-#         cur.execute(
-#             "INSERT INTO questions(username, title, body) VALUES (%s, %s, %s)",
-#             (session["username"], title, body),
-#         )
-
-#         # Commit to db
-#         conn.commit()
-
-#         # Close connection
-#         cur.close()
-
-#         flash("Question created successfully", "success")
-#         return redirect(url_for("dashboard"))
-#     return render_template("post_question.html")
-
-
-# ## Get single question
-# @app.route("/user_question/<string:id>/", methods=["GET", "POST"])
-# @is_logged_in
-# def user_get_question(id):
-
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-#     # Execute query
-#     cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
-
-#     question = cur.fetchone()
-
-#     # Execute answers query
-#     cur.execute(
-#         "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC", [id]
-#     )
-
-#     # Fetch answers
-#     answers = cur.fetchall()
-
-#     # Commit to db
-#     conn.commit()
-
-#     # Close cursor
-#     cur.close()
-
-#     context = {"question": question, "answers": answers}
-
-#     return render_template("user_question.html", **context)
 
 
 # ## Get profile question

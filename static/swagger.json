@@ -179,8 +179,8 @@
           ],
           "summary": "User login",
           "responses": {
-            "200":{
-            "description": "ok",
+            "302":{
+            "description": "redirect to login page",
             "content": {
               "application/json": {
                 "schema": {
@@ -188,6 +188,90 @@
                 }
               }
              }
+            }
+          }
+        }
+      },
+      "/dashboard": {
+        "get": {
+          "tags": [
+            "Logged in user dashboard"
+          ],
+          "summary": "Questions page for logged in users",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/questions"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/post_question": {
+        "get": {
+          "tags": [
+            "Get post question page"
+          ],
+          "summary": "Page for posting question",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/postQuestion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Post question"
+          ],
+          "summary": "Post question details",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "question details",
+              "required": "true",
+              "description": "Question details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/postedQuestion"
+                  }
+                }
+              }
+             
+            }
+          ],
+          "requestBody": {
+            "description": "Question details",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/postedQuestion"
+                }
+              }
+            }
+          },
+          "question": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description":"ok",
+              "schema": {
+                "$ref":"#/components/schemas/postedQuestions"
+              }
             }
           }
         }
@@ -231,6 +315,51 @@
               "email":"galice@example.com",
               "password":"1x1x1x1x1"
             }
+        },
+        "postQuestion": {
+          "type": "array",
+          "properties":{
+            "titleInput": {
+              "type": "null",
+              "format":"null"
+            },
+            "questionBodyTextarea": {
+              "type":"null",
+              "format":"null"
+            }
+          }
+        },
+        "postedQuestion": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "string"
+            },
+            "username": {
+              "type":"string",
+              "format":"string"
+            },
+            "title": {
+              "type":"string",
+              "format":"string"
+            },
+            "body": {
+              "type":"string",
+              "format":"string"
+            },
+            "timestamp": {
+              "type":"string",
+              "format":"number"
+            }
+          },
+          "example" : {
+            "id": "2",
+            "username":"Galice",
+            "title": "CSS",
+            "body": "What is css in full?",
+            "timestamp": "2022-10-26 10:57:24.609132"
+          }
         },
         "questions": {
           "type": "array",

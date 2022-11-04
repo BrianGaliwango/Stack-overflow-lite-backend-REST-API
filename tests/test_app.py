@@ -1,5 +1,5 @@
 import pytest
-from flask import json
+
 
 # Test index api
 def test_index(app, client):
@@ -78,3 +78,34 @@ def test_logout(app, client):
     
     # Comments 
     # Redirects to login page
+    
+    
+# Test dashboard
+def test_dashboard(app, client):
+    result = client.get("/dashboard")
+    assert result.status_code == 200
+    assert b'What is css in full' in result.data
+    assert b'questions' in result.data
+    print(result.data)
+    
+    # Returns expected questions data
+    
+
+# Test get post_question
+def test_post_question(app, client):
+    result = client.get("/post_question")
+    assert b'title' in result.data
+    assert b'textarea' in result.data
+    assert result.status_code == 200
+    
+    # Get the requested html content
+
+# Test post /post_question
+def test_post_question(app, client):
+    result = client.post("/post_question")
+    assert b'title' in result.data
+    assert b'question' in result.data
+    assert result.status_code == 200
+    
+    # Post a question redirects to the dashboard
+    
