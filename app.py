@@ -135,96 +135,97 @@ def search_questions():
     return render_template("search_questions.html", questions=questions)
 
 
-# ## Register route
-# @app.route("/register", methods=["GET", "POST"])
-# def register():
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+## Register route
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Validate request
-#     if request.method == "POST":
-#         first_name = request.form.get("first_name")
-#         last_name = request.form.get("last_name")
-#         username = request.form.get("username")
-#         email = request.form.get("email")
-#         password = request.form.get("password")
+    # Validate request
+    if request.method == "POST":
+        first_name = request.form.get("first_name")
+        last_name = request.form.get("last_name")
+        username = request.form.get("username")
+        email = request.form.get("email")
+        password = request.form.get("password")
 
-#         # Hash password
-#         _hashed_password = generate_password_hash(password)
+        # Hash password
+        _hashed_password = generate_password_hash(password)
 
-#         # Check if account exists
-#         cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+        # Check if account exists
+        cur.execute("SELECT * FROM users WHERE username = %s", (username,))
 
-#         # Fetch account
-#         account = cur.fetchone()
+        # Fetch account
+        account = cur.fetchone()
 
-#         # If account exists show error and validation
-#         if account:
-#             flash("Account already exists", "danger")
-#         elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-#             flash("Invalid email address", "danger")
-#         elif not re.match(r"[A-Za-z0-9]+", username):
-#             flash("Username must contain only characters and numbers", "danger")
-#         elif (
-#             not first_name or not last_name or not username or not password or not email
-#         ):
-#             flash("Please fill all fields", "danger")
-#         else:
-#             # Create account
-#             cur.execute(
-#                 "INSERT INTO users (first_name, last_name, username, email, password) VALUES(%s, %s, %s, %s, %s)",
-#                 (first_name, last_name, username, email, _hashed_password),
-#             )
-#             conn.commit()
+        # If account exists show error and validation
+        if account:
+            flash("Account already exists", "danger")
+        elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
+            flash("Invalid email address", "danger")
+        elif not re.match(r"[A-Za-z0-9]+", username):
+            flash("Username must contain only characters and numbers", "danger")
+        elif (
+            not first_name or not last_name or not username or not password or not email
+        ):
+            flash("Please fill all fields", "danger")
+        else:
+            # Create account
+            cur.execute(
+                "INSERT INTO users (first_name, last_name, username, email, password) VALUES(%s, %s, %s, %s, %s)",
+                (first_name, last_name, username, email, _hashed_password),
+            )
+            conn.commit()
 
-#             flash("You have registered successfully", "success")
-#             return redirect(url_for("login"))
-#     elif request.method == "POST":
-#         # Form is empty..
-#         flash("Please fill out form!")
+            flash("You have registered successfully", "success")
+            return redirect(url_for("login"))
+    elif request.method == "POST":
+        # Form is empty..
+        flash("Please fill out form!")
 
-#     return render_template("register.html")
+    return render_template("register.html")
 
 
-# # User login
-# @app.route("/login", methods=["GET", "POST"])
-# def login():
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+# User login
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Validate request
-#     if request.method == "POST":
-#         # Get Form fields data
-#         username = request.form["username"]
-#         password = request.form["password"]
+    # Validate request
+    if request.method == "POST":
+        # Get Form fields data
+        username = request.form["username"]
+        password = request.form["password"]
 
-#         # Check if account exists
-#         cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+        # Check if account exists
+        cur.execute("SELECT * FROM users WHERE username = %s", (username,))
 
-#         # Fetch result
-#         account = cur.fetchone()
+        # Fetch result
+        account = cur.fetchone()
 
-#         # confirm account
-#         if account:
-#             password_rs = account["password"]
+        # confirm account
+        if account:
+            password_rs = account["password"]
 
-#             # Compare passwords if account exists
-#             if check_password_hash(password_rs, password):
-#                 # If passed login
-#                 session["logged_in"] = True
-#                 session["id"] = account["id"]
-#                 session["username"] = account["username"]
+            # Compare passwords if account exists
+            if check_password_hash(password_rs, password):
+                # If passed login
+                session["logged_in"] = True
+                session["id"] = account["id"]
+                session["username"] = account["username"]
 
-#                 flash("You have logged in successfully", "success")
-#                 return redirect(url_for("dashboard"))
-#             else:
-#                 # Account doesn't exist
-#                 flash("Account does not exist", "error")
-#         else:
-#             # Account doesn't exist
-#             flash("Incorrect username/password", "danger")
-
-#     return render_template("login.html")
+                flash("You have logged in successfully", "success")
+                return redirect(url_for("dashboard"))
+            else:
+                # Account doesn't exist
+                flash("Account does not exist", "error")
+        else:
+            # Account doesn't exist
+            flash("Incorrect username/password", "danger")
+            print(password)
+    return render_template("login.html")
+    
 
 
 # # Check if the user is logged in decorator
@@ -239,13 +240,13 @@ def search_questions():
 #     return wrap
 
 
-# ## Logout
-# @app.route("/logout")
+## Logout
+@app.route("/logout")
 # @is_logged_in
-# def logout():
-#     session.clear()
-#     flash("Logged out successfully", "success")
-#     return redirect(url_for("login"))
+def logout():
+    session.clear()
+    flash("Logged out successfully", "success")
+    return redirect(url_for("login"))
 
 
 # ## Profile route

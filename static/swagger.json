@@ -83,23 +83,124 @@
                 "content": {
                   "application/json": {
                     "schema":{
-                      "$ref": "#/components/schemas/viewQuestionRequest"
+                      "$ref": "#/components/schemas/viewQuestionRequest/id"
                     }
                   } 
                 }   
               }
             }
+          }     
+      },
+      "/search_questions": {
+        "post": {
+          "tags": [
+            "Search Question"
+          ],
+          "summary": "Search for question by title",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "title",
+              "required":"true",
+              "description": "Title of the searched question to view",
+              "schema":{
+                "$ref": "#/components/schemas/questions"
+              } 
+            }
+          ],
+          "requestBody": {
+            "description": "Question Request Post Object",
+            "required":"true",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/questions"
+                }
+              }
+            }
+          },
+          "question": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description":"ok",
+              "schema": {
+                "$ref":"#/components/schemas/questions"
+              }
+            }
           }
-     
+        }
+      },
+      "/register": {
+        "get": {
+          "tags":[
+            "Register request"
+          ],
+          "summary": "Register user",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/registerUser"
+                  }
+                }
+              }             
+            }
+          }
+        }
+      },
+      "/login":{
+        "get": {
+          "tags": [
+            "Login user"
+          ],
+          "summary": "User login",
+          "responses": {
+            "200":{
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginUser"
+                }
+              }
+             }
+            }
+          }
+        }
+      },
+      "/logout":{
+        "get": {
+          "tags": [
+            "Login user"
+          ],
+          "summary": "User login",
+          "responses": {
+            "200":{
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logoutUser"
+                }
+              }
+             }
+            }
+          }
+        }
       }
     },
     "components": {
       "schemas": {
-        "user": {
+        "registerUser": {
           "type": "object",
             "properties": {
               "id": {
-                "type": "integer"
+                "type": "integer",
+                "format": "number"
               },
               "first_name": {
                 "type": "string",
@@ -121,6 +222,14 @@
                 "type": "string",
                 "format": "string"
               }
+            },
+            "example": {
+              "id": "1",
+              "first_name":"Galice",
+              "last_name":"Brian",
+              "username":"Galice",
+              "email":"galice@example.com",
+              "password":"1x1x1x1x1"
             }
         },
         "questions": {
@@ -129,34 +238,34 @@
             "id": {
               "type": "integer", 
               "format": "string"          
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "number"
+            },
+            "username":{
+              "type": "string",
+              "format": "string"
+            },
+            "title": {
+              "type": "string",
+              "format": "string"
+            },
+            
+            "body": {
+              "type": "string",
+              "format": "string"
+            }          
           },
-          "timestamp": {
-            "type": "string",
-            "format": "number"
-          },
-          "username":{
-            "type": "string",
-            "format": "string"
-          },
-          "title": {
-            "type": "string",
-            "format": "string"
-          },
-          
-          "body": {
-            "type": "string",
-            "format": "string"
-          }          
+          "example" : {
+            "id": "4",
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "username":"Galice",
+            "title": "Javascript",
+            "body": "What year was js launched?"
+          }
         },
-        "example" : {
-          "id": "4",
-          "username":"Galice",
-          "title": "Javascript",
-          "body": "What year was js launched?",
-          "timestamp": "2022-10-26 10:57:24.609132"
-        }
-        },
-        "viewQuestionRequest" :{
+        "viewQuestionRequest/id" :{
           "type": "array",
           "properties": {
               "questionTimestamp": {
@@ -199,6 +308,40 @@
             "body": "What year was js launched?",
             "answersHeader": "Answers",
             "answersList": [{"id": "1", "answerTimestamp":"2022-11-01 20:20:29.934177","answerAuthor": "Brian", "answerBody": "1996"}, {"id": "2","answerTimestamp":"2022-11-01 21:20:29.934177", "answerAuthor": "Alex", "answerBody": "1990"}, {"id": "3", "answerTimestamp":"2022-11-03 20:10:29.968177","answerAuthor": "John", "answerBody": "1998"}]         
+          }
+        },
+        "loginUser": {
+          "type": "array",
+          "properties": {
+            "username": {
+              "type": "string",
+              "format": "string"
+            },
+            "password": {
+              "type": "string",
+              "format":"string"
+            }
+          },
+          "example": {
+            "username": "Galice",
+            "password": "1x1x1x1x1x"
+          }
+        },
+        "logoutUser": {
+          "type": "array",
+          "properties": {
+            "username": {
+              "type": "null",
+              "format": "null"
+            },
+            "password": {
+              "type": "null",
+              "format":"null"
+            }
+          },
+          "example": {
+            "username": "null",
+            "password": "null"
           }
         }
       }
