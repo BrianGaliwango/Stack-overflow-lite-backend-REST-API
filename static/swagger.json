@@ -386,7 +386,58 @@
             }
           }
         }
-      }
+      },
+      "/profile":{
+        "get": {
+          "tags": [
+            "Profile Questions page"
+          ],
+          "summary": "Profile questions page",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref": "#/components/schemas/questions"
+                  }
+                } 
+              }             
+            }
+          }
+        }
+      },
+      "/profile_question/{id}": {
+        "get": {
+          "tags": [
+            "View question request"
+          ],
+          "summary": "Get question with given ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required":"true",
+              "description": "ID of the selected question to view",
+              "schema":{
+                "$ref": "#/components/schemas/questions"
+              } 
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref": "#/components/schemas/viewQuestionRequest"
+                  }
+                } 
+              }   
+            }
+          }
+        }     
+    }
     },
     "components": {
       "schemas": {

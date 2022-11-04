@@ -133,7 +133,21 @@ def test_answer_question(app, client):
 def test_post_answer(app, client):
     result = client.post("/answer_question/1")
     assert result.status_code == 308
-    print(result.data)
     
     # Redirects to dashboard when request is successful
+    
+    
+#Get my profile questions request
+def get_profile_questions(app, client):
+    result = client.get("/profile")
+    assert result.status_code == 200
+    assert b'answers' in result.data
+    print(result.data)
+    
+
+#Test profile single get question
+def test_profile_get_question(app, client):
+    result = client.get("/profile_question/1/")
+    assert result.status_code == 200
+    assert b'css' in result.data
     

@@ -330,12 +330,12 @@ def user_get_question(question_id):
 
 @app.route("/answer_question/<string:id>/", methods=["GET", "POST"])
 # @is_logged_in()
-def post_answer(id):
+def post_answer(question_id):
     # create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     # Execute query
-    cur.execute("SELECT * FROM questions WHERE id = %s", [id])
+    cur.execute("SELECT * FROM questions WHERE id = %s", [question_id])
 
     # Fetch question
     question = cur.fetchone()
@@ -352,7 +352,7 @@ def post_answer(id):
         # Execute query
         cur.execute(
             "INSERT INTO answers (question_id, answer_username, answer_body) VALUES (%s, %s, %s)",
-            [id, session["username"], answer],
+            [question_id, session["username"], answer],
         )
 
         # Commit to db
@@ -365,26 +365,53 @@ def post_answer(id):
         return redirect(url_for("dashboard"))
     return render_template("answer_question.html", question=question)
 
-# ## Profile route
-# @app.route("/profile", methods=["GET", "POST"])
+## Profile route
+@app.route("/profile", methods=["GET", "POST"])
 # @is_logged_in
-# def profile():
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def profile():
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute questions query
-#     cur.execute(
-#         "SELECT * FROM questions WHERE username = %s ORDER BY date_asked DESC",
-#         [session["username"]],
-#     )
+    # Execute questions query
+    cur.execute(
+        "SELECT * FROM questions WHERE username = %s ORDER BY date_asked DESC",
+        [session["username"]],
+    )
 
-#     # Fetch all questions
-#     questions = cur.fetchall()
+    # Fetch all questions
+    questions = cur.fetchall()
 
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
 
-#     return render_template("profile.html", questions=questions)
+    return render_template("profile.html", questions=questions)
+
+
+## Get profile question
+@app.route("/profile_question/<string:question_id>/")
+# @is_logged_in
+def profile_get_question(question_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    # Execute query
+    cur.execute("SELECT * FROM questions WHERE id  = %s", [question_id])
+
+    # Fetch questions
+    question = cur.fetchone()
+
+    # Get answers query
+    cur.execute(
+        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date", [question_id]
+    )
+
+    # Fetch all answers
+    answers = cur.fetchall()
+
+    # Close cursor
+    cur.close()
+
+    return render_template("profile_question.html", question=question, answers=answers)
 
 
 # ## Get myPro profile answers
@@ -408,32 +435,6 @@ def post_answer(id):
 
 #     return render_template("myPro_answers.html", answers=answers)
 
-
-# ## Get profile question
-# @app.route("/profile_question/<string:id>/")
-# @is_logged_in
-# def profile_get_question(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
-#     # Execute query
-#     cur.execute("SELECT * FROM questions WHERE id  = %s", [id])
-
-#     # Fetch questions
-#     question = cur.fetchone()
-
-#     # Get answers query
-#     cur.execute(
-#         "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date", [id]
-#     )
-
-#     # Fetch all answers
-#     answers = cur.fetchall()
-
-#     # Close cursor
-#     cur.close()
-
-#     return render_template("profile_question.html", question=question, answers=answers)
 
 
 # # Edit my question
@@ -687,83 +688,83 @@ def downvote_answer(answer_id):
 #     return render_template("edit_comment.html", comment=comment)
 
 
-# ## Mark answer
-# @app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
+## Mark answer
+@app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
 # @is_logged_in
-# def mark_answer(answer_id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def mark_answer(answer_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Get marked_answer
-#     cur.execute("UPDATE answers SET marked_answer = 'True' WHERE id = %s", [answer_id])
+    # Get marked_answer
+    cur.execute("UPDATE answers SET marked_answer = 'True' WHERE id = %s", [answer_id])
 
-#     # Commit to db
-#     conn.commit()
+    # Commit to db
+    conn.commit()
 
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
 
-#     flash("Marked answer successfully", "success")
-#     return redirect(url_for("profile"))
+    flash("Marked answer successfully", "success")
+    return redirect(url_for("profile"))
 
 
-# ## UnMark answer
-# @app.route("/unmark_answer/<string:answer_id>", methods=["GET", "PUT"])
+## UnMark answer
+@app.route("/unmark_answer/<string:answer_id>", methods=["GET", "PUT"])
 # @is_logged_in
-# def unmark_answer(answer_id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def unmark_answer(answer_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Get marked_answer
-#     cur.execute("UPDATE answers SET marked_answer = 'False' WHERE id = %s", [answer_id])
+    # Get marked_answer
+    cur.execute("UPDATE answers SET marked_answer = 'False' WHERE id = %s", [answer_id])
 
-#     # Commit to db
-#     conn.commit()
+    # Commit to db
+    conn.commit()
 
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
 
-#     flash("Un-marked answer successfully", "success")
-#     return redirect(url_for("profile"))
+    flash("Un-marked answer successfully", "success")
+    return redirect(url_for("profile"))
 
 
-# ## Profile Delete question
-# @app.route("/delete_question/<string:id>", methods=["POST"])
+## Profile Delete question
+@app.route("/delete_question/<string:id>", methods=["POST"])
 # @is_logged_in
-# def delete_question(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def delete_question(id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute query
-#     cur.execute("DELETE FROM questions WHERE id = %s", [id])
+    # Execute query
+    cur.execute("DELETE FROM questions WHERE id = %s", [id])
 
-#     # Commit to db
-#     conn.commit()
+    # Commit to db
+    conn.commit()
 
-#     # Close cursor
-#     cur.close()
-#     flash("Question deleted successfully", "danger")
-#     return redirect(url_for("profile"))
+    # Close cursor
+    cur.close()
+    flash("Question deleted successfully", "danger")
+    return redirect(url_for("profile"))
 
 
-# ## Profile Delete answer
-# @app.route("/delete_answer/<string:id>", methods=["POST"])
+## Profile Delete answer
+@app.route("/delete_answer/<string:id>", methods=["POST"])
 # @is_logged_in
-# def delete_answer(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def delete_answer(id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute query
-#     cur.execute("DELETE FROM answers WHERE id = %s", [id])
+    # Execute query
+    cur.execute("DELETE FROM answers WHERE id = %s", [id])
 
-#     # Commit to db
-#     conn.commit()
+    # Commit to db
+    conn.commit()
 
-#     # Close cursor
-#     cur.close()
+    # Close cursor
+    cur.close()
 
-#     flash("Answer deleted successfully", "danger")
-#     return redirect(url_for("profile"))
+    flash("Answer deleted successfully", "danger")
+    return redirect(url_for("profile"))
 
 
 ## Dashboard Delete answer
@@ -786,23 +787,23 @@ def dashboard_delete_answer(id):
     return redirect(url_for("dashboard"))
 
 
-# ## Delete comment
-# @app.route("/delete_comment/<string:id>", methods=["POST"])
+## Delete comment
+@app.route("/delete_comment/<string:id>", methods=["POST"])
 # @is_logged_in
-# def delete_comment(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def delete_comment(id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute query
-#     cur.execute("DELETE FROM comments WHERE id = %s", [id])
+    # Execute query
+    cur.execute("DELETE FROM comments WHERE id = %s", [id])
 
-#     # Commit to db
-#     conn.commit()
+    # Commit to db
+    conn.commit()
 
-#     # Close cursor
-#     cur.close()
-#     flash("Comment deleted successfully", "danger")
-#     return redirect(url_for("dashboard"))
+    # Close cursor
+    cur.close()
+    flash("Comment deleted successfully", "danger")
+    return redirect(url_for("dashboard"))
 
 
 if __name__ == "__main__":
