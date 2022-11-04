@@ -72,17 +72,21 @@
                 "name": "id",
                 "required":"true",
                 "description": "ID of the selected question to view",
-                "schema": {
+                "schema":{
                   "$ref": "#/components/schemas/questions"
-                }
+                } 
               }
             ],
             "responses": {
               "200": {
                 "description": "ok",
-                "schema": {
-                  "$ref": "#/components/schemas/questions"
-                }
+                "content": {
+                  "application/json": {
+                    "schema":{
+                      "$ref": "#/components/schemas/viewQuestionRequest"
+                    }
+                  } 
+                }   
               }
             }
           }
@@ -126,6 +130,10 @@
               "type": "integer", 
               "format": "string"          
           },
+          "timestamp": {
+            "type": "string",
+            "format": "number"
+          },
           "username":{
             "type": "string",
             "format": "string"
@@ -138,11 +146,7 @@
           "body": {
             "type": "string",
             "format": "string"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "number"
-          }
+          }          
         },
         "example" : {
           "id": "4",
@@ -151,7 +155,51 @@
           "body": "What year was js launched?",
           "timestamp": "2022-10-26 10:57:24.609132"
         }
-
+        },
+        "viewQuestionRequest" :{
+          "type": "array",
+          "properties": {
+              "questionTimestamp": {
+                "type": "string",
+                "format": "number"
+              },
+              "questionAuthor": {
+                "type": "string",
+                "format": "string"
+              },
+              "questionBody": {
+                "type": "string",
+                "format": "string"
+              },
+              "answersHeader": {
+                "type": "string",
+                "format": "string"
+              },
+              "answersList": {
+                "type": "array",
+                "format": "string",
+                "answerTimestamp": {
+                  "type": "string",
+                  "format": "number"
+                },
+                "answerAuthor": {
+                  "type": "string",
+                  "format": "string"
+                },
+                "answerBody": {
+                  "type": "string",
+                  "format": "string"
+                }
+              }             
+          },
+          "example": {
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "username":"Galice",
+            "title": "Javascript",
+            "body": "What year was js launched?",
+            "answersHeader": "Answers",
+            "answersList": [{"id": "1", "answerTimestamp":"2022-11-01 20:20:29.934177","answerAuthor": "Brian", "answerBody": "1996"}, {"id": "2","answerTimestamp":"2022-11-01 21:20:29.934177", "answerAuthor": "Alex", "answerBody": "1990"}, {"id": "3", "answerTimestamp":"2022-11-03 20:10:29.968177","answerAuthor": "John", "answerBody": "1998"}]         
+          }
         }
       }
     }
