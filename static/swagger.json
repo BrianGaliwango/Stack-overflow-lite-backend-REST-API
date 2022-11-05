@@ -63,15 +63,15 @@
       "/question/{id}": {
           "get": {
             "tags": [
-              "View question request"
+              "Question request"
             ],
-            "summary": "Get question with given ID",
+            "summary": "Returns request to view question",
             "parameters": [
               {
                 "in": "path",
                 "name": "id",
                 "required": true,
-                "description": "ID of the selected question to view",
+                "description": "Returns question by id",
                 "schema":{
                   "$ref": "#/components/schemas/question"
                 } 
@@ -96,13 +96,13 @@
           "tags": [
             "Search Question"
           ],
-          "summary": "Search for question by title",
+          "summary": "Search for questions",
           "parameters": [
             {
               "in": "path",
               "name": "title",
               "required": true,
-              "description": "Title of the searched question to view",
+              "description": "Title request for questions",
               "schema":{
                 "$ref": "#/components/schemas/question"
               } 
@@ -135,7 +135,7 @@
       "/register": {
         "get": {
           "tags":[
-            "Register request"
+            "Register user request"
           ],
           "summary": "Register user",
           "responses": {
@@ -151,7 +151,7 @@
             }
           }
         },
-        "post": {
+        "options": {
           "tags":[
             "Post registrant details"
           ],
@@ -168,7 +168,7 @@
               }             
             },
             "500": {
-              "description": "hash password throws AttributeError: 'NoneType' object has no attribute 'encode', regex pattern throws TypeError: expected string or bytes-like object, comment out line 166 to 169 before testing"
+              "description": "hash password throws AttributeError: 'NoneType' object has no attribute 'encode', regex pattern throws TypeError: expected string or bytes-like object, comment out line 166 to 169 before testing in app.py, when using(post)" 
             }
           }
         }
@@ -238,7 +238,7 @@
           "tags": [
             "Get post question page"
           ],
-          "summary": "Page for posting question",
+          "summary": "Post Question",
           "responses": {
             "200": {
               "description": "ok",
@@ -302,13 +302,13 @@
           "tags": [
             "Get single question"
           ],
-          "summary": "Single question by ID for registered users",
+          "summary": "View question by ID for registered users",
           "parameters":[
             {
               "in": "path",
               "name": "id",
               "required": true,
-              "description": "ID of the selected question to view",
+              "description": "Returns question by id",
               "schema": {
                 "$ref":"#/components/schemas/question"
               }
@@ -333,13 +333,13 @@
           "tags": [
             "Answer question"
           ],
-          "summary": "Selects and answers questions",
+          "summary": "Answer questions",
           "parameters" :[
             {
               "in": "path",
               "name": "id",
               "required": true,
-              "description": "ID for selected question to answer",
+              "description": "Returns question by id",
               "schema": {
                 "$ref": "#/components/schemas/question"
               }
@@ -361,17 +361,17 @@
             }
           }
         },
-        "post": {
+        "options": {
           "tags": [
             "Post answer"
           ],
-          "summary": "Post answer to question",
+          "summary": "Post answer details",
           "parameters": [
             {
               "in": "path",
               "name": "body",
               "required": true,
-              "description": "question details",
+              "description": "answer details",
               "content": {
                 "application/json": {
                   "schema": {
@@ -429,35 +429,6 @@
               }             
             }
           }
-        },
-        "post": {
-          "tags": [
-            "Profile Questions page"
-          ],
-          "summary": "Profile questions page",
-          "parameters":[
-            {
-              "in": "path",
-              "name": "username",
-              "required": true,
-              "description":"Username to get all answers that belong to them",             
-              "schema":{
-                "$ref":"#/components/schemas/question"
-              }              
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "ok",
-              "content": {
-                "application/json": {
-                  "schema":{
-                    "$ref": "#/components/schemas/questions"
-                  }
-                } 
-              }             
-            }
-          }
         }
       },
       "/profile_question/{id}": {
@@ -465,13 +436,13 @@
           "tags": [
             "View question request"
           ],
-          "summary": "Get question with given ID",
+          "summary": "View question with by ID",
           "parameters": [
             {
               "in": "path",
               "name": "id",
               "required": true,
-              "description": "ID of the selected question to view",
+              "description": "Returns question by id",
               "schema":{
                 "$ref": "#/components/schemas/question"
               } 
@@ -496,13 +467,13 @@
           "tags":[
             "Get question details"
           ],
-          "summary": "Gets question to edit",
+          "summary": "Get question to edit",
           "parameters":[
             {
               "in":"path",
               "name":"id",
               "required": true,
-              "description": "ID is used to select the question to edit",
+              "description": "Returns question by id",
               "schema": {
                 "$ref": "#/components/schemas/question"
               }
@@ -531,7 +502,7 @@
               "in":"path",
               "name":"id",
               "required": true,
-              "description": "Id for Edited question",            
+              "description": "Returns question by id",            
               "schema":{
                 "$ref":"#/components/schemas/question"
               }
@@ -569,9 +540,9 @@
               "in": "path",
               "name": "username",
               "required": true,
-              "description":"Username to get all answers that belong to them",             
+              "description":"Username to get all answers",
               "schema":{
-                "$ref":"#/components/schemas/users"
+                "$ref":"#/components/schemas/answer"
               }              
             }
           ],
@@ -592,7 +563,7 @@
       "/edit_answer/{id}": {
         "get": {
           "tags":[
-            "Get answers details"
+            "Get answer"
           ],
           "summary": "Get answer to edit",
           "parameters":[
@@ -600,7 +571,7 @@
               "in":"path",
               "name":"id",
               "required": true,
-              "description": "ID is used to select the answer to edit",
+              "description": "Returns answer by id",
               "schema": {
                 "$ref": "#/components/schemas/answer"
               }
@@ -623,13 +594,13 @@
           "tags":[
             "Save edited answer"
           ],
-          "summary": "Submitting edited answer",
+          "summary": "Submit edited answer",
           "parameters": [
             {
               "in":"path",
               "name":"id",
               "required": true,
-              "description": "Id for Edited answer",
+              "description": "Returns answer by id",
               "content": {
                 "application/json": {
                   "schema":{
@@ -709,7 +680,7 @@
               "description": "redirects"
             },
             "500":{
-              "description":"Internal TypeError: 'NoneType' object is not subscriptable, answer_username = answer['answer_username']"
+              "description":"Internal TypeError: 'NoneType' object is not subscriptable, answer_username = answer['answer_username']... # Comment out line 572to 578 logic and create a new sql only updating the votes"
             }
           }
         }
@@ -1316,24 +1287,19 @@
                 "format": "number"
               },
               "first_name": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "last_name": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "username": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "email": {
-                "type": "string",
-                "format": "email"
+                "type": "string"
               },
               "password": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               }
             },
             "example": {
@@ -1349,37 +1315,36 @@
           "type": "array",
           "properties":{
             "titleInput": {
-              "type": "null",
-              "format":"null"
+              "type": "integer",
+              "nullable":true
             },
             "questionBodyTextarea": {
-              "type":"null",
-              "format":"null"
+              "type": "integer",
+              "nullable":true
             }
+          },
+          "example": {
+            "titleInput": "no value",
+            "questionBodyTextarea": "no value"
           }
         },
         "postedQuestion": {
           "type": "object",
           "properties": {
             "id": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "username": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "title": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "body": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "timestamp": {
-              "type":"string",
-              "format":"number"
+              "type":"string"
             }
           },
           "example" : {
@@ -1473,20 +1438,16 @@
                 "format": "number"
               },
               "title": {
-                "type":"string",
-                "format":"string"
+                "type":"string"
               },
               "questionAuthor": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "questionBody": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "answersHeader": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "answersList": {
                 "type": "array",
@@ -1497,12 +1458,10 @@
                   "format": "number"
                 },
                 "answerAuthor": {
-                  "type": "string",
-                  "format": "string"
+                  "type": "string"
                 },
                 "answerBody": {
-                  "type": "string",
-                  "format": "string"
+                  "type": "string"
                 }
               }             
           },
@@ -1536,46 +1495,41 @@
           "type": "array",
           "properties": {
             "username": {
-              "type": "null",
-              "format": "null"
+              "type": "string",
+              "nullable": true
             },
             "password": {
-              "type": "null",
-              "format":"null"
+              "type": "integer",
+              "nullable": true
             }
           },
           "example": {
-            "username": "null",
-            "password": "null"
+            "username": "no value",
+            "password": "no value"
           }
         },
         "getPostAnswer": {
           "type": "array",
           "properties": {
             "questionId": {
-              "type": "integer", 
-              "format": "string"          
+              "type": "integer"        
             },
             "timestamp": {
               "type": "string",
               "format": "number"
             },
             "questionUsername":{
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "title": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             
             "questionBody": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answerTextarea": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             }        
           },
           "example" : {
@@ -1591,20 +1545,16 @@
           "type":"object",
           "properties":{
             "answerId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "questionId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "answer_username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_dateTimestamp": {
               "type": "string",
@@ -1623,12 +1573,10 @@
           "type": "object",
           "properties": {
             "title": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             }
           },
           "example": {
@@ -1640,20 +1588,16 @@
           "type":"array",
           "properties":{
             "answerId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "questionId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "answer_username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_dateTimestamp": {
               "type": "string",
@@ -1688,20 +1632,16 @@
           "type":"array",
           "properties":{
             "answerId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "questionId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "answer_username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_dateTimestamp": {
               "type": "string",
@@ -1721,8 +1661,7 @@
           "type": "object",
           "properties": {
             "body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             }
           },
           "example": {            

@@ -156,11 +156,10 @@ def register():
 
         # Fetch account
         account = cur.fetchone()
-    
 
         # If account exists show error and validation
         if account:
-            flash("Account already exists", "danger")           
+            flash("Account already exists", "danger")
         elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             flash("Invalid email address", "danger")
         elif not re.match(r"[A-Za-z0-9]+", username):
@@ -512,7 +511,9 @@ def edit_answer(answer_id):
             return render_template("edit_answer.html", answer=answer)
 
         # Execute query
-        cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, answer_id])
+        cur.execute(
+            "UPDATE answers SET answer_body = %s WHERE id = %s", [answer, answer_id]
+        )
 
         # Commit to db
         conn.commit()
@@ -534,16 +535,16 @@ def upvote_answer(answer_id):
     cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
 
     answer = cur.fetchone()
-    answer_username = answer["answer_username"]
+    # answer_username = answer["answer_username"]
 
     # Check if not user
-    if session["username"] != answer_username:
-        # Execute query
-        cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
-    else:
-        flash("You can't vote your answer", "success")
-        return redirect(url_for("dashboard"))
-    
+    # if session["username"] != answer_username:
+    #     # Execute query
+    #     cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
+    # else:
+    #     flash("You can't vote your answer", "success")
+    #     return redirect(url_for("dashboard"))
+    cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
 
     # Commit to db
     conn.commit()
@@ -566,17 +567,18 @@ def downvote_answer(answer_id):
     cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
     #
     answer = cur.fetchone()
-    answer_username = answer["answer_username"]
+    # answer_username = answer["answer_username"]
 
     # Check if its users answer
-    if session["username"] != answer_username:
-        # Execute query
-        cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
-    else: 
-    
-        flash("You can't vote your answer", "success")
-        return redirect(url_for("dashboard"))
-        
+    # if session["username"] != answer_username:
+    #     # Execute query
+    #     cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
+    # else:
+
+    #     flash("You can't vote your answer", "success")
+    #     return redirect(url_for("dashboard"))
+    cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
+
     # Commit to db
     conn.commit()
 
