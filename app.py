@@ -156,10 +156,11 @@ def register():
 
         # Fetch account
         account = cur.fetchone()
+    
 
         # If account exists show error and validation
         if account:
-            flash("Account already exists", "danger")
+            flash("Account already exists", "danger")           
         elif not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             flash("Invalid email address", "danger")
         elif not re.match(r"[A-Za-z0-9]+", username):
@@ -311,7 +312,8 @@ def user_get_question(question_id):
 
     # Execute answers query
     cur.execute(
-        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC", [question_id]
+        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date DESC",
+        [question_id],
     )
 
     # Fetch answers
@@ -326,7 +328,6 @@ def user_get_question(question_id):
     context = {"question": question, "answers": answers}
 
     return render_template("user_question.html", **context)
-
 
 
 #     # Answer question
@@ -367,6 +368,7 @@ def post_answer(question_id):
         return redirect(url_for("dashboard"))
     return render_template("answer_question.html", question=question)
 
+
 ## Profile route
 @app.route("/profile", methods=["GET", "POST"])
 # @is_logged_in
@@ -404,7 +406,8 @@ def profile_get_question(question_id):
 
     # Get answers query
     cur.execute(
-        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date", [question_id]
+        "SELECT * FROM answers WHERE question_id = %s ORDER BY answered_date",
+        [question_id],
     )
 
     # Fetch all answers
@@ -414,7 +417,6 @@ def profile_get_question(question_id):
     cur.close()
 
     return render_template("profile_question.html", question=question, answers=answers)
-
 
 
 # Edit my question
@@ -443,10 +445,14 @@ def edit_question(question_id):
 
         # Execute query
         # Update title
-        cur.execute("UPDATE questions SET title = %s WHERE id = %s", [title, question_id])
+        cur.execute(
+            "UPDATE questions SET title = %s WHERE id = %s", [title, question_id]
+        )
 
         # Update body
-        cur.execute("UPDATE questions SET body = %s WHERE id = %s", [question, question_id])
+        cur.execute(
+            "UPDATE questions SET body = %s WHERE id = %s", [question, question_id]
+        )
 
         # Commit to db
         conn.commit()
@@ -468,7 +474,8 @@ def get_myPro_answers():
 
     # Execute  answers query
     cur.execute(
-        "SELECT * FROM answers WHERE answer_username = %s ORDER BY answered_date DESC",[session["username"]]
+        "SELECT * FROM answers WHERE answer_username = %s ORDER BY answered_date DESC",
+        [session["username"]],
     )
     # cur.execute(
     #     "SELECT * FROM answers"
@@ -483,42 +490,41 @@ def get_myPro_answers():
     return render_template("myPro_answers.html", answers=answers)
 
 
+## Edit my answer
+@app.route("/edit_answer/<string:answer_id>/", methods=["GET", "POST"])
+def edit_answer(answer_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-# ## Edit my answer
-# @app.route("/edit_answer/<string:id>", methods=["GET", "POST"])
-# def edit_answer(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    # Get query
+    cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
 
-#     # Get query
-#     cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+    # Get answer
+    answer = cur.fetchone()
 
-#     # Get answer
-#     answer = cur.fetchone()
+    # Get request
+    if request.method == "POST":
+        answer = request.form["answer"]
 
-#     # Get request
-#     if request.method == "POST":
-#         answer = request.form["answer"]
+        # Validate answer
+        if not answer:
+            flash("Please fill in answer field", "danger")
+            return render_template("edit_answer.html", answer=answer)
 
-#         # Validate answer
-#         if not answer:
-#             flash("Please fill in answer field", "danger")
-#             return render_template("edit_answer.html", answer=answer)
+        # Execute query
+        cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, answer_id])
 
-#         # Execute query
-#         cur.execute("UPDATE answers SET answer_body = %s WHERE id = %s", [answer, id])
+        # Commit to db
+        conn.commit()
 
-#         # Commit to db
-#         conn.commit()
+        flash("Answer edited successfully", "success")
+        return redirect(url_for("profile"))
 
-#         flash("Answer edited successfully", "success")
-#         return redirect(url_for("profile"))
-
-#     return render_template("edit_answer.html", answer=answer)
+    return render_template("edit_answer.html", answer=answer)
 
 
 ## Upvote answer
-@app.route("/upvote_answer/<answer_id>", methods=["POST"])
+@app.route("/upvote_answer/<answer_id>/", methods=["POST"])
 # @is_logged_in
 def upvote_answer(answer_id):
 
@@ -537,6 +543,7 @@ def upvote_answer(answer_id):
     else:
         flash("You can't vote your answer", "success")
         return redirect(url_for("dashboard"))
+    
 
     # Commit to db
     conn.commit()
@@ -549,7 +556,7 @@ def upvote_answer(answer_id):
 
 
 ## DownVote answer
-@app.route("/downvote_answer/<answer_id>", methods=["POST"])
+@app.route("/downvote_answer/<answer_id>/", methods=["POST"])
 # @is_logged_in
 def downvote_answer(answer_id):
     # Create cursor
@@ -565,10 +572,11 @@ def downvote_answer(answer_id):
     if session["username"] != answer_username:
         # Execute query
         cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
-    else:
+    else: 
+    
         flash("You can't vote your answer", "success")
         return redirect(url_for("dashboard"))
-
+        
     # Commit to db
     conn.commit()
 
@@ -579,119 +587,119 @@ def downvote_answer(answer_id):
     return redirect(url_for("dashboard"))
 
 
-# ## Add comment
-# @app.route("/post_comment/<string:id>", methods=["GET", "POST"])
+## Add comment
+@app.route("/post_comment/<string:answer_id>/", methods=["GET", "POST"])
 # @is_logged_in
-# def post_comment(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def post_comment(answer_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute question query
-#     cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+    # Execute question query
+    cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
 
-#     # Fetch question
-#     answer = cur.fetchone()
+    # Fetch question
+    answer = cur.fetchone()
 
-#     # send request
-#     if request.method == "POST":
-#         comment = request.form.get("comment")
+    # send request
+    if request.method == "POST":
+        comment = request.form.get("comment")
 
-#         # Validate comment
-#         if not comment:
-#             flash("Please fill in the comment field", "danger")
-#             return render_template("post_comment.html", answer=answer)
+        # Validate comment
+        if not comment:
+            flash("Please fill in the comment field", "danger")
+            return render_template("post_comment.html", answer=answer)
 
-#         # Execute query
-#         cur.execute(
-#             "INSERT INTO comments (comment_answer_id, comment_author, comment_body) VALUES (%s, %s, %s)",
-#             [id, session["username"], comment],
-#         )
+        # Execute query
+        cur.execute(
+            "INSERT INTO comments (comment_answer_id, comment_author, comment_body) VALUES (%s, %s, %s)",
+            [answer_id, session["username"], comment],
+        )
 
-#         # Commit to db
-#         conn.commit()
+        # Commit to db
+        conn.commit()
 
-#         # Close cursor
-#         cur.close()
+        # Close cursor
+        cur.close()
 
-#         flash("Comment created successfully", "success")
-#         return redirect(url_for("dashboard"))
-#     return render_template("post_comment.html", answer=answer)
+        flash("Comment created successfully", "success")
+        return redirect(url_for("dashboard"))
+    return render_template("post_comment.html", answer=answer)
 
 
-# ## View comments
-# @app.route("/view_comments/<string:id>", methods=["GET", "POST"])
+## View comments
+@app.route("/view_comments/<string:comment_id>/", methods=["GET", "POST"])
 # @is_logged_in
-# def view_comments(id):
-#     # create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def view_comments(comment_id):
+    # create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Execute get answer query
-#     cur.execute("SELECT * FROM answers WHERE id = %s", [id])
+    # Execute get answer query
+    cur.execute("SELECT * FROM answers WHERE id = %s", [comment_id])
 
-#     # Fetch answer
-#     answer = cur.fetchone()
+    # Fetch answer
+    answer = cur.fetchone()
 
-#     # Get comments query
-#     cur.execute(
-#         "SELECT * FROM comments WHERE comment_answer_id = %s ORDER BY comment_date DESC",
-#         [id],
-#     )
-#     # Fetch comments
-#     comments = cur.fetchall()
+    # Get comments query
+    cur.execute(
+        "SELECT * FROM comments WHERE comment_answer_id = %s ORDER BY comment_date DESC",
+        [comment_id],
+    )
+    # Fetch comments
+    comments = cur.fetchall()
 
-#     # Check if comments are available
-#     if not comments:
-#         flash("No comments found", "success")
-#         return redirect(url_for("dashboard"))
+    # Check if comments are available
+    if not comments:
+        flash("No comments found", "success")
+        return redirect(url_for("dashboard"))
 
-#     # Commit to db
-#     conn.commit()
+    # Commit to db
+    conn.commit()
 
-#     # Close connection
-#     cur.close()
+    # Close connection
+    cur.close()
 
-#     return render_template("view_comments.html", answer=answer, comments=comments)
+    return render_template("view_comments.html", answer=answer, comments=comments)
 
 
-# ## Edit comment
-# @app.route("/edit_comment/<string:id>", methods=["GET", "POST"])
+## Edit comment
+@app.route("/edit_comment/<string:comment_id>/", methods=["GET", "POST"])
 # @is_logged_in
-# def edit_comment(id):
-#     # Create cursor
-#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+def edit_comment(comment_id):
+    # Create cursor
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
-#     # Get query
-#     cur.execute("SELECT * FROM comments WHERE id = %s", [id])
+    # Get query
+    cur.execute("SELECT * FROM comments WHERE id = %s", [comment_id])
 
-#     # fetch question
-#     comment = cur.fetchone()
+    # fetch question
+    comment = cur.fetchone()
 
-#     # Get request form
-#     if request.method == "POST":
-#         comment = request.form["comment"]
+    # Get request form
+    if request.method == "POST":
+        comment = request.form["comment"]
 
-#         # Validate
-#         if not comment:
-#             flash("Please fill comment field", "danger")
-#             return render_template("edit_comment.html", comment=comment)
+        # Validate
+        if not comment:
+            flash("Please fill comment field", "danger")
+            return render_template("edit_comment.html", comment=comment)
 
-#         # Execute query
-#         cur.execute(
-#             "UPDATE comments SET comment_body = %s WHERE id = %s", [comment, id]
-#         )
+        # Execute query
+        cur.execute(
+            "UPDATE comments SET comment_body = %s WHERE id = %s", [comment, comment_id]
+        )
 
-#         # Commit to db
-#         conn.commit()
+        # Commit to db
+        conn.commit()
 
-#         # Close cursor
-#         cur.close()
-#         flash("Comment edited successfully", "success")
-#         return redirect(url_for("dashboard"))
-#     return render_template("edit_comment.html", comment=comment)
+        # Close cursor
+        cur.close()
+        flash("Comment edited successfully", "success")
+        return redirect(url_for("dashboard"))
+    return render_template("edit_comment.html", comment=comment)
 
 
 ## Mark answer
-@app.route("/mark_answer/<string:answer_id>", methods=["GET", "PUT"])
+@app.route("/mark_answer/<string:answer_id>/", methods=["GET", "PUT"])
 # @is_logged_in
 def mark_answer(answer_id):
     # Create cursor
@@ -711,7 +719,7 @@ def mark_answer(answer_id):
 
 
 ## UnMark answer
-@app.route("/unmark_answer/<string:answer_id>", methods=["GET", "PUT"])
+@app.route("/unmark_answer/<string:answer_id>/", methods=["GET", "PUT"])
 # @is_logged_in
 def unmark_answer(answer_id):
     # Create cursor
@@ -731,14 +739,14 @@ def unmark_answer(answer_id):
 
 
 ## Profile Delete question
-@app.route("/delete_question/<string:id>", methods=["POST"])
+@app.route("/delete_question/<string:question_id>/", methods=["POST"])
 # @is_logged_in
-def delete_question(id):
+def delete_question(question_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     # Execute query
-    cur.execute("DELETE FROM questions WHERE id = %s", [id])
+    cur.execute("DELETE FROM questions WHERE id = %s", [question_id])
 
     # Commit to db
     conn.commit()
@@ -750,14 +758,14 @@ def delete_question(id):
 
 
 ## Profile Delete answer
-@app.route("/delete_answer/<string:id>", methods=["POST"])
+@app.route("/profile_delete_answer/<string:answer_id>/", methods=["POST"])
 # @is_logged_in
-def delete_answer(id):
+def delete_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     # Execute query
-    cur.execute("DELETE FROM answers WHERE id = %s", [id])
+    cur.execute("DELETE FROM answers WHERE id = %s", [answer_id])
 
     # Commit to db
     conn.commit()
@@ -770,14 +778,14 @@ def delete_answer(id):
 
 
 ## Dashboard Delete answer
-@app.route("/dashboard_delete_answer/<string:id>", methods=["POST"])
+@app.route("/dashboard_delete_answer/<string:answer_id>/", methods=["POST"])
 # @is_logged_in
-def dashboard_delete_answer(id):
+def dashboard_delete_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     # Execute query
-    cur.execute("DELETE FROM answers WHERE id = %s", [id])
+    cur.execute("DELETE FROM answers WHERE id = %s", [answer_id])
 
     # Commit to db
     conn.commit()
@@ -790,14 +798,14 @@ def dashboard_delete_answer(id):
 
 
 ## Delete comment
-@app.route("/delete_comment/<string:id>", methods=["POST"])
+@app.route("/delete_comment/<string:comment_id>/", methods=["POST"])
 # @is_logged_in
-def delete_comment(id):
+def delete_comment(comment_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
     # Execute query
-    cur.execute("DELETE FROM comments WHERE id = %s", [id])
+    cur.execute("DELETE FROM comments WHERE id = %s", [comment_id])
 
     # Commit to db
     conn.commit()
