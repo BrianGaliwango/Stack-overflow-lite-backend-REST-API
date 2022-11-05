@@ -741,13 +741,13 @@
           "tags": [
             "Comment on answer"
           ],
-          "summary": "Selects and answer to comment",
+          "summary": "Comment on answer",
           "parameters" :[
             {
               "in": "path",
               "name": "id",
               "required": true,
-              "description": "ID for selected answer to comment",
+              "description": "Returns answer by id",
               "schema": {
                 "$ref": "#/components/schemas/answer"
               }
@@ -765,7 +765,7 @@
               }
             },
             "200": {
-              "description": "successful got add comment page"
+              "description": "ok"
             }
           }
         },
@@ -779,11 +779,11 @@
               "in": "path",
               "name": "id",
               "required": true,
-              "description": "comment details",
+              "description": "Returns answer by id",
               "content": {
                 "application/json": {
                   "schema": {
-                    "$ref": "#/components/schemas/answer"
+                    "$ref": "#/components/schemas/comment"
                   }
                 }
               }
@@ -811,7 +811,7 @@
               }
             },
             "200": {
-              "description": "successful answered question"
+              "description": "successfully answered question"
             },
             "500": {
               "description": "Throws id error if id ain't found when testing but works fine"
@@ -830,7 +830,7 @@
               "in": "path",
               "name": "id",
               "required": true,
-              "description": "ID of the selected answer",
+              "description": "Returns answer by id with comments",
               "schema": {
                 "$ref":"#/components/schemas/answer"
               }
@@ -865,13 +865,13 @@
           "tags":[
             "Get comment details"
           ],
-          "summary": "Gets comment to edit",
+          "summary": "Get comment to edit",
           "parameters":[
             {
               "in":"path",
               "name":"id",
               "required": true,
-              "description": "ID is used to select the comment to edit",
+              "description": "Returns comment to edit",
               "schema": {
                 "$ref": "#/components/schemas/comment"
               }
@@ -903,7 +903,7 @@
               "in":"path",
               "name":"id",
               "required": true,
-              "description": "Id for Edited comment",            
+              "description": "Returns edited comment",            
               "schema":{
                 "$ref":"#/components/schemas/comment"
               }
@@ -924,6 +924,9 @@
             "application/json"
           ],
           "responses": {
+            "308":{
+              "description":"redirect"
+            },
             "400": {
               "description": "Bad request"
             }
@@ -1746,32 +1749,28 @@
           "type": "array",
           "properties":{
             "answerId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "answer_dateTimestamp": {
               "type": "string",
               "format": "number"
             },
-            "answer_username": {
-              "type": "string",
-              "format": "string"
+            "answerAuthor": {
+              "type": "string"
             },
-            "answer_body": {
-              "type": "string",
-              "format": "string"
+            "answerBody": {
+              "type": "string"
             },
             "commentTextarea": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             }
           },
           "example" : {
-            "questionId": "1",
+            "answerId": "1",
             "timestamp": "2022-10-26 10:57:24.609132",
-            "questionUsername":"Galice",
-            "questionTitle": "Javascript",
-            "questionBody": "cascading style sheets",
+            "answerAuthor":"Galice",
+            "answerTitle": "Javascript",
+            "answerBody": "cascading style sheets",
             "commentTextarea": "Add comment here....."
           }
         },
@@ -1783,20 +1782,16 @@
               "format": "string"
             },
             "answerId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "comment_username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "comment_body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_dateTimestamp": {
-              "type": "string",
-              "format": "number"
+              "type": "string"
             }
           },
           "example": {
@@ -1815,16 +1810,13 @@
                 "format": "number"
               },
               "answerAuthor": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "answerBody": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "commentsHeader": {
-                "type": "string",
-                "format": "string"
+                "type": "string"
               },
               "commentsList": {
                 "type": "array",
@@ -1835,12 +1827,10 @@
                   "format": "number"
                 },
                 "commentAuthor": {
-                  "type": "string",
-                  "format": "string"
+                  "type": "string"
                 },
                 "commentBody": {
-                  "type": "string",
-                  "format": "string"
+                  "type": "string"
                 }
               }             
           },
@@ -1888,8 +1878,7 @@
           "type": "object",
           "properties": {
             "body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             }
           },
           "example": {            
