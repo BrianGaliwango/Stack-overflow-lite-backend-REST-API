@@ -535,16 +535,15 @@ def upvote_answer(answer_id):
     cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
 
     answer = cur.fetchone()
-    # answer_username = answer["answer_username"]
+    answer_username = answer["answer_username"]
 
     # Check if not user
-    # if session["username"] != answer_username:
-    #     # Execute query
-    #     cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
-    # else:
-    #     flash("You can't vote your answer", "success")
-    #     return redirect(url_for("dashboard"))
-    cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
+    if session["username"] != answer_username:
+        # Execute query
+        cur.execute("UPDATE answers SET votes = votes +1 WHERE id = %s", [answer_id])
+    else:
+        flash("You can't vote your answer", "success")
+        return redirect(url_for("dashboard"))
 
     # Commit to db
     conn.commit()
@@ -567,17 +566,16 @@ def downvote_answer(answer_id):
     cur.execute("SELECT * FROM answers WHERE id = %s", [answer_id])
     #
     answer = cur.fetchone()
-    # answer_username = answer["answer_username"]
+    answer_username = answer["answer_username"]
 
     # Check if its users answer
-    # if session["username"] != answer_username:
-    #     # Execute query
-    #     cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
-    # else:
+    if session["username"] != answer_username:
+        # Execute query
+        cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
+    else:
 
-    #     flash("You can't vote your answer", "success")
-    #     return redirect(url_for("dashboard"))
-    cur.execute("UPDATE answers SET votes = votes -1 WHERE id = %s", [answer_id])
+        flash("You can't vote your answer", "success")
+        return redirect(url_for("dashboard"))
 
     # Commit to db
     conn.commit()

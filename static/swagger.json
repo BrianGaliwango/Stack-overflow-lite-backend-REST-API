@@ -863,7 +863,7 @@
       "/edit_comment/{id}": {
         "get": {
           "tags":[
-            "Get comment details"
+            "Get comment"
           ],
           "summary": "Get comment to edit",
           "parameters":[
@@ -944,7 +944,7 @@
               "in":"path",
               "name":"id",
               "required":true,
-              "description":"Id request for answer to mark",
+              "description":"Returns answer to mark",
               "schema":{
                 "$ref":"#/components/schemas/markAnswer"
               }
@@ -952,7 +952,7 @@
           ],
           "responses": {
             "302":{
-              "description": "marked successfully!, redirects to profile page",
+              "description": "marked answer successfully!, redirects to profile page",
               "content": {
                 "application/json":{
                   "schema":{
@@ -976,7 +976,7 @@
               "in": "path",
               "name": "id",
               "required":true,
-              "description":"Id for answer to be marked",
+              "description":"Returns answer to be marked",
               "schema":{
                 "$ref":"#/components/schemas/markAnswer"
               }
@@ -1001,7 +1001,7 @@
               "content":{
                 "application/json":{
                   "schema":{
-                    "$ref":"#/components/schemas/questions"
+                    "$ref":"#/components/schemas/unmarkAnswer"
                   }
                 }
               }
@@ -1023,7 +1023,7 @@
               "in":"path",
               "name":"id",
               "required":true,
-              "description":"Id for answer to unmark",
+              "description":"Returns answer to unmark by id",
               "schema":{
                 "$ref":"#/components/schemas/unmarkAnswer"
               }
@@ -1031,11 +1031,11 @@
           ],
           "responses": {
             "302":{
-              "description": "unmarked successfully!,redirects to profile page",
+              "description": "unmarked answer successfully!,redirects to profile page",
               "content": {
                 "application/json":{
                   "schema":{
-                    "$ref":"#/components/schemas/questions"
+                    "$ref":"#/components/schemas/markAnswer"
                   }
                 }
               }
@@ -1055,7 +1055,7 @@
               "in": "path",
               "name": "id",
               "required":true,
-              "description":"Id for answer to be unmarked",
+              "description":"Returns answer to be unmarked",
               "schema":{
                 "$ref":"#/components/schemas/unmarkAnswer"
               }
@@ -1080,7 +1080,7 @@
               "content":{
                 "application/json":{
                   "schema":{
-                    "$ref":"#/components/schemas/questions"
+                    "$ref":"#/components/schemas/markAnswer"
                   }
                 }
               }
@@ -1094,13 +1094,14 @@
       "/delete_question/{id}": {
         "options": {
           "tags":[
-            "Delete Request"
+            "Delete question Request"
           ],
+          "summary":"Delete a question",
           "parameters": [
             {
               "in":"path",
               "name":"id",
-              "description":"Question request Id",
+              "description":"Returns question by Id",
               "content": {
                 "application/json":{
                   "schema":{
@@ -1143,11 +1144,12 @@
           "tags":[
             "Delete Request"
           ],
+          "summary":"Delete answer request",
           "parameters": [
             {
               "in":"path",
               "name":"id",
-              "description":"Answer request Id",
+              "description":"Return answer by Id",
               "content": {
                 "application/json":{
                   "schema":{
@@ -1190,11 +1192,12 @@
           "tags":[
             "Delete Request"
           ],
+          "summary":"Delete answer request",
           "parameters": [
             {
               "in":"path",
               "name":"id",
-              "description":"Answer request Id",
+              "description":"Returns answer by Id",
               "content": {
                 "application/json":{
                   "schema":{
@@ -1237,11 +1240,12 @@
           "tags":[
             "Delete Request"
           ],
+          "summary":"Delete comment request",
           "parameters": [
             {
               "in":"path",
               "name":"id",
-              "description":"Comment request Id",
+              "description":"Returns comment by Id",
               "content": {
                 "application/json":{
                   "schema":{
@@ -1409,16 +1413,13 @@
               "format": "string"
             },
             "username": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "title": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "body": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "timestamp": {
               "type":"string",
@@ -1481,12 +1482,10 @@
           "type": "array",
           "properties": {
             "username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "password": {
-              "type": "string",
-              "format":"string"
+              "type": "string"
             }
           },
           "example": {
@@ -1657,8 +1656,7 @@
             "answer_username": "John",
             "answerBody": "Cascading style sheets",
             "answer_dateTimestamp":"2022-10-26 10:50;306482"
-            }           
-          
+            }                    
         },
         "editAnswer": {
           "type": "object",
@@ -1675,24 +1673,19 @@
           "type":"array",
           "properties":{
             "answerId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "questionId": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "answer_username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "votes": {
-              "type": "integer",
-              "format": "string"
+              "type": "integer"
             },
             "answer_dateTimestamp": {
               "type": "string",
@@ -1720,12 +1713,10 @@
               "format": "string"
             },
             "answer_username": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "answer_body": {
-              "type": "string",
-              "format": "string"
+              "type": "string"
             },
             "votes": {
               "type": "integer",
@@ -1850,16 +1841,13 @@
               "format": "string"
             },
             "username": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "title": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "body": {
-              "type":"string",
-              "format":"string"
+              "type":"string"
             },
             "timestamp": {
               "type":"string",
