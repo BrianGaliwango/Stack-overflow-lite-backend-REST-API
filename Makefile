@@ -5,8 +5,16 @@ install:
 test:
 		python -m pytest -vv -s --cov=app tests
 
+
 format:	
 			black *.py
 
 lint:
 		pylint --disable=R,C *.py							
+
+format:
+		black *.py
+
+lint:
+		pylint --disable=R,C *.py
+
