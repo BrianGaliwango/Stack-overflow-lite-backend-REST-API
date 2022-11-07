@@ -1,4 +1,31 @@
 import pytest
+from .sql.user_sql import user_sql
+import jwt
+
+
+def test_create_tables(cursor):
+     cursor.execute(
+        "CREATE TABLE allow(id SERIAL PRIMARY KEY,first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, username VARCHAR(255) UNIQUE, email VARCHAR(100) NOT NULL, password VARCHAR(255) NOT NULL, register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"
+    )
+
+
+def test_db(cursor):
+    cursor.execute("begin; select email from users;")
+   
+    result = cursor.fetchall()
+    # for rs in result:
+    #     print(rs)
+    # assert len(rs) == 1   
+    
+    
+#Test inserting into db 
+def test_insert_db(cursor):
+    cursor.execute(user_sql, {"first_name": "Sweetie", 
+                              "last_name": "Mufasa",
+                              "username": "gully",
+                              "email": "galice@gmail.com",
+                              "password": "12345"
+                              })   
 
 
 # Test index api
@@ -8,8 +35,9 @@ def test_index(app, client):
     assert b'register' in result.data 
     
 
-#Testing home questions API 
-def test_get_questions(app, client):
+# Testing home questions API 
+def test_get_questions(client, cursor):
+    # Given  
     result = client.get("/questions")
     assert result.status_code == 200
     assert b"What is css in full?" in result.data
@@ -34,20 +62,39 @@ def test_search_questions(app, client):
  
     
 # Test register user
-def test_register_user(app, client):
+def test_register_user(client, cursor):
     result = client.get("/register")
+    
+    # Given
+   
+    first_name =  "Nice"
+    last_name = "Mark"
+    username = "mark"
+    email = "mark@gmail.com"
+    password = "12345"
+
+  
+    # When
+    try:
+        cursor.execute("INSERT INTO users(first_name, last_name, username, email, password) VALUES (%s, %s, %s, %s, %s)",(first_name,last_name,username,email,password))
+    except:
+        ValueError("empty fields")
+            
+        
     assert result.status_code == 200
-    assert b'Register' in result.data
-    assert b'first_name' in result.data
-    assert b'last_name' in result.data
- 
- 
+    assert b'New user registered' in result.data
+    # assert b'Nice' in result.data
+    # assert b'Mark' in result.data
+    print(result.data)
+  
+
  
 # Test register user 
 @pytest.mark.skip(reason="hash password throws AttributeError: 'NoneType' object has no attribute 'encode', regex pattern throws TypeError: expected string or bytes-like object, comment out line 166 to 169 before testing")    
 def test_register_user(app, client):
     result = client.post("/register")
     assert result.status_code == 200
+    
     
     # Comments
     # Comment out  elif not re.match(r"[^@]+@[^@]+\.[^@]+", email) (line 166) and  elif not re.match(r"[A-Za-z0-9]+", username): flash("Username must contain only characters and numbers", "danger") before testing
@@ -68,9 +115,10 @@ def test_login(app, client):
 def test_login(app, client):
     result = client.post("/login")
     assert result.status_code == 400
-    print(result.data)  
     
     # Throws bad request if login fails  
+    
+    
 
 # Testing logout
 def test_logout(app, client):
@@ -293,26 +341,35 @@ def test_get_mark_answer(app, client):
 #Test delete_question 
 @pytest.mark.skip(reason="will delete")
 def test_delete_question(app, client):
-    result = client.post("/profile_delete_question/17/")
+    result = client.post("/delete_question/21/")
     assert result.status_code == 302
  
   
+#Delete answer 
 @pytest.mark.skip(reason="will delete")    
 def test_profile_delete_answer(app, client):
-    result = client.post("/profile_delete_answer/18/")
+    result = client.post("/profile_delete_answer/30/")
     assert result.status_code == 302
  
  
+#Delete answer 
 @pytest.mark.skip(reason="will delete")    
 def test_dashboard_delete_answer(app, client):
-    result = client.post("/dashboard_delete_answer/18/")
+    result = client.post("/dashboard_delete_answer/31/")
     assert result.status_code == 302
  
  
+# Delete comment 
 @pytest.mark.skip(reason="will delete")    
 def test_delete_comment(app, client):
-    result = client.post("/delete_comment/17/")
+    result = client.post("/delete_comment/18/")
     assert result.status_code == 302
+    
+    
+
+    
+    
+    
     
     
     
