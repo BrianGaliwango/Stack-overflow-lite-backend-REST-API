@@ -7,11 +7,15 @@ import psycopg2.extras
 from flask_swagger_ui import get_swaggerui_blueprint
 
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, render_template, request, redirect, flash, session, url_for
+from flask import Flask, render_template, request, redirect, flash, session, url_for, jsonify, make_response
+import jwt
+import datetime
 
 app = Flask(__name__)
 
 app.secret_key = os.environ.get("SECRET_KEY", "prod")
+app.config["JWT_HEADER_TYPE"] = "JWT"
+
 
 
 SWAGGER_URL = "/swagger"
@@ -49,6 +53,32 @@ conn = psycopg2.connect(
     host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
 )
 
+def token_required(f):
+    @wraps(f)
+    def decorator(*args, **kwargs):  
+        if "logged_in" in session:
+            # Ensure token is passed
+            token = None
+            if 'x-access-token' in request.headers:
+                token = request.headers['x-access-token']
+                print(token)
+                if not token: #throw error if no token provided
+                    return jsonify({"message": "Invalid token"})
+                
+                try:
+                    # decode token to obtain user public_id
+                    data = jwt.decode(token, app.config["SECRET_KEY"], ['HS256'])
+                except:
+                    return jsonify({"message": "Token is invalid"})
+            
+            return f(*args, **kwargs)
+        else:
+        #     # return redirect(url_for("login"))
+            return make_response(jsonify({"message": "Token is invalid"}), 401) 
+
+    return decorator
+
+
 
 @app.route("/")
 def index():
@@ -56,7 +86,7 @@ def index():
 
 
 ## Home questions routes
-@app.route("/questions")
+@app.route("/questions", methods=["GET"])
 def get_questions():
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -70,11 +100,12 @@ def get_questions():
     conn.commit()
 
     cur.close()
-    return render_template("questions.html", questions=questions)
+    # return render_template("questions.html", questions=questions)
+    return jsonify({"questions": questions})
 
 
 ## Get single question
-@app.route("/question/<string:question_id>/")
+@app.route("/question/<string:question_id>/", methods=["GET"])
 def get_question(question_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -94,8 +125,10 @@ def get_question(question_id):
 
     # Close cursor
     cur.close()
+    context = {"question": question, "answers": answers}
 
-    return render_template("question.html", question=question, answers=answers)
+    # return render_template("question.html", question=question, answers=answers)
+    return jsonify({"**context": context})
 
 
 ## Search Route
@@ -131,7 +164,8 @@ def search_questions():
         # Close cursor
         cur.close()
 
-    return render_template("search_questions.html", questions=questions)
+    # return render_template("search_questions.html", questions=questions)
+    return jsonify({"questions": questions})
 
 
 ## Register route
@@ -139,7 +173,7 @@ def search_questions():
 def register():
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-
+    
     # Validate request
     if request.method == "POST":
         first_name = request.form.get("first_name")
@@ -182,8 +216,50 @@ def register():
         # Form is empty..
         flash("Please fill out form!")
 
-    return render_template("register.html")
+    # return render_template("register.html")
+    return jsonify({"message": "New user registered"})
 
+
+
+# # User login
+# @app.route("/login", methods=["GET", "POST"])
+# def login():
+#     # Create cursor
+#     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+#     # Validate request
+#     if request.method == "POST":
+#         # Get Form fields data
+#         username = request.form["username"]
+#         password = request.form["password"]
+
+#         # Check if account exists
+#         cur.execute("SELECT * FROM users WHERE username = %s", (username,))
+
+#         # Fetch result
+#         account = cur.fetchone()
+
+#         # confirm account
+#         if account:
+#             password_rs = account["password"]
+
+#             # Compare passwords if account exists
+#             if check_password_hash(password_rs, password):
+#                 # If passed login
+#                 session["logged_in"] = True
+#                 session["id"] = account["id"]
+#                 session["username"] = account["username"]
+
+#                 flash("You have logged in successfully", "success")
+#                 return redirect(url_for("dashboard"))
+#             else:
+#                 # Account doesn't exist
+#                 flash("Account does not exist", "error")
+#         else:
+#             # Account doesn't exist
+#             flash("Incorrect username/password", "danger")
+#             print(password)
+#     return render_template("login.html")
 
 # User login
 @app.route("/login", methods=["GET", "POST"])
@@ -209,21 +285,24 @@ def login():
 
             # Compare passwords if account exists
             if check_password_hash(password_rs, password):
-                # If passed login
                 session["logged_in"] = True
                 session["id"] = account["id"]
                 session["username"] = account["username"]
+               
+                token = jwt.encode({'user' : account["username"], 'exp': str(datetime.datetime.utcnow() + datetime.timedelta(minutes=30))}, app.config["SECRET_KEY"], 'HS256')
 
                 flash("You have logged in successfully", "success")
-                return redirect(url_for("dashboard"))
+                return jsonify({'token' : token})
+                # return redirect(url_for("dashboard"))
             else:
                 # Account doesn't exist
                 flash("Account does not exist", "error")
+                return make_response("unable to verify account", 403 )
         else:
             # Account doesn't exist
             flash("Incorrect username/password", "danger")
-            print(password)
     return render_template("login.html")
+    # return jsonify({"message": "logged in"})
 
 
 # Check if the user is logged in decorator
@@ -238,6 +317,8 @@ def login():
 #     return wrap
 
 
+# Check if the user is logged in decorator
+
 ## Logout
 @app.route("/logout")
 # @is_logged_in
@@ -249,7 +330,7 @@ def logout():
 
 ## Dashboard
 @app.route("/dashboard", methods=["GET", "POST"])
-# @is_logged_in
+@token_required
 def dashboard():
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
