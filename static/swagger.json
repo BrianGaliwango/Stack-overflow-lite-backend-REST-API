@@ -1,0 +1,1942 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Stack overflow lite",
+      "description": "A questions and answers app",
+      "version": "1.0.0",
+      "contact": {
+          "email": "bryanreynolds70@gmail.com"
+      },
+      "license": {
+        "name": "Mansa media",
+        "url": "https://opensource.org/licences/MIT"
+      }
+    },
+    "servers": [
+      {
+          "url": "/"
+      }
+  ],
+    "tags": [
+      {
+        "name": "Home page",
+        "description":"Welcome page when user visits the application"
+      }
+    ],
+    "paths": {
+      "/": {
+        "get": {
+          "tags": [
+            "Home page"
+          ],
+          "summary": "Home page when user visits the application",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "schema": {
+                "type": "text/html"     
+              }
+            }
+          }
+        }
+      },
+      "/questions":{
+        "get": {
+          "tags": [
+            "Questions page"
+          ],
+          "summary": "Questions page when not logged in",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref": "#/components/schemas/questions"
+                  }
+                } 
+              }             
+            }
+          }
+        }
+      },
+      "/question/{id}": {
+          "get": {
+            "tags": [
+              "Question request"
+            ],
+            "summary": "Returns request to view question",
+            "parameters": [
+              {
+                "in": "path",
+                "name": "id",
+                "required": true,
+                "description": "Returns question by id",
+                "schema":{
+                  "$ref": "#/components/schemas/question"
+                } 
+              }
+            ],
+            "responses": {
+              "200": {
+                "description": "ok",
+                "content": {
+                  "application/json": {
+                    "schema":{
+                      "$ref": "#/components/schemas/viewQuestionRequest"
+                    }
+                  } 
+                }   
+              }
+            }
+          }     
+      },
+      "/search_questions": {
+        "post": {
+          "tags": [
+            "Search Question"
+          ],
+          "summary": "Search for questions",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "title",
+              "required": true,
+              "description": "Title request for questions",
+              "schema":{
+                "$ref": "#/components/schemas/question"
+              } 
+            }
+          ],
+          "requestBody": {
+            "description": "Question Request Post Object",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/questions"
+                }
+              }
+            }
+          },
+          "question": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description":"ok",
+              "schema": {
+                "$ref":"#/components/schemas/questions"
+              }
+            }
+          }
+        }
+      },
+      "/register": {
+        "get": {
+          "tags":[
+            "Register user request"
+          ],
+          "summary": "Register user",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/registerUser"
+                  }
+                }
+              }             
+            }
+          }
+        },
+        "options": {
+          "tags":[
+            "Post registrant details"
+          ],
+          "summary": "Submits registrants details",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/registerUser"
+                  }
+                }
+              }             
+            },
+            "500": {
+              "description": "hash password throws AttributeError: 'NoneType' object has no attribute 'encode', regex pattern throws TypeError: expected string or bytes-like object, comment out line 166 to 169 before testing in app.py, when using(post)" 
+            }
+          }
+        }
+      },
+      "/login":{
+        "get": {
+          "tags": [
+            "Login user"
+          ],
+          "summary": "User login",
+          "responses": {
+            "200":{
+            "description": "ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginUser"
+                }
+              }
+             }
+            }
+          }
+        }
+      },
+      "/logout":{
+        "get": {
+          "tags": [
+            "Login user"
+          ],
+          "summary": "User login",
+          "responses": {
+            "302":{
+            "description": "redirect to login page",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/logoutUser"
+                }
+              }
+             }
+            }
+          }
+        }
+      },
+      "/dashboard": {
+        "get": {
+          "tags": [
+            "Logged in user dashboard"
+          ],
+          "summary": "Questions page for logged in users",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/questions"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/post_question": {
+        "get": {
+          "tags": [
+            "Get post question page"
+          ],
+          "summary": "Post Question",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/postQuestion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Post question"
+          ],
+          "summary": "Post question details",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "question details",
+              "required":  true,
+              "description": "Question details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/postedQuestion"
+                  }
+                }
+              }
+             
+            }
+          ],
+          "requestBody": {
+            "description": "Question details",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/postedQuestion"
+                }
+              }
+            }
+          },
+          "question": [
+            "application/json"
+          ],
+          "responses": {
+            "200": {
+              "description":"ok",
+              "schema": {
+                "$ref":"#/components/schemas/postedQuestion"
+              }
+            }
+          }
+        }
+      },
+      "/user_question/{id}": {
+        "get": {
+          "tags": [
+            "Get single question"
+          ],
+          "summary": "View question by ID for registered users",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Returns question by id",
+              "schema": {
+                "$ref":"#/components/schemas/question"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/viewQuestionRequest"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/answer_question/{id}": {
+        "get": {
+          "tags": [
+            "Answer question"
+          ],
+          "summary": "Answer questions",
+          "parameters" :[
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Returns question by id",
+              "schema": {
+                "$ref": "#/components/schemas/question"
+              }
+            }
+          ],
+          "responses": {
+            "308": {
+              "description": "Redirects to the answer question url for answering",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/getPostAnswer"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "successful got answer page"
+            }
+          }
+        },
+        "options": {
+          "tags": [
+            "Post answer"
+          ],
+          "summary": "Post answer details",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "body",
+              "required": true,
+              "description": "answer details",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/question"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "answer",
+            "required":true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/postAnswer"
+                }
+              }
+            }           
+          },
+          "answer": [
+            "application/json"
+          ],
+          "responses": {
+            "308": {
+              "description": "redirects to dashboard",
+              "schema": {
+                "$ref":"#/components/schemas/questions"
+              }
+            },
+            "200": {
+              "description": "successful answered question"
+            },
+            "500": {
+              "description": "Throws id error if id ain't found when testing but works fine"
+            }
+          }
+        }
+      },
+      "/profile":{
+        "get":{
+          "tags":[
+            "Profile Questions page"
+          ],
+          "summary": "Profile questions page",
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref": "#/components/schemas/questions"
+                  }
+                } 
+              }             
+            }
+          }
+        }
+      },
+      "/profile_question/{id}": {
+        "get": {
+          "tags": [
+            "View question request"
+          ],
+          "summary": "View question with by ID",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Returns question by id",
+              "schema":{
+                "$ref": "#/components/schemas/question"
+              } 
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref": "#/components/schemas/viewQuestionRequest"
+                  }
+                } 
+              }   
+            }
+          }
+        }     
+      },
+      "/edit_question/{id}": {
+        "get": {
+          "tags":[
+            "Get question details"
+          ],
+          "summary": "Get question to edit",
+          "parameters":[
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Returns question by id",
+              "schema": {
+                "$ref": "#/components/schemas/question"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successfully selected a question",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref":"#/components/schemas/editQuestion"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags":[
+            "Save edited question"
+          ],
+          "summary": "Submitting edited question",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Returns question by id",            
+              "schema":{
+                "$ref":"#/components/schemas/question"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "edited question",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/editQuestion"
+                }
+              }
+            }
+          },
+          "question": [
+            "application/json"
+          ],
+          "responses": {
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+      "/myPro_answers": {
+        "get": {
+          "tags":[
+            "Answers for the current user "
+          ],
+          "summary": "All answers for the current user",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "username",
+              "required": true,
+              "description":"Username to get all answers",
+              "schema":{
+                "$ref":"#/components/schemas/answer"
+              }              
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/answers"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/edit_answer/{id}": {
+        "get": {
+          "tags":[
+            "Get answer"
+          ],
+          "summary": "Get answer to edit",
+          "parameters":[
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Returns answer by id",
+              "schema": {
+                "$ref": "#/components/schemas/answer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref":"#/components/schemas/editAnswer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags":[
+            "Save edited answer"
+          ],
+          "summary": "Submit edited answer",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Returns answer by id",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref":"#/components/schemas/answer"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "edited answer",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/editAnswer"
+                }
+              }
+            }
+          },
+          "answer": [
+            "application/json"
+          ],
+          "responses": {
+            "400": {
+              "description": "Bad request"
+            },
+            "500": {
+              "description": "Internal server id error"
+            }
+          }
+        }
+      },
+      "/upvote_answer/{id}": {
+        "post": {
+          "tags": [
+            "Vote answer"
+          ],
+          "summary": "Votes answer +1",
+          "parameters":[
+            {
+              "in":"path",
+              "name":"id",
+              "required":true,
+              "description":"ID for voted answer",
+              "schema": {
+                "$ref":"#/components/schemas/answer"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Voted answer",
+            "required":true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/voteAnswer"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ok"
+            },
+            "302": {
+              "description":"redirects to dashboard",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/questions"
+                  }
+                }
+              }
+            },
+            "308": {
+              "description": "redirects"
+            },
+            "500":{
+              "description":"Internal TypeError: 'NoneType' object is not subscriptable, answer_username = answer['answer_username']... # Comment out line 572to 578 logic and create a new sql only updating the votes"
+            }
+          }
+        }
+      },
+      "/downvote_answer/{id}": {
+        "post": {
+          "tags": [
+            "Vote answer"
+          ],
+          "summary": "down votes answer -1",
+          "parameters":[
+            {
+              "in":"path",
+              "name":"id",
+              "required":true,
+              "description":"ID for voted answer",
+              "schema": {
+                "$ref":"#/components/schemas/answer"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "Voted answer",
+            "required":true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/downVoteAnswer"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "ok"
+            },
+            "302": {
+              "description":"redirects to dashboard",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/questions"
+                  }
+                }
+              }
+            },
+            "308": {
+              "description": "redirects"
+            },
+            "500":{
+              "description":"Internal TypeError: 'NoneType' object is not subscriptable, answer_username = answer['answer_username']"
+            }
+          }
+        }
+      },
+      "/post_comment/{id}": {
+        "get": {
+          "tags": [
+            "Comment on answer"
+          ],
+          "summary": "Comment on answer",
+          "parameters" :[
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Returns answer by id",
+              "schema": {
+                "$ref": "#/components/schemas/answer"
+              }
+            }
+          ],
+          "responses": {
+            "308": {
+              "description": "Redirects to the  comment answer url for answering",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/getPostComment"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description": "ok"
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "Post comment"
+          ],
+          "summary": "Post comment",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Returns answer by id",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/comment"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "comment",
+            "required":true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/postComment"
+                }
+              }
+            }           
+          },
+          "comment": [
+            "application/json"
+          ],
+          "responses": {
+            "308": {
+              "description": "redirects to dashboard",
+              "schema": {
+                "$ref":"#/components/schemas/questions"
+              }
+            },
+            "200": {
+              "description": "successfully answered question"
+            },
+            "500": {
+              "description": "Throws id error if id ain't found when testing but works fine"
+            }
+          }
+        }
+      },
+      "/view_comments/{id}": {
+        "get": {
+          "tags": [
+            "View comments"
+          ],
+          "summary": "View comments to answer",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "id",
+              "required": true,
+              "description": "Returns answer by id with comments",
+              "schema": {
+                "$ref":"#/components/schemas/answer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "ok",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/viewCommentsRequest"
+                  },
+                  "302": {
+                    "description": "redirects to dashboard if no comments",
+                    "content":{
+                      "application/json":{
+                        "schema": {
+                          "$ref":"#/components/schemas/questions"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/edit_comment/{id}": {
+        "get": {
+          "tags":[
+            "Get comment"
+          ],
+          "summary": "Get comment to edit",
+          "parameters":[
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Returns comment to edit",
+              "schema": {
+                "$ref": "#/components/schemas/comment"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successfully selected a comment",
+              "content": {
+                "application/json": {
+                  "schema":{
+                    "$ref":"#/components/schemas/editComment"
+                  },
+                  "308":{
+                    "description":"redirects to edit comment page"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "post": {
+          "tags":[
+            "Save edited comment"
+          ],
+          "summary": "Submitting edited comment",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "required": true,
+              "description": "Returns edited comment",            
+              "schema":{
+                "$ref":"#/components/schemas/comment"
+              }
+            }
+          ],
+          "requestBody": {
+            "description": "edited comment",
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref":"#/components/schemas/editComment"
+                }
+              }
+            }
+          },
+          "comment": [
+            "application/json"
+          ],
+          "responses": {
+            "308":{
+              "description":"redirect"
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        }
+      },
+      "/mark_answer/{id}": {
+        "get":{
+          "tags":[
+            "Mark Answer"
+          ],
+          "summary": "Mark answer as favorite",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "required":true,
+              "description":"Returns answer to mark",
+              "schema":{
+                "$ref":"#/components/schemas/markAnswer"
+              }
+            }
+          ],
+          "responses": {
+            "302":{
+              "description": "marked answer successfully!, redirects to profile page",
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/questions"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description":"successfully marked answer"
+            }
+          }
+        },
+        "options":{
+          "tags": [
+            "Mark answer"
+          ],
+          "summary":"Mark answer as favorite",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "id",
+              "required":true,
+              "description":"Returns answer to be marked",
+              "schema":{
+                "$ref":"#/components/schemas/markAnswer"
+              }
+            }
+          ],
+          "requestBody":{
+            "description":"selected answer",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/markAnswer"
+                }
+              }
+            }
+          },
+          "answer":[
+            "application/json"
+          ],
+          "responses":{
+            "302": {
+              "description":"redirects to profile page",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/unmarkAnswer"
+                  }
+                }
+              }
+            },
+            "200":{
+              "description":"ok"
+            }
+          }        
+        }
+      },
+      "/unmark_answer/{id}": {
+        "get":{
+          "tags":[
+            "Unmark Answer"
+          ],
+          "summary": "Unmark answer as favorite",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "required":true,
+              "description":"Returns answer to unmark by id",
+              "schema":{
+                "$ref":"#/components/schemas/unmarkAnswer"
+              }
+            }
+          ],
+          "responses": {
+            "302":{
+              "description": "unmarked answer successfully!,redirects to profile page",
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/markAnswer"
+                  }
+                }
+              }
+            },
+            "200": {
+              "description":"successfully unmarked answer"
+            }
+          }
+        },
+        "options":{
+          "tags": [
+            "Unmark answer"
+          ],
+          "summary":"Unmark answer as favorite",
+          "parameters":[
+            {
+              "in": "path",
+              "name": "id",
+              "required":true,
+              "description":"Returns answer to be unmarked",
+              "schema":{
+                "$ref":"#/components/schemas/unmarkAnswer"
+              }
+            }
+          ],
+          "requestBody":{
+            "description":"selected answer",
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/unmarkAnswer"
+                }
+              }
+            }
+          },
+          "answer":[
+            "application/json"
+          ],
+          "responses":{
+            "302": {
+              "description":"redirects to profile page",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/markAnswer"
+                  }
+                }
+              }
+            },
+            "200":{
+              "description":"ok"
+            }
+          }        
+        }
+      },
+      "/delete_question/{id}": {
+        "options": {
+          "tags":[
+            "Delete question Request"
+          ],
+          "summary":"Delete a question",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "description":"Returns question by Id",
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/question"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody":{
+            "description":"delete question",
+            "required":true,
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/question"
+                }
+              }
+            }
+          },
+          "question":[
+            "application/json"
+          ],
+          "responses": {
+            "302":{
+              "description":"ok",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/question"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/dashboard_delete_answer/{id}": {
+        "options": {
+          "tags":[
+            "Delete Request"
+          ],
+          "summary":"Delete answer request",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "description":"Return answer by Id",
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/answer"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody":{
+            "description":"delete answer",
+            "required":true,
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/answer"
+                }
+              }
+            }
+          },
+          "answer":[
+            "application/json"
+          ],
+          "responses": {
+            "302":{
+              "description":"deleted successfully",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/answer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/profile_delete_answer/{id}": {
+        "options": {
+          "tags":[
+            "Delete Request"
+          ],
+          "summary":"Delete answer request",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "description":"Returns answer by Id",
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/answer"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody":{
+            "description":"delete answer",
+            "required":true,
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/answer"
+                }
+              }
+            }
+          },
+          "answer":[
+            "application/json"
+          ],
+          "responses": {
+            "302":{
+              "description":"deleted successfully",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/answer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/delete_comment/{id}": {
+        "options": {
+          "tags":[
+            "Delete Request"
+          ],
+          "summary":"Delete comment request",
+          "parameters": [
+            {
+              "in":"path",
+              "name":"id",
+              "description":"Returns comment by Id",
+              "content": {
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/comment"
+                  }
+                }
+              }
+            }
+          ],
+          "requestBody":{
+            "description":"delete comment",
+            "required":true,
+            "content":{
+              "application/json": {
+                "schema":{
+                  "$ref":"#/components/schemas/comment"
+                }
+              }
+            }
+          },
+          "comment":[
+            "application/json"
+          ],
+          "responses": {
+            "302":{
+              "description":"deleted successfully",
+              "content":{
+                "application/json":{
+                  "schema":{
+                    "$ref":"#/components/schemas/comment"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }     
+    },
+    "components": {
+      "schemas": {
+        "registerUser": {
+          "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "number"
+              },
+              "first_name": {
+                "type": "string"
+              },
+              "last_name": {
+                "type": "string"
+              },
+              "username": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              }
+            },
+            "example": {
+              "id": "1",
+              "first_name":"Galice",
+              "last_name":"Brian",
+              "username":"Galice",
+              "email":"galice@example.com",
+              "password":"1x1x1x1x1"
+            }
+        },
+        "postQuestion": {
+          "type": "array",
+          "properties":{
+            "titleInput": {
+              "type": "integer",
+              "nullable":true
+            },
+            "questionBodyTextarea": {
+              "type": "integer",
+              "nullable":true
+            }
+          },
+          "example": {
+            "titleInput": "no value",
+            "questionBodyTextarea": "no value"
+          }
+        },
+        "postedQuestion": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer"
+            },
+            "username": {
+              "type":"string"
+            },
+            "title": {
+              "type":"string"
+            },
+            "body": {
+              "type":"string"
+            },
+            "timestamp": {
+              "type":"string"
+            }
+          },
+          "example" : {
+            "id": "2",
+            "username":"Galice",
+            "title": "CSS",
+            "body": "What is css in full?",
+            "timestamp": "2022-10-26 10:57:24.609132"
+          }
+        },
+        "questions": {
+          "type": "array",
+          "properties": {
+            "id": {
+              "type": "integer"                       
+            },
+            "timestamp": {
+              "type": "string"
+            },
+            "username":{
+              "type": "string"             
+            },
+            "title": {
+              "type": "string"             
+            },            
+            "body": {
+              "type": "string"              
+            }          
+          },
+          "example" : [
+            {
+            "id": "4",
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "username":"Galice",
+            "title": "Javascript",
+            "body": "What year was js launched?"
+            },
+            {
+            "id": "7",
+            "timestamp": "2022-10-26 12:50:24.609132",
+            "username":"Mansa",
+            "title": "Heap",
+            "body": "What is a heap?"
+            },
+            {
+            "id": "11",
+            "timestamp": "2022-10-26 09:10:24.609132",
+            "username":"Doe",
+            "title": "HTML",
+            "body": "What is HTML in full?"
+            }
+        ]
+        },
+        "question": {
+          "type": "array",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "string"
+            },
+            "username": {
+              "type":"string"
+            },
+            "title": {
+              "type":"string"
+            },
+            "body": {
+              "type":"string"
+            },
+            "timestamp": {
+              "type":"string",
+              "format":"number"
+            }
+          },
+          "example" : {
+            "id": "2",
+            "username":"Galice",
+            "title": "CSS",
+            "body": "What is css in full?",
+            "timestamp": "2022-10-26 10:57:24.609132"
+          }
+        },
+        "viewQuestionRequest" :{
+          "type": "array",
+          "properties": {
+              "questionTimestamp": {
+                "type": "string",
+                "format": "number"
+              },
+              "title": {
+                "type":"string"
+              },
+              "questionAuthor": {
+                "type": "string"
+              },
+              "questionBody": {
+                "type": "string"
+              },
+              "answersHeader": {
+                "type": "string"
+              },
+              "answersList": {
+                "type": "array",
+                "format": "string",
+
+                "answerTimestamp": {
+                  "type": "string",
+                  "format": "number"
+                },
+                "answerAuthor": {
+                  "type": "string"
+                },
+                "answerBody": {
+                  "type": "string"
+                }
+              }             
+          },
+          "example": {
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "username":"Galice",
+            "title": "Javascript",
+            "body": "What year was js launched?",
+            "answersHeader": "Answers",
+            "answersList": [{"id": "1", "answerTimestamp":"2022-11-01 20:20:29.934177","answerAuthor": "Brian", "answerBody": "1996"}, {"id": "2","answerTimestamp":"2022-11-01 21:20:29.934177", "answerAuthor": "Alex", "answerBody": "1990"}, {"id": "3", "answerTimestamp":"2022-11-03 20:10:29.968177","answerAuthor": "John", "answerBody": "1998"}]         
+          }
+        },
+        "loginUser": {
+          "type": "array",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "username": "Galice",
+            "password": "1x1x1x1x1x"
+          }
+        },
+        "logoutUser": {
+          "type": "array",
+          "properties": {
+            "username": {
+              "type": "string",
+              "nullable": true
+            },
+            "password": {
+              "type": "integer",
+              "nullable": true
+            }
+          },
+          "example": {
+            "username": "no value",
+            "password": "no value"
+          }
+        },
+        "getPostAnswer": {
+          "type": "array",
+          "properties": {
+            "questionId": {
+              "type": "integer"        
+            },
+            "timestamp": {
+              "type": "string",
+              "format": "number"
+            },
+            "questionUsername":{
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            
+            "questionBody": {
+              "type": "string"
+            },
+            "answerTextarea": {
+              "type": "string"
+            }        
+          },
+          "example" : {
+            "questionId": "1",
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "questionUsername":"Galice",
+            "questionTitle": "Javascript",
+            "questionBody": "What year was js launched?",
+            "answerTextarea": "Answer question here"
+          }
+        },
+        "postAnswer": {
+          "type":"object",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "questionId": {
+              "type": "integer"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+          }
+        },
+        "editQuestion": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type":"string"
+            },
+            "body": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "title": "CSS",
+            "body": "What is css in full?"
+          }
+        },
+        "answers": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "questionId": {
+              "type": "integer"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": [
+            {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            },
+            {
+              "answerId": "3",
+              "questionId": "1",
+              "answer_username": "Doe",
+              "answerBody": "Cash Soda Salary",
+              "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            },
+            {
+              "answerId": "6",
+              "questionId": "1",
+              "answer_username": "Dean",
+              "answerBody": "Cash Send Sleep",
+              "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }
+        ]
+        },
+        "answer": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "questionId": {
+              "type": "integer"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }                    
+        },
+        "editAnswer": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string"
+            }
+          },
+          "example": {            
+            "body": "What is css in full?"
+          }
+        },
+        "voteAnswer": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "questionId": {
+              "type": "integer"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "votes": {
+              "type": "integer"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "votes": "10 + 1",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }                    
+        },
+        "downVoteAnswer": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "questionId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "votes": {
+              "type": "integer",
+              "format": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "votes": "10 - 1",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }                    
+        },
+        "getPostComment": {
+          "type": "array",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "answer_dateTimestamp": {
+              "type": "string",
+              "format": "number"
+            },
+            "answerAuthor": {
+              "type": "string"
+            },
+            "answerBody": {
+              "type": "string"
+            },
+            "commentTextarea": {
+              "type":"string"
+            }
+          },
+          "example" : {
+            "answerId": "1",
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "answerAuthor":"Galice",
+            "answerTitle": "Javascript",
+            "answerBody": "cascading style sheets",
+            "commentTextarea": "Add comment here....."
+          }
+        },
+        "postComment": {
+          "type":"object",
+          "properties":{
+            "commentId": {
+              "type": "integer",
+              "format": "string"
+            },
+            "answerId": {
+              "type": "integer"
+            },
+            "comment_username": {
+              "type": "string"
+            },
+            "comment_body": {
+              "type": "string"
+            },
+            "answer_dateTimestamp": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "commentId": "2",
+            "answerId": "1",
+            "comment_author": "John",
+            "commentBody": "This answer is awesome!",
+            "answer_dateTimestamp":"2022-15-26 12:50;306482"
+          }
+        },
+        "viewCommentsRequest": {
+          "type": "array",
+          "properties": {
+              "answerTimestamp": {
+                "type": "string",
+                "format": "number"
+              },
+              "answerAuthor": {
+                "type": "string"
+              },
+              "answerBody": {
+                "type": "string"
+              },
+              "commentsHeader": {
+                "type": "string"
+              },
+              "commentsList": {
+                "type": "array",
+                "format": "string",
+                
+                "commentTimestamp": {
+                  "type": "string",
+                  "format": "number"
+                },
+                "commentAuthor": {
+                  "type": "string"
+                },
+                "commentBody": {
+                  "type": "string"
+                }
+              }             
+          },
+          "example": {
+            "timestamp": "2022-10-26 10:57:24.609132",
+            "answerAuthor":"Galice",
+            "body": "Cascading style sheets",
+            "commentsHeader": "Comments",
+            "commentsList": [{"id": "1", "commentTimestamp":"2022-11-01 20:20:29.934177","commentAuthor": "Brian", "commentBody": "Alright let me try this"}, {"id": "2","commentTimestamp":"2022-11-01 21:20:29.934177", "commentAuthor": "Alex", "commentBody": "This answer still throws an error"}, {"id": "3", "answerTimestamp":"2022-11-03 20:10:29.968177","commentAuthor": "John", "commentBody": "very helpful answer"}]         
+          }
+        },
+        "comment": {
+          "type": "array",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "format": "string"
+            },
+            "username": {
+              "type":"string"
+            },
+            "title": {
+              "type":"string"
+            },
+            "body": {
+              "type":"string"
+            },
+            "timestamp": {
+              "type":"string",
+              "format":"number"
+            }
+          },
+          "example": {
+            "commentId": "2",
+            "answerId": "1",
+            "comment_author": "John",
+            "commentBody": "This answer is awesome!",
+            "answer_dateTimestamp":"2022-15-26 12:50;306482"
+          }
+        },
+        "editComment": {
+          "type": "object",
+          "properties": {
+            "body": {
+              "type": "string"
+            }
+          },
+          "example": {            
+            "commentBodyTextarea": "This answer is awesome!?"
+          }
+        },
+        "markAnswer": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "questionId": {
+              "type": "integer"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "markedAnswer": {
+              "type":"boolean"
+            },
+            "answer_dateTimestamp": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "markedAnswer": "false",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }           
+          
+        },
+        "unmarkAnswer": {
+          "type":"array",
+          "properties":{
+            "answerId": {
+              "type": "integer"
+            },
+            "questionId": {
+              "type": "integer"
+            },
+            "answer_username": {
+              "type": "string"
+            },
+            "answer_body": {
+              "type": "string"
+            },
+            "markedAnswer": {
+              "type":"boolean"
+            },
+            "answer_dateTimestamp": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "answerId": "1",
+            "questionId": "1",
+            "answer_username": "John",
+            "markedAnswer": "true",
+            "answerBody": "Cascading style sheets",
+            "answer_dateTimestamp":"2022-10-26 10:50;306482"
+            }           
+          
+        }
+      }
+    }
+}
