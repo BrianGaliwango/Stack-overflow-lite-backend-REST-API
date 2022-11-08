@@ -9,14 +9,11 @@ passlib==1.7.4
 psycopg2==2.9.4
 psycopg2-binary==2.9.4
 Werkzeug==2.2.2
-<<<<<<< HEAD
 pytest==7.2.0
 pytest-cov==4.0.0
 pylint==2.15.5
 black==22.10.0
 ipython==8.6.0
-
-=======
 uuid==1.30
 flask_swagger_ui==4.11.1
->>>>>>> jwt
+

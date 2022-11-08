@@ -16,8 +16,6 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "prod")
 app.config["JWT_HEADER_TYPE"] = "JWT"
 
-
-
 SWAGGER_URL = "/swagger"
 API_URL = "/static/swagger.json"
 swaggerui_blueprint = get_swaggerui_blueprint(
@@ -67,8 +65,7 @@ def is_logged_in(f):
                     # return jsonify({"message": "Invalid token"})
                     flash("Please login to access this page", "danger")
                     return redirect(url_for("login"))
-                
-               
+                              
                     # decode token to obtain user public_id
                 jwt.decode(token, app.config["SECRET_KEY"], ['HS256'])
               
