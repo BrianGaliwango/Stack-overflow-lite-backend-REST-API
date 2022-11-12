@@ -29,6 +29,8 @@ DB_NAME = "stack_over_flow_psycopg2"
 DB_USER = os.environ["DB_USERNAME"]
 DB_PASS = os.environ["DB_PASSWORD"]
 DB_PORT = "5432"
+
+
 # Connect to db
 
 # ENV = 'Env'
