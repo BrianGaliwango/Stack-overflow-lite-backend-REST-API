@@ -12,7 +12,7 @@ DB_NAME = "stack_over_flow_psycopg2"
 
 
 @pytest.fixture
-def app(scope="class"):
+def app():
     yield flask_app
     
         
