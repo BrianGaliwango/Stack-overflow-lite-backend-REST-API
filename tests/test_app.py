@@ -43,7 +43,7 @@ def test_get_questions(client, cursor):
     assert b"What is css in full?" in result.data
     
 
-# Testing  get single question
+# Testing get single question
 def test_get_single_question(app, client):
     result = client.get("/question/8/")
     assert result.status_code == 200
@@ -137,6 +137,16 @@ def test_dashboard(app, client):
     assert b'questions' in result.data
     
 #     # Returns expected questions data
+
+
+
+# # Test dashboard get single question 
+def test_get_single_question(app, client):
+    result = client.get("/user_question/8/")
+    assert result.status_code == 200
+    assert b'What is css in full' in result.data
+   
+   
     
 
 # Test get post_question
@@ -159,17 +169,7 @@ def test_get_post_question(app, client):
     
 #     # Post a question redirects to the dashboard
     
-    
-# # Test dashboard get single question 
-def test_get_single_question(app, client):
-    result = client.get("/user_question/8/")
-    assert result.status_code == 200
-    assert b'What is css in full' in result.data
-   
-   
-#     # Works fine
-    
- 
+
 # Test answer question
 def test_answer_question(app, client):
     result = client.get("/answer_question/8")
@@ -195,7 +195,8 @@ def get_profile_questions(app, client):
     assert b'questions' in result.data
     print(result.data)
     
-    
+ 
+#Test post profile_questions 
 def get_post_profile_questions(app, client):
     result = client.post("/profile")
     assert result.status_code == 200
@@ -336,6 +337,21 @@ def test_mark_answer(app, client):
 #Testing get mark answer
 def test_get_mark_answer(app, client):
     result = client.get("/mark_answer/2/")
+    assert result.status_code == 302 
+    print(result.data)
+    
+    
+    
+#Testing unmark answer
+def test_unmark_answer(app, client):
+    result = client.put("/unmark_answer/2/")
+    assert result.status_code == 302 
+    print(result.data)
+    
+    
+#Testing get unmark answer
+def test_get_unmark_answer(app, client):
+    result = client.get("/unmark_answer/2/")
     assert result.status_code == 302 
     print(result.data)
     
