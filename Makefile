@@ -3,7 +3,7 @@ install:
 			pip install -r requirements.txt
 
 test:
-		 pytest -vv -s --cov=app tests
+		pytest -vv -s --cov=app tests
 
 
 format:	

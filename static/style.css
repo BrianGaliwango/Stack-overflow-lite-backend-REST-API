@@ -1,4 +1,4 @@
-/* home-slogan */
+/* dashboard-answerBtn-container*/
 
 :root {
   --main-color: orange;
@@ -224,17 +224,18 @@ a {
 .login-btns {
   display: flex;
   align-items: center;
+  margin-top: 8px;
 }
 
 .login-btn ,
 .register-btn ,
 .logout-btn {
-  padding: 10 25px;
   border: none;
   border-radius: 3px;
   margin  : 0 5px;
   color: var(--secondary-color);
   cursor: pointer;
+  padding: 10px 25px;
 }
 
 .login-btn {
@@ -265,7 +266,6 @@ a {
   text-align: center;
   font-size: 25px;
   letter-spacing: 1px;
-  margin-bottom: 20px;
   color: var(--primary-color);
 }
 
@@ -571,8 +571,7 @@ a {
 }
 
 .profile-editAnswer-btns ,
-.profile-question-btns ,
-.dashboard-answerBtn-container {
+.profile-question-btns  {
   display: inline-flex;
 }
 
@@ -584,8 +583,8 @@ a {
 
 .dashboard-answerBtn-container {
   position: absolute;
+  right: 0;
   bottom: 5;
-  right: 20;
 }
 
 .profile-editAnswer-btns ,
@@ -864,7 +863,6 @@ a {
   .options-container-list li {
     margin: 15px;
   }
-
 
   .dashboard-header , 
   .user-selectedQtn-header ,

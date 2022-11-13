@@ -46,7 +46,7 @@ This project is a stack overflow lite challenge, Every part of this project is a
 22. After app has bn deployed open it and enjoy.
   
 **Find a bug?**
-If you found an issue or would like to submit an improvement to this project, please issue using the issues tab above.if you would like to submit a PR with a fix, reference the issue created!
+If you found an issue or would like to submit an improvement to this project, please issue using the issues tab above. if you would like to submit a PR with a fix, reference the issue created!
 
 **Known issues (Work in progress)**
 This project is ongoing and will be getting updated soon.****

@@ -42,7 +42,7 @@ DB_PORT = "5432"
 
 # Connect to db
 
-# ENV = 'Env'
+ENV = 'Env'
 
 # if ENV == "dev":
 #     app.debug=True
@@ -73,14 +73,12 @@ def is_logged_in(f):
                 token = request.headers["x-access-token"]
                 print(token)
                 if not token:  # throw error if no token provided
-                    # return jsonify({"message": "Invalid token"})
                     flash("Please login to access this page", "danger")
                     return redirect(url_for("login"))
 
                     # decode token to obtain user public_id
                 jwt.decode(token, app.config["SECRET_KEY"], ["HS256"])
 
-                # return jsonify({"message": "Token is invalid"})
                 flash("Please login to access this page", "danger")
                 return redirect(url_for("login"))
 
@@ -88,7 +86,6 @@ def is_logged_in(f):
         else:
             flash("Please login to access this page", "danger")
             return redirect(url_for("login"))
-            # return make_response(jsonify({"message": "Token is invalid"}), 401)
 
     return decorator
 
