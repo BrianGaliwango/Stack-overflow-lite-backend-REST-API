@@ -11,7 +11,8 @@ install:
 
 env:
     - ENV="development"
-    - ENV="production" ; SESSION_SECRET="secret12345"
+    - ENV="production" ; SESSION_SECRET="os.environ.get("SECRET_KEY", "prod")"
+    - ENV="DATABASE_URL"; 
 
 services:
     - postgresql
