@@ -4,12 +4,7 @@ import pytest
 import psycopg2
 from .sql.user_sql import user_sql
 
-
-DB_HOST = "localhost"
-DB_NAME = "stack_over_flow_psycopg2"
-# DB_USER = os.environ["DB_USERNAME"]
-# DB_PASS = os.environ["DB_PASSWORD"]
-
+DATABASE_URL = os.environ["DATABASE_URL"]
 
 @pytest.fixture
 def app():
@@ -24,7 +19,9 @@ def client(app):
 
 @pytest.fixture
 def cursor():
-  conn = psycopg2.connect("host=localhost dbname=stack_over_flow_psycopg2 user=postgres password=57726630")
+  # conn = psycopg2.connect("host=localhost dbname=stack_over_flow_psycopg2 user=postgres password=57726630")
+  conn = psycopg2.connect(DATABASE_URL)
+  
   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
   yield cur
   # cur.close()

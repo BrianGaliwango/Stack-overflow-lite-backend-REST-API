@@ -2,7 +2,7 @@ import psycopg2
 import os
 
 
-    # Init db
+# Init db
 DATABASE_URL = os.environ["DATABASE_URL"]
 
 # Connect to database
