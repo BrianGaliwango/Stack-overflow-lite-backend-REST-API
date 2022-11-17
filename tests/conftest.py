@@ -19,7 +19,6 @@ def client(app):
 
 @pytest.fixture
 def cursor():
-  # conn = psycopg2.connect("host=localhost dbname=stack_over_flow_psycopg2 user=postgres password=57726630")
   conn = psycopg2.connect(DATABASE_URL)
   
   cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
