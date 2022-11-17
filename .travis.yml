@@ -9,6 +9,13 @@ python:
 install: 
     - pip install -r requirements.txt
 
+env:
+    - ENV="development"
+    - ENV="production" ; SESSION_SECRET="secret12345"
+
+services:
+    - postgresql
+
 # Command to run tests
 script:
   - make test

@@ -39,28 +39,24 @@ DB_USER = os.environ["DB_USERNAME"]
 DB_PASS = os.environ["DB_PASSWORD"]
 DB_PORT = "5432"
 
-
 # Connect to db
 
 ENV = 'Env'
 
-# if ENV == "dev":
-#     app.debug=True
-#     conn = psycopg2.connect(
-#         host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
-#     )
-# else:
-#     # Init db
-#     app.debug=False
-#     DATABASE_URL = os.environ["DATABASE_URL"]
+if ENV == "dev":
+    app.debug=True
+    conn = psycopg2.connect(
+        host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
+    )
+else:
+    # Init db
+    app.debug=False
+    DATABASE_URL = os.environ["DATABASE_URL"]
 
-# # Connect to database
-# conn = psycopg2.connect(DATABASE_URL)
+# Connect to database
+conn = psycopg2.connect(DATABASE_URL)
 
 
-conn = psycopg2.connect(
-    host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
-)
 
 # Check if user logged_in decorator
 def is_logged_in(f):
@@ -279,7 +275,7 @@ def login():
 
 ## Logout
 @app.route("/logout")
-# @is_logged_in
+@is_logged_in
 def logout():
     session.clear()
     flash("Logged out successfully", "success")
@@ -288,7 +284,7 @@ def logout():
 
 ## Dashboard
 @app.route("/dashboard", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def dashboard():
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -304,7 +300,7 @@ def dashboard():
 
 ## Post question
 @app.route("/post_question", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def post_question():
     # Create cursor connection
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -337,7 +333,7 @@ def post_question():
 
 ## Get single question
 @app.route("/user_question/<string:question_id>/", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def user_get_question(question_id):
 
     # Create cursor
@@ -370,7 +366,7 @@ def user_get_question(question_id):
 
 #     # Answer question
 @app.route("/answer_question/<string:question_id>/", methods=["GET", "POST"])
-# @is_logged_in()
+@is_logged_in
 def post_answer(question_id):
     # create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -409,7 +405,7 @@ def post_answer(question_id):
 
 ## Profile route
 @app.route("/profile", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def profile():
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -431,7 +427,7 @@ def profile():
 
 ## Get profile question
 @app.route("/profile_question/<string:question_id>/")
-# @is_logged_in
+@is_logged_in
 def profile_get_question(question_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -459,7 +455,7 @@ def profile_get_question(question_id):
 
 # Edit my question
 @app.route("/edit_question/<string:question_id>/", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def edit_question(question_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -505,7 +501,7 @@ def edit_question(question_id):
 
 ## Get myPro profile answers
 @app.route("/myPro_answers", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def get_myPro_answers():
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -515,9 +511,6 @@ def get_myPro_answers():
         "SELECT * FROM answers WHERE answer_username = %s ORDER BY answered_date DESC",
         [session["username"]],
     )
-    # cur.execute(
-    #     "SELECT * FROM answers"
-    #     )
 
     # Get answers
     answers = cur.fetchall()
@@ -530,6 +523,7 @@ def get_myPro_answers():
 
 ## Edit my answer
 @app.route("/edit_answer/<string:answer_id>/", methods=["GET", "POST"])
+@is_logged_in
 def edit_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -565,7 +559,7 @@ def edit_answer(answer_id):
 
 ## Upvote answer
 @app.route("/upvote_answer/<answer_id>/", methods=["POST"])
-# @is_logged_in
+@is_logged_in
 def upvote_answer(answer_id):
 
     # Create cursor
@@ -596,7 +590,7 @@ def upvote_answer(answer_id):
 
 ## DownVote answer
 @app.route("/downvote_answer/<answer_id>/", methods=["POST"])
-# @is_logged_in
+@is_logged_in
 def downvote_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -628,7 +622,7 @@ def downvote_answer(answer_id):
 
 ## Add comment
 @app.route("/post_comment/<string:answer_id>/", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def post_comment(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -667,7 +661,7 @@ def post_comment(answer_id):
 
 ## View comments
 @app.route("/view_comments/<string:comment_id>/", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def view_comments(comment_id):
     # create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -702,7 +696,7 @@ def view_comments(comment_id):
 
 ## Edit comment
 @app.route("/edit_comment/<string:comment_id>/", methods=["GET", "POST"])
-# @is_logged_in
+@is_logged_in
 def edit_comment(comment_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -739,7 +733,7 @@ def edit_comment(comment_id):
 
 ## Mark answer
 @app.route("/mark_answer/<string:answer_id>/", methods=["GET", "PUT"])
-# @is_logged_in
+@is_logged_in
 def mark_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -759,7 +753,7 @@ def mark_answer(answer_id):
 
 ## UnMark answer
 @app.route("/unmark_answer/<string:answer_id>/", methods=["GET", "PUT"])
-# @is_logged_in
+@is_logged_in
 def unmark_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -779,7 +773,7 @@ def unmark_answer(answer_id):
 
 ## Profile Delete question
 @app.route("/delete_question/<string:question_id>/", methods=["POST"])
-# @is_logged_in
+@is_logged_in
 def delete_question(question_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -798,7 +792,7 @@ def delete_question(question_id):
 
 ## Profile Delete answer
 @app.route("/profile_delete_answer/<string:answer_id>/", methods=["POST"])
-# @is_logged_in
+@is_logged_in
 def delete_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -818,7 +812,7 @@ def delete_answer(answer_id):
 
 ## Dashboard Delete answer
 @app.route("/dashboard_delete_answer/<string:answer_id>/", methods=["POST"])
-# @is_logged_in
+@is_logged_in
 def dashboard_delete_answer(answer_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -838,7 +832,7 @@ def dashboard_delete_answer(answer_id):
 
 ## Delete comment
 @app.route("/delete_comment/<string:comment_id>/", methods=["POST"])
-# @is_logged_in
+@is_logged_in
 def delete_comment(comment_id):
     # Create cursor
     cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)

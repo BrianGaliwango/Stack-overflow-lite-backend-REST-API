@@ -16,7 +16,7 @@ This project is a stack overflow lite challenge, Every part of this project is a
 * Registered users can post comments to answers API.
 * Registered users can delete and edit comments API's
 * Registered users profile pages viewing all current user questions and answers
-* Unregistered users home page with questions.
+* Unregistered users home page with questions API.
 * Unregistered user home page can view single question with all its answers API's
 * Data is saved to postgres database.
 
