@@ -15,7 +15,6 @@ from flask import (
     flash,
     session,
     url_for,
-    make_response,
 )
 import jwt
 import datetime
@@ -49,7 +48,7 @@ def is_logged_in(f):
             token = None
             if "x-access-token" in request.headers:
                 token = request.headers["x-access-token"]
-                print(token)
+                
                 if not token:  # throw error if no token provided
                     flash("Please login to access this page", "danger")
                     return redirect(url_for("login"))
@@ -248,7 +247,7 @@ def login():
             else:
                 # Account doesn't exist
                 flash("Account does not exist", "error")
-                return make_response("unable to verify account", 403)
+                return render_template("login.html")
         else:
             # Account doesn't exist
             flash("Incorrect username/password", "danger")
