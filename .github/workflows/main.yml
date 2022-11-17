@@ -27,9 +27,11 @@ jobs:
       run: |
             make install
     - name: step 1
-        ## Reference your environment variables
-      run: 
-          echo "The DATABASE_URL is:${{env.DATABASE_URL}}"        
+      run: |
+          echo "The DATABASE_URL is:${{env.DATABASE_URL}}" 
+    - name: Test with pytest
+      run: |
+          make test 
     - name: Lint with pylint
       run: |
             make lint
