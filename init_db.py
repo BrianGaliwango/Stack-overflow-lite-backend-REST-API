@@ -1,21 +1,10 @@
 import psycopg2
 import os
 
-DB_HOST = "localhost"
-DB_NAME = "stack_over_flow_psycopg2"
-DB_USER = os.environ["DB_USERNAME"]
-DB_PASS = os.environ["DB_PASSWORD"]
-DB_PORT = "5432"
 
-ENV = 'Env'
-
-if ENV == "dev":
-    conn = psycopg2.connect(
-        host=DB_HOST, port=DB_PORT, dbname=DB_NAME, user=DB_USER, password=DB_PASS
-    )
-else:
     # Init db
-    DATABASE_URL = os.environ["DATABASE_URL"]
+DATABASE_URL = os.environ["DATABASE_URL"]
+
 # Connect to database
 conn = psycopg2.connect(DATABASE_URL)
 
