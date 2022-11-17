@@ -44,6 +44,9 @@ This project is a stack overflow lite challenge, Every part of this project is a
 20. Git push to github
 21. git push to heroku main
 22. After app has bn deployed open it and enjoy.
+
+
+## Documented with swagger ui
   
 **Find a bug?**
 If you found an issue or would like to submit an improvement to this project, please issue using the issues tab above. if you would like to submit a PR with a fix, reference the issue created!
